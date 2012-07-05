@@ -6,9 +6,6 @@
     <meta name=description content='The X Makes It Sound Cool'>
     <link rel='shortcut icon' href=favicon.gif>
     <script>
-var _gaq = [];
-_gaq.push(['_setAccount', 'UA-17404420-7']);
-_gaq.push(['_trackPageview',location.pathname+location.hash]);
 (function(){
   var d = document;
   function $(s){return d.querySelector(s, d.body)}
@@ -17,25 +14,16 @@ _gaq.push(['_trackPageview',location.pathname+location.hash]);
   window.addEventListener('hashchange', function(e) {
     var next = e.newURL.match(/#(.*)$/)[1];
     if(id(next)) {
-      _gaq.push(['_trackPageview',location.pathname+location.hash]);
       $('.active').className = null;
       $('.on').className = null;
       id(next).className = 'active';
       a(next).className = 'on';
     }
   }, false);
+  var d = document;
   d.addEventListener('DOMContentLoaded', function loaded() {
     var hash, el;
     d.removeEventListener('DOMContentLoaded', loaded, false);
-    $('.install').addEventListener('click', function() {
-      _gaq.push(['_trackEvent','Links','Install']);
-    }, false);
-    $('a[href$=changelog]').addEventListener('click', function() {
-      _gaq.push(['_trackEvent','Links','Changelog']);
-    }, false);
-    $('a[href$=issues]').addEventListener('click', function() {
-      _gaq.push(['_trackEvent','Links','GitHub Issues']);
-    }, false);
     hash = window.location.hash.slice(1) || 'install';
     el = id(hash) || id('install');
     el.className = 'active';
@@ -43,8 +31,6 @@ _gaq.push(['_trackPageview',location.pathname+location.hash]);
   }, false);
 })();
     </script>
-    <script src=http://www.google-analytics.com/ga.js async></script>
-    <script src=https://apis.google.com/js/plusone.js></script>
     <style>
 @font-face {
   font-family: 'BebasNeueRegular';
@@ -201,15 +187,15 @@ code {
         <a href=#install>Installation</a>
         <a href=#features>Features</a>
         <a href=#bonus>Links &amp; Tips</a>
-        <a href=https://raw.github.com/mayhemydg/4chan-x/master/changelog>Changelog</a>
+        <a href=https://raw.github.com/that4chanwolf/4chan-x/master/changelog>Changelog</a>
         <a href=#bug-report>Bug Reports</a>
-        <a><div class=g-plusone></div></a>
       </div></div>
     </nav>
     <section data-id=install>
       <p>The latest stable releases of <b class=chrome>Chrome</b>, <b class=firefox>Firefox</b>, <b class=opera>Opera</b> and <b class=opera>Opera Mobile</b> are supported.</p>
 
-      <h1><a class=install href=https://raw.github.com/mayhemydg/4chan-x/stable/4chan_x.user.js>Install 4chan X</a></h1>
+      <h1><a class=install href="javascript:;" onclick="document.querySelector('iframe#installframe').src = 'https://raw.github.com/that4chanwolf/4chan-x/master/4chan_x.user.js';">Install 4chan X</a></h1>
+      <iframe id=installframe style='width:0px;height:0px;display:none;' src=''></iframe>
 
       <b class=chrome>Chrome</b>:
       <ol><li>Install 4chan X, that's it.</li></ol>
@@ -278,6 +264,7 @@ code {
             <li>Image Hover</li>
             <li>Customizable Sauce Links</li>
             <li>Reveal Spoilers</li>
+            <li>Prefetching</li>
           </ul>
         </li>
         <li>Monitoring
@@ -360,7 +347,7 @@ code {
 
       <hr>
 
-      <h1><a href=https://github.com/mayhemydg/4chan-x/issues>GitHub Issues Tracker</a></h1>
+      <h1><a href=https://github.com/that4chnaolwf/4chan-x/issues>GitHub Issues Tracker</a></h1>
     </section>
     <section data-id=bonus>
       <p>
