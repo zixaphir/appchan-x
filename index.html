@@ -111,8 +111,8 @@ nav > div {
   display: inline-block;
 }
 nav > div > div {
-  display: -webkit-box;
-  -webkit-box-pack: justify;
+  display: -webkit-flex;
+  -webkit-justify-content: space-between;
 }
 nav a > div {
   display: block !important;
@@ -120,7 +120,6 @@ nav a > div {
 nav a {
   color: #EEE;
   display: inline-block;
-  display: -webkit-box;
   font: 1.5em BebasNeueRegular, sans-serif;
   padding: 10px 0;
   text-shadow: 0 1px 1px #000, 0 2px 1px #000;
@@ -128,7 +127,9 @@ nav a {
   width: 115px;
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-  nav a{width: auto}
+  nav a {
+    width: auto;
+  }
 }
 nav a:hover {
   color: #D0F;
