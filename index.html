@@ -97,8 +97,8 @@ nav > div {
   display: inline-block;
 }
 nav > div > div {
-  display: -webkit-box;
-  -webkit-box-pack: justify;
+  display: -webkit-flex;
+  -webkit-justify-content: space-between;
 }
 nav a > div {
   display: block !important;
@@ -106,7 +106,6 @@ nav a > div {
 nav a {
   color: #EEE;
   display: inline-block;
-  display: -webkit-box;
   font: 1.5em BebasNeueRegular, sans-serif;
   padding: 10px 0;
   text-shadow: 0 1px 1px #000, 0 2px 1px #000;
@@ -114,7 +113,9 @@ nav a {
   width: 115px;
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-  nav a{width: auto}
+  nav a {
+    width: auto;
+  }
 }
 nav a:hover {
   color: #D0F;
@@ -198,13 +199,16 @@ code {
       <iframe id=installframe style='width:0px;height:0px;display:none;' src=''></iframe>
 
       <b class=chrome>Chrome</b>:
-      <ol><li>Install Appchan X, that's it.</li></ol>
+      <ol>
+        <li>Save the Appchan X file from the install button as <code>appchan_x.user.js</code>.</li>
+        <li>Drag and drop the file into the extensions page (<code>chrome://chrome/extensions/</code>).</li>
+      </ol>
 
       <b class=firefox>Firefox</b>:
       <ol>
-        <li>If you don't have <a href=https://addons.mozilla.org/firefox/addon/scriptish/>Scriptish</a> installed:
+        <li>If you don't have <a href=https://addons.mozilla.org/firefox/addon/greasemonkey/>Greasemonkey</a> installed:
           <ol>
-            <li>Install <a href=https://addons.mozilla.org/firefox/addon/scriptish/>Scriptish</a>.</li>
+            <li>Install <a href=https://addons.mozilla.org/firefox/addon/greasemonkey/>Greasemonkey</a>.</li>
             <li>Restart Firefox.</li>
           </ol>
         </li>
@@ -217,6 +221,7 @@ code {
           <ol>
             <li>Go to Preferences (<code>Ctrl + F12</code>) → Advanced → Content → JavaScript Options → User JavaScript Folder.</li>
             <li>Chose what will be your userscripts folder.</li>
+            <li>Enable <code><a href=opera:config#UserPrefs|UserJavaScriptonHTTPS target=_blank>User JavaScript on HTTPS</a></code> and save your settings.</li>
           </ol>
         </li>
         <li>Save the Appchan X file as <code>appchan_x.js</code> into your userscripts folder.</li>
@@ -226,8 +231,8 @@ code {
       <ol>
         <li>If you haven't set your userscripts folder:
           <ol>
-            <li>Enter <code>opera:config</code> in the address bar.</li>
-            <li>Under <code>User Prefs</code>, enable <code>User JavaScript</code>.</li>
+            <li>Open <code><a target=opera:config#UserPrefs target=_blank>User Prefs</a></code>.</li>
+            <li>Enable <code>User JavaScript</code> and <code>User JavaScript on HTTPS</code>.</li>
             <li>Set <code>User JavaScript File</code> to what will be your userscripts folder, <code>/sdcard/js</code> for example</li>
             <li>Save your settings.</li>
           </ol>
@@ -333,16 +338,9 @@ code {
 
       <b class=firefox>Firefox</b>:
       <ul>
-        <li><b>Greasemonkey</b> is bugged, use <b>Scriptish</b> instead.</li>
         <li>If Scriptish refuses to auto-update Appchan X, disable <code>Require user scripts to update using HTTPS</code> in Scriptish's preferences under Advanced → Update Security.</li>
         <li>If you get an error stating <code>localStorage is null</code>, go to <code>about:config</code> and enable <code>dom.storage.enabled</code>.</li>
         <li>If you get a <code>Security error</code>, make sure cookies are enabled.</li>
-        <li>If <b>Linkify Plus</b> does not work with <b>Appchan X</b>, make sure to use <b>Scriptish</b> and edit <b>Linkify Plus</b> by adding <code>// @delay 1</code> in its metadata block.</li>
-      </ul>
-
-      <b class=opera>Opera</b> and <b class=opera>Opera Mobile</b>:
-      <ul>
-        <li>For Appchan X to run with HTTPS, enable <code><a href=opera:config#UserPrefs|UserJavaScriptonHTTPS target=_blank>User JavaScript on HTTPS</a></code> and save.</li>
       </ul>
 
       <hr>
