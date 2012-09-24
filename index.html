@@ -195,7 +195,7 @@ code {
       </div></div>
     </nav>
     <section data-id=install>
-      <p>The latest stable releases of <b class=chrome>Chrome</b> and <b class=firefox>Firefox</b> are supported.</p>
+      <p>The latest stable releases of <b class=chrome>Chrome</b>, <b class=firefox>Firefox</b>, and <b class=opera>Opera</b> are supported.</p>
 
       <h1><a class=install href="javascript:;" onclick="/Presto/.test(navigator.userAgent) ? window.location = 'https://raw.github.com/zixaphir/appchan-x/stable/appchan_x.user.js' : document.querySelector('iframe#installframe').src = 'https://raw.github.com/zixaphir/appchan-x/stable/appchan_x.user.js';">Install Appchan X</a></h1>
       <iframe id=installframe style='width:0px;height:0px;display:none;' src=''></iframe>
@@ -226,15 +226,31 @@ code {
         <li>Install Appchan X.</li>
       </ol>
 
+
       <b class=opera>Opera</b>:
       <ol>
-        <li>Support for Opera and all Presto-based browsers has been dropped.
-          <ul>
-            <li>Because I CBA to maintain it.</li>
-          </ul>
+        <li>If you haven't set your userscripts folder:
+          <ol>
+            <li>Go to Preferences (<code>Ctrl + F12</code>) → Advanced → Content → JavaScript Options → User JavaScript Folder.</li>
+            <li>Chose what will be your userscripts folder.</li>
+            <li>Enable <code><a href=opera:config#UserPrefs|UserJavaScriptonHTTPS target=_blank>User JavaScript on HTTPS</a></code> and save your settings.</li>
+          </ol>
         </li>
+        <li>Save the Appchan X file as <code>appchan_x.js</code> into your userscripts folder.</li>
       </ol>
 
+      <b class=opera>Opera Mobile</b>:
+      <ol>
+        <li>If you haven't set your userscripts folder:
+          <ol>
+            <li>Open <code><a target=opera:config#UserPrefs target=_blank>User Prefs</a></code>.</li>
+            <li>Enable <code>User JavaScript</code> and <code>User JavaScript on HTTPS</code>.</li>
+            <li>Set <code>User JavaScript File</code> to what will be your userscripts folder, <code>/sdcard/js</code> for example</li>
+            <li>Save your settings.</li>
+          </ol>
+        </li>
+        <li>Save the Appchan X file as <code>appchan_x.js</code> into your userscripts folder.</li>
+      </ol>
     </section>
     <section data-id=features>
       <ul>
@@ -315,6 +331,7 @@ code {
         <li>If your issue persists, report precise steps to reproduce and console errors, if any. Open your console with:
           <ul>
             <li><code>Ctrl + Shift + J</code> on <b class=chrome>Chrome</b> &amp; <b class=firefox>Firefox</b></li>
+            <li><code>Ctrl + Shift + O</code> on <b class=opera>Opera</b>.</li>
           </ul>
         </li>
       </ol>
