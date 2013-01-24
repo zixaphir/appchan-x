@@ -197,13 +197,12 @@ code {
     <section data-id=install>
       <p>The latest stable releases of <b class=chrome>Chrome</b>, <b class=firefox>Firefox</b>, and <b class=opera>Opera</b> are supported.</p>
 
-      <h1><a class=install href="javascript:;" onclick="/Presto/.test(navigator.userAgent) ? window.location = 'https://raw.github.com/zixaphir/appchan-x/stable/appchan_x.user.js' : document.querySelector('iframe#installframe').src = 'https://raw.github.com/zixaphir/appchan-x/stable/appchan_x.user.js';">Install Appchan X</a></h1>
-      <iframe id=installframe style='width:0px;height:0px;display:none;' src=''></iframe>
+      <h1><a class=install href="'https://raw.github.com/zixaphir/appchan-x/stable/appchan_x.user.js">Install Appchan X</a></h1>
 
       <b>Before you start</b>:
       <ol>
         <li>If you have 4chan X, disable or uninstall it. Appchan X has a custom version of 4chan X baked in and will break if 4chan X runs in parallel with it.</li>
-        <li>If you have a userstyle or userscript that themes 4chan, you may want to disable it or disable Appchan X's style setting.</li>
+        <li>If you have a userstyle or userscript that themes 4chan, you may want to disable it.</li>
       </ol>
       
       <b class=chrome>Chrome</b>:
@@ -228,7 +227,6 @@ code {
         <li>Install Appchan X.</li>
         <li>Enjoy your customizable 4chan with the most powerful 4chan Extension.</li>
       </ol>
-
 
       <b class=opera>Opera</b>:
       <ol>
@@ -257,10 +255,22 @@ code {
         <li>Enjoy your customizable 4chan with the most powerful 4chan Extension.</li>
       </ol>
     </section>
+
     <section data-id=features>
+      <ul>
+        <li>Basics
+          <ul>
+            <li>Appchan X is a hybrid style / extension userscript that adds an enormous amount of functionality while providing a wide variety of theming and stylistic options for 4chan.</li>
+          </ul>
+        </li>
       <ul>
         <li>Enhancing
           <ul>
+            <li>Toggleable navigation links for boards and catalogs
+              <ul>
+                <li>Options for external catalogs, where available!</li>
+              </ul>
+            </li>
             <li>Archive Redirection for 404'd Threads</li>
             <li>Customizable Keybinds</li>
             <li>Time Localization + Custom Formatting</li>
@@ -269,7 +279,7 @@ code {
             <li>Index &amp; Reply Navigation</li>
             <li>Styles and Theming</li>
             <li>Custom Navigation</li>
-            <li>Linkification</li>
+            <li>Ban Checking</li>
           </ul>
         </li>
         <li>Filtering
@@ -280,22 +290,36 @@ code {
             <li>Optional Stubs</li>
           </ul>
         </li>
+        <li>Linkification
+          <ul>
+            <li>Convert text URLs to clickable links</li>
+            <li>Embedding and Title Links for various external video and audio hosting websites, like YouTube, Vimeo, and SoundCloud</li>
+          </ul>
+        </li>
         <li>Imaging
           <ul>
-            <li>Auto-Gif</li>
-            <li>PNG Thumbnail Fixing</li>
+            <li>Thumbnail Replacement
+              <ul>
+                <li>Fixes incorrect colors for PNG and auto-animates GIF thumbnails</li>
+              </ul>
+            </li>
             <li>Image Expansion</li>
             <li>Image Fit: Full, Width, Height or Screen</li>
             <li>Image Reload on Loading Error</li>
             <li>Image Hover</li>
             <li>Customizable Sauce Links</li>
             <li>Reveal Spoilers</li>
-            <li>Prefetching</li>
+            <li>Image Prefetching</li>
           </ul>
         </li>
         <li>Monitoring
           <ul>
-            <li>Thread Updater With Unread Count</li>
+            <li>Thread Updater With Unread Count, minimum limit of 1 second
+              <ul>
+                <li>Optional configurable interval for background tabs</li>
+                <li>Optional additional delays for threads with slower post activity</li>
+              </ul>
+            </li>
             <li>Scrolling onto New Posts</li>
             <li>Unread Count with Favicon Indicator</li>
             <li>Post In Title</li>
@@ -319,6 +343,7 @@ code {
             <li>Captcha Reloading on Backspace</li>
             <li>Persistent QR</li>
             <li>Remember QR Size, Name, E-Mail, Subject, Image Spoiler, and Sage</li>
+            <li>Board-specific personas for those who maintain seperate identities on certain boards</li>
             <li>Markdown</li>
           </ul>
         </li>
@@ -335,44 +360,65 @@ code {
         </li>
         <li>Styling
           <ul>
-            <li>Dialogs
+            <li>Interface
               <ul>
-                <li>Alternate Post Colors</li>
-                <li>Slideout or hide global announcements</li>
-                <li>Slideout, transparent, or fixed post form</li>
-                <li>Slideout Navigation</li>
-                <li>Slideout or hide thread watcher</li>
+                <li>Single or Multi-column menu interface.</li>
+                <li>Configurable sidebar position and size</li>
+                <li>Thread Padding</li>
+                <li>Configurable dialogs for announcements, thread watcher, updater, and slideout navigation</li>
+                <li>Configurable icons</li>
               </ul>
-            <li>Rice
+          </ul>
+          <ul>
+            <li>Posts
               <ul>
-                <li>Block ads</li>
-                <li>Alter checkboxes</li>
-                <li>Captcha Opacity</li>
-                <li>Emoji for characters and OSs</li>
-                <li>Mark backlinks to filtered posts</li>
-                <li>Font styles and sizes</li>
-                <li>Mascots with settings for positions, locations, and SFW / NSFW boards</li>
-                <li>Themes and theme settings for SFW / NSFW boards</li>
-                <li>Toggleable backgrounds for OP posts</li>
-                <li>Sage Highlighting</li>
-                <li>Toggleable underlines for hyperlinks</li>
+                <li>Alternate reply colors</li>
+                <li>Additional coloring options for file info and reply headings</li>
+                <li>Configurable backlink positions</li>
+                <li>Sage Highlighting and Emoji</li>
+                <li>Options for reply spacing, padding, and widths</li>
+                <li>Configurable layering options for expanded images</li>
               </ul>
-            <li>Layout
+          </ul>
+          <ul>
+            <li>Aesthetics
               <ul>
-                <li>Position for the 4chan banner and logo</li>
-                <li>Positions for board navigation and pagination</li>
-                <li>Toggleable board subtitles</li>
-                <li>Toggleable compact postform styles</li>
-                <li>Toggleable force reply line break</li>
-                <li>Toggleable Horizontal Rules</li>
-                <li>Orientation positioning of UI icons</li>
-                <li>Toggleable force for images to overlap sidebar layout</li>
-                <li>Toggleable fit width replies</li>
-                <li>Customizable page margin</li>
-                <li>Customizable reply padding and spacing</li>
-                <li>Ability to move sidebar to right or left side of screen</li>
-                <li>Customizable stat and updater positions</li>
-                <li>Customizable conditions for post form textarea resizability</li>
+                <li>4chan Style Script Navigation and Sidebar emulation</li>
+                <li>Ad Blocking, shrinking, and transparency</li>
+                <li>Optional glowing sidebar elements</li>
+                <li>Optional circle checkboxes</li>
+                <li>Custom CSS, with examples</li>
+                <li>Additional Emoji configuration options</li>
+                <li>Font configuration</li>
+                <li>Optional shadows for quote previews and inlined posts, rounded edges, slideout transitions, and link underlines</li>
+                <li>Options for separate themes for SFW and NSFW boards</li>
+              </ul>
+          </ul>
+          <ul>
+            <li>Mascots
+              <ul>
+                <li>Option to disable</li>
+                <li>Configurable positions and starting locations</li>
+                <li>Options to overlap posts, apply greyscale filters, hide on catalogs, or add transparency</li>
+                <li>Options for separate mascots on SFW and NSFW boards</li>
+              </ul>
+          </ul>
+          <ul>
+            <li>Navigation
+              <ul>
+                <li>Postions and alignment for board navigation and pagination</li>
+                <li>Optionally remove non-link text</li>
+              </ul>
+          </ul>
+        </li>
+          <ul>
+            <li>Post Form
+              <ul>
+                <li>Compact and expanded post form options</li>
+                <li>Various styles, including slideout, fixed, faded, and floating</li>
+                <li>Toggleable "show post form" button</li>
+                <li>Smart Tripcode Hider</li>
+                <li>Optional decorations and captcha opacity</li>
               </ul>
           </ul>
         </li>
