@@ -568,13 +568,10 @@ div.navLinks > a:first-of-type:hover::after,
       )
 
       iconOffset =
-        if align is 'left'
-          250 - Style.sidebar
+        position[position.length - 1] - (if _conf['4chan SS Navigation']
+          0
         else
-          position[position.length - 1] - (if _conf['4chan SS Navigation']
-            0
-          else
-            Style.sidebar + parseInt(_conf["Right Thread Padding"], 10))
+          Style.sidebar + parseInt(_conf["Right Thread Padding"], 10))
       if iconOffset < 0 then iconOffset = 0
 
       css += """
@@ -653,7 +650,10 @@ body > a[style="cursor: pointer; float: right;"]::after {
   top: 17px !important;
 }
 #{if _conf['Boards Navigation'] is 'top' or _conf['Boards Navigation'] is 'sticky top' then '#boardNavDesktop' else if _conf['Pagination'] is 'top' or _conf['Pagination'] is 'sticky top' then '.pagelist'} {
-  padding-#{align}: #{iconOffset}px;
+  #{if _conf['4chan SS Navigation']
+    "padding-#{align}: #{iconOffset}px;"
+  else
+    "margin-#{align}: #{iconOffset}px;"}
 }\n
 """
 
@@ -689,7 +689,7 @@ body > a[style="cursor: pointer; float: right;"]::after {
         ]
       )
 
-      iconOffset = 20 + (if _conf['Updater Position'] is 'top' then 100) - (if _conf['4chan SS Navigation']
+      iconOffset = 20 + (if g.REPLY and _conf['Updater Position'] is 'top' then 100 else 0) - (if _conf['4chan SS Navigation']
         0
       else
         Style.sidebar + parseInt _conf[align.capitalize() + " Thread Padding"], 10)
@@ -770,7 +770,10 @@ div.navLinks > a:first-of-type::after {
   #{align}: 18px !important;
 }
 #{if _conf['Boards Navigation'] is 'top' or _conf['Boards Navigation'] is 'sticky top' then '#boardNavDesktop' else if _conf['Pagination'] is 'top' or _conf['Pagination'] is 'sticky top' then '.pagelist'} {
-  padding-#{align}: #{iconOffset}px;
+  #{if _conf['4chan SS Navigation']
+    "padding-#{align}: #{iconOffset}px;"
+  else
+    "margin-#{align}: #{iconOffset}px;"}
 }
 """
 
@@ -781,7 +784,7 @@ div.navLinks > a:first-of-type::after {
 #stats {
   #{align}: #{if _conf["Updater Position"] is "top" then "24" else "2"}px !important;
   #{Style.sidebarLocation[1]}: auto !important;
-  top: #{if _conf["Updater Position"] == "top" then "1px" else "auto"} !important;
+  top: #{if _conf["Updater Position"] == "top" then "0" else "auto"} !important;
   bottom: #{if _conf["Updater Position"] == "bottom" then "2px" else "auto"} !important;
 }
 """
@@ -969,6 +972,11 @@ hr {
 #navlinks a {
   position: fixed;
   z-index: 85;
+  opacity: 0.5;
+  display: inline-block;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  margin: 1.5px;
 }
 /* Navigation */
 #boardNavDesktop {
@@ -1225,7 +1233,7 @@ else "
 #updater {
   position: fixed;
   z-index: 84;
-  padding: 2px;
+  padding: 1px;
 }
 #updater:not(:hover) > div:not(.move) {
   display: none;
@@ -2713,10 +2721,10 @@ a[style="cursor: pointer; float: right;"] ~ div[style^="width: 100%;"] > table {
   color: #{theme["Warnings"]};
 }
 #navlinks a:first-of-type {
-  border-bottom: 11px solid rgb(#{if Style.lightTheme then "130,130,130" else "230,230,230"});
+  border-bottom: 11px solid rgb(#{if Style.lightTheme then "130,130,130" else "152,152,152"});
 }
 #navlinks a:last-of-type {
-  border-top: 11px solid rgb(#{if Style.lightTheme then "130,130,130" else "230,230,230"});
+  border-top: 11px solid rgb(#{if Style.lightTheme then "130,130,130" else "152,152,152"});
 }
 #charCount {
   color: #{(if Style.lightTheme then "rgba(0,0,0,0.7)" else "rgba(255,255,255,0.7)")};
