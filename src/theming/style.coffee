@@ -144,6 +144,7 @@ a.useremail[href*='#{name.toUpperCase()}']:last-of-type::#{position} {
       $.after checkbox, div
       if div.parentElement.tagName.toLowerCase() != 'label'
         $.on div, 'click', click
+
     selects = $$('select:not(.riced)', source)
     for select in selects
       $.addClass select, 'riced'
@@ -2488,6 +2489,7 @@ opacity: 0;
 .clear-bug {
   display: none;
 }
+#{if Conf["Custom CSS"] then Conf["customCSS"] else ""}
 """
 
   theme: (theme) ->

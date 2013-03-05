@@ -29,7 +29,8 @@ ReplyHiding =
       g.hiddenReplies[id] = Date.now()
     $.set "hiddenReplies/#{g.BOARD}/", g.hiddenReplies
 
-  hide: (root, show_stub=Conf['Show Stubs']) ->
+  hide: (root, show_stub) ->
+    show_stub or= Conf['Show Stubs']
     hide = $('.hide_reply_button', root)
     return if hide.hidden # already hidden once by the filter
     hide.hidden = true
