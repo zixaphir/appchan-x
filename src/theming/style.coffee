@@ -1674,6 +1674,12 @@ else ""
 .focused .subMenu {
   display: block;
 }
+/* Stubs */
+#{if _conf['Fit Width Replies'] then "
+.stub {
+  float: right;
+  clear: both;
+}" else ""}
 /* Emoji */
 #{unless _conf["Emoji"] is "disable" then Style.emoji _conf["Emoji Position"] else ""}
 /* Element Replacing */

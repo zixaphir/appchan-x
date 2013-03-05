@@ -42,15 +42,10 @@ ReplyHiding =
 
     stub = $.el 'div',
       className: 'stub'
-      innerHTML: "<a href='javascript:;' id='show#{id = root.id[2..]}'><span>[ + ]</span> </a>"
+      innerHTML: "<a href='javascript:;' id='show#{id = root.id[2..]}'>#{if Conf['Anonymize'] then 'Anonymous' else $('.desktop > .nameBlock', root).textContent} <span>[ + ]</span></a>"
     a = stub.firstChild
     $.on  a, 'click', ->
       ReplyHiding.toggle button = @parentNode, root = $.id("pc#{@id[4..]}"), id
-    $.add a, $.tn if Conf['Anonymize'] then 'Anonymous' else $('.desktop > .nameBlock', root).textContent
-    if Conf['Menu']
-      menuButton = Menu.a.cloneNode true
-      $.on menuButton, 'click', Menu.toggle
-      $.add stub, [$.tn(' '), menuButton]
     $.before root, stub
 
   show: (root) ->
