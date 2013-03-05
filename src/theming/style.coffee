@@ -366,7 +366,7 @@ body {
 .jscBoxB {
   left: 320px;
   bottom: 20px;
-  z-index: 1000;
+  z-index: 30;
   border: 1px solid;
   border-color: ThreeDHighlight ThreeDShadow ThreeDShadow ThreeDHighlight;
   background: ThreeDFace;
@@ -440,7 +440,7 @@ body > a[style="cursor: pointer; float: right;"]::after,
 #imgControls label:first-of-type::after,
 #catalog::after,
 #fappeTyme {
-  z-index: 90;
+  z-index: 18;
   position: fixed;
   display: block;
   width: 15px;
@@ -456,7 +456,7 @@ body > div.navLinks > a:first-of-type,
 #boardNavDesktopFoot,
 body > a[style="cursor: pointer; float: right;"],
 #catalog {
-  z-index: 88;
+  z-index: 16;
 }
 #navtopright .exlinksOptionsLink:hover,
 body > div.navLinks > a:first-of-type:hover,
@@ -465,10 +465,10 @@ body > div.navLinks > a:first-of-type:hover,
 #boardNavDesktopFoot:hover,
 body > a[style="cursor: pointer; float: right;"]:hover,
 #catalog:hover {
-  z-index: 89;
+  z-index: 17;
 }
 #imgControls {
-  z-index: 91;
+  z-index: 19;
 }
 #imgControls {
   position: fixed;
@@ -629,7 +629,7 @@ div.navLinks > a:first-of-type::after {
 #prefetch {
   width: #{248 + Style.sidebarOffset.W}px;
   #{align}: 2px;
-  top: 20px;
+  top: 1.6em;
   text-align: #{Style.sidebarLocation[1]};
 }
 #boardNavDesktopFoot::after,
@@ -689,10 +689,22 @@ body > a[style="cursor: pointer; float: right;"]::after {
         ]
       )
 
-      iconOffset = 20 + (if g.REPLY and _conf['Updater Position'] is 'top' then 100 else 0) - (if _conf['4chan SS Navigation']
-        0
-      else
-        Style.sidebar + parseInt _conf[align.capitalize() + " Thread Padding"], 10)
+      iconOffset = (
+        if g.REPLY and _conf['Prefetch'] 
+          250 + Style.sidebarOffset.W
+        else
+          20 + (
+            if g.REPLY and _conf['Updater Position'] is 'top'
+              100
+            else
+              0
+          )
+      ) - (
+        if _conf['4chan SS Navigation']
+          0
+        else
+          Style.sidebar + parseInt _conf[align.capitalize() + " Thread Padding"], 10
+      )
 
       css += """
 /* Image Expansion */
@@ -747,7 +759,7 @@ div.navLinks > a:first-of-type::after {
 #prefetch {
   width: #{248 + Style.sidebarOffset.W}px;
   #{align}: 2px;
-  top: 1px;
+  top: 0;
   text-align: #{Style.sidebarLocation[1]};
 }
 #navlinks a,
@@ -784,8 +796,8 @@ div.navLinks > a:first-of-type::after {
 #stats {
   #{align}: #{if _conf["Updater Position"] is "top" then "24" else "2"}px !important;
   #{Style.sidebarLocation[1]}: auto !important;
-  top: #{if _conf["Updater Position"] == "top" then "0" else "auto"} !important;
-  bottom: #{if _conf["Updater Position"] == "bottom" then "2px" else "auto"} !important;
+  top: #{if _conf["Updater Position"] == "top" then "-1px" else "auto"} !important;
+  bottom: #{if _conf["Updater Position"] == "bottom" then "-2px" else "auto"} !important;
 }
 """
 
@@ -862,6 +874,7 @@ div.navLinks > a:first-of-type::after {
 #delform > hr:last-of-type,
 #navbotright,
 #postForm,
+#styleSwitcher,
 .boardBanner > div,
 .mobile,
 .postingMode,
@@ -971,7 +984,7 @@ hr {
 /* Thread / Reply Nav */
 #navlinks a {
   position: fixed;
-  z-index: 85;
+  z-index: 12;
   opacity: 0.5;
   display: inline-block;
   border-right: 6px solid transparent;
@@ -980,7 +993,7 @@ hr {
 }
 /* Navigation */
 #boardNavDesktop {
-  z-index: 8;
+  z-index: 6;
   border-width: 1px;
 #{{
 "sticky top": "
@@ -1023,8 +1036,19 @@ else "
 }
 /* Pagination */
 .pagelist {
-  z-index: 85;
   border-width: 1px;
+  text-align: #{_conf["Pagination Alignment"]};
+#{
+if _conf['4chan SS Navigation'] then "
+  left: 0;
+  right: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0 !important;"
+else "
+  #{Style.sidebarLocation[0]}: #{Style.sidebar + parseInt(_conf["Right Thread Padding"], 10) + editSpace["right"]}px;
+  #{Style.sidebarLocation[1]}: #{parseInt(_conf["Left Thread Padding"], 10) + editSpace["left"] + 2}px;"
+}
 #{{
 "sticky top": "
   position: fixed;
@@ -1047,24 +1071,34 @@ else "
 "hide": "
   display: none;"
 
-}[_conf['Pagination']]}
-#{
-if _conf['4chan SS Navigation'] then "
-  left: 0;
-  right: 0;
-  border-left: 0;
-  border-right: 0;
-  border-radius: 0 !important;"
+"on side": "
+  position: fixed;
+  padding: 0;
+  top: auto;
+  bottom: #{if ['fixed', 'transparent fade'].contains(_conf['Post Form Style']) then (20.2 + (if !g.REPLY or !!$ '#postForm input[name=spoiler]' then 1.4 else 0) + (if Conf['Show Post Form Header'] then 1.5 else 0) + (if Conf['Post Form Decorations'] then 0.2 else 0)) else .5}em;
+  #{Style.sidebarLocation[1]}: auto;
+  #{Style.sidebarLocation[0]}: #{250 + Style.sidebarOffset.W}px
+  position: fixed;
+#{if Style.sidebarLocation[0] is 'right' then "
+  #{Style.agent}transform: rotate(90deg);
+  #{Style.agent}transform-origin: bottom right;"
 else "
-  #{Style.sidebarLocation[0]}: #{Style.sidebar + parseInt(_conf["Right Thread Padding"], 10) + editSpace["right"]}px;
-  #{Style.sidebarLocation[1]}: #{parseInt(_conf["Left Thread Padding"], 10) + editSpace["left"] + 2}px;"
-}
+  #{Style.agent}transform: rotate(-90deg);
+  #{Style.agent}transform-origin: bottom left;
+"}
+  z-index: 6;
+  margin: 0;
+  background: none transparent !important;
+  border: 0 none !important;
+  text-align: right;
+"
+}[_conf['Pagination']]}
 #{if _conf["Hide Navigation Decorations"] then "
   font-size: 0;
   color: transparent;
   word-spacing: 0;
 " else ""}
-  text-align: #{_conf["Pagination Alignment"]};
+  z-index: 6;
 }
 .pagelist input,
 .pagelist div {
@@ -1086,7 +1120,6 @@ else "
 }
 /* Banner */
 .boardBanner {
-  z-index: -1;
   line-height: 0;
 }
 #{if _conf["Faded 4chan Banner"] then "
@@ -1112,6 +1145,7 @@ else "
   right: 0;
   top: 100%;
   -moz-transform: scaleY(-1);
+  z-index: -1;
 }
 .webkit #Banner {
   -webkit-box-reflect: below 0 -webkit-linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0) 10%, rgba(255,255,255,.5));
@@ -1153,7 +1187,6 @@ else "
   display: table;
   margin: 0 auto;
   text-align: center;
-  z-index: -1;
 }"
 
 "hide": "
@@ -1165,7 +1198,7 @@ else "
 #boardTitle {
   font-size: #{parseInt(_conf["Font Size"], 10) + 10}px;
   text-align: center;
-  z-index: 4;
+  z-index: 2;
 #{{
 "at sidebar top": "
   position: fixed;
@@ -1210,11 +1243,11 @@ else "
   max-height: 97%;
   max-width: 75%;
   padding: 10px;
-  z-index: 96;
+  z-index: 22;
 }
 #qp {
   position: fixed;
-  z-index: 96;
+  z-index: 22;
 }
 #qp blockquote::after {
   clear: both;
@@ -1228,12 +1261,14 @@ else "
 #menu {
   position: absolute;
   outline: none;
+  z-index: 22;
 }
 /* Updater */
 #updater {
   position: fixed;
-  z-index: 84;
-  padding: 1px;
+  z-index: 10;
+  padding: 0 1px 1px;
+  border: 1px solid transparent;
 }
 #updater:not(:hover) > div:not(.move) {
   display: none;
@@ -1278,10 +1313,14 @@ else "
 #{if _conf['Images Overlap Post Form'] then "
 .fullSize {
   position: relative;
-  z-index: 96;
+  z-index: 22;
 }" else ""
 }
-
+/* Prefetcher */
+#prefetch {
+  z-index: 9;
+  position: fixed;
+}
 /* Delete Buttons */
 #{if _conf['Hide Delete UI'] then "
 .deleteform,
@@ -1294,7 +1333,7 @@ else "
 " else "
 .deleteform {
   position: fixed;
-  z-index: 90;
+  z-index: 18;
   width: 0;
   bottom: 0;
   right: 0;
@@ -1307,7 +1346,7 @@ else "
   width: auto;
 }
 .deleteform::before {
-  z-index: 90;
+  z-index: 18;
   border-width: 1px 0 0 1px;
   border-style: solid;
   content: 'X';
@@ -1387,7 +1426,7 @@ hide: "
 /* Watcher */
 #watcher {
   position: fixed;
-  z-index: 86;
+  z-index: 14;
   padding: 2px;
 }
 #{ if _conf['Slideout Watcher'] then "
@@ -1460,6 +1499,12 @@ hide: "
 .inline .menu_button {
   opacity: 1;
 }
+#{if _conf['Color user IDs'] then "
+.posteruid .hand {
+  padding: .1em .3em;
+  border-radius: 1em;
+  font-size: 80%;
+}" else ""}
 .fileInfo {
   padding: 0 3px;
 }
@@ -1646,6 +1691,10 @@ input:checked + .rice {
   background-repeat: no-repeat;
   background-position: bottom right;
 }
+#{if _conf["Circle Checkboxes"] then "
+.rice {
+  border-radius: 6px;
+}" else ""}
 /* Selects */
 .selectrice {
   position: relative;
@@ -1675,11 +1724,11 @@ input:checked + .rice {
   max-height: 120px;
   overflow-y: auto;
   overflow-x: hidden;
-  z-index: 99999;
+  z-index: 32;
 }
 /* Post Form */
 #qr {
-  z-index: 95;
+  z-index: 20;
   position: fixed;
   padding: 1px;
   border: 1px solid transparent;
@@ -1892,7 +1941,7 @@ input:not([type=radio]) {
 }
 #showQR {
   display: #{if _conf["Hide Show Post Form"] then "none" else "block"};
-  z-index: 6;
+  z-index: 4;
   #{Style.sidebarLocation[0]}: 2px;
   width: #{width}px;
   background-color: transparent;
@@ -2045,7 +2094,7 @@ img[src*='support.4chan.org'] {
 /* Options */
 #overlay {
   position: fixed;
-  z-index: 998;
+  z-index: 30;
   top: 0;
   right: 0;
   left: 0;
@@ -2189,7 +2238,7 @@ article li {
 }
 /* Hover Functionality */
 #mouseover {
-  z-index: 999;
+  z-index: 32;
   position: fixed;
   max-width: 70%;
 }
@@ -2384,7 +2433,7 @@ opacity: 0;
 }
 #post-preview {
   position: absolute;
-  z-index: 100;
+  z-index: 22;
 }
 #settings,
 #threads,
@@ -2403,7 +2452,6 @@ opacity: 0;
 }
 .thread {
   padding: 0;
-  #{(unless _conf['Images Overlap Post Form'] then "z-index: 0;" else "")}
 }
 .extended-small .thread,
 .small .thread {
