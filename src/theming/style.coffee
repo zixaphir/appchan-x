@@ -953,6 +953,9 @@ hr {
   padding: 0;
   margin: 0;
 }
+.center {
+  text-align: center;
+}
 /* Symbols */
 .dropmarker {
   vertical-align: middle;
@@ -2004,28 +2007,29 @@ a:only-of-type > .remove {
   margin: 0 0.5em;
 }
 /* Ads */
-img.topad,
-img.middlead,
-img.bottomad {
+.topad img,
+.middlead img,
+.bottomad img {
   opacity: 0.3;
   #{Style.agent}transition: opacity .3s linear;
 }
-img.topad:hover,
-img.middlead:hover,
-img.bottomad:hover {
+.topad img:hover,
+.middlead img:hover,
+.bottomad img:hover {
   opacity: 1;
 }
 #{if _conf["Block Ads"] then "
 /* AdBlock Minus */
 .bottomad + hr,
 a[href*='jlist'],
-  img[src^='//static.4chan.org/support/'] {
+a[href*='engine.4chan-ads.org'],
+img[src*='support.4chan.org'] {
   display: none;
 }
 " else ""}
 #{if _conf["Shrink Ads"] then "
 a[href*='jlist'],
-img[src^='//static.4chan.org/support/'] {
+img[src*='support.4chan.org'] {
   width: 500px;
   height: auto;
 }
