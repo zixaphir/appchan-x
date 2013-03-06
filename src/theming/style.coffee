@@ -349,7 +349,9 @@ body {
     else
       false
 
-  jsColorCSS: -> """
+  jsColorCSS: -> 
+    agent = Style.agent
+    """
 .jscBox {
   width: 251px;
   height: 155px;
@@ -374,7 +376,7 @@ body {
 .jscPad {
   width: 181px;
   height: 101px;
-  background-image: #{Style.agent}linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1)), #{Style.agent}linear-gradient(left, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+  background-image: #{agent}linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1)), #{agent}linear-gradient(left, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
   background-repeat: no-repeat;
   background-position: 0 0;
 }
@@ -396,7 +398,7 @@ body {
 .jscSld {
   width: 16px;
   height: 101px;
-  background-image: #{Style.agent}linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1));
+  background-image: #{agent}linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1));
 }
 .jscSldB {
   right: 10px;
@@ -806,6 +808,7 @@ div.navLinks > a:first-of-type::after {
   layout: ->
 
     _conf = Conf
+    agent = Style.agent
 
     # Position of submenus in relation to the post menu.
     position = {
@@ -953,7 +956,7 @@ body::before {
   #{Style.sidebarLocation[0]}: 0;
   width: #{if _conf["Sidebar"] is 'large' then 305 else if _conf['Sidebar'] is 'normal' then 254 else if _conf['Sidebar'] is 'minimal' then 27 else 0}px;
   z-index: 1;
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
   display: block;
 }
 " else ""}
@@ -1080,11 +1083,11 @@ else "
   #{Style.sidebarLocation[0]}: #{250 + Style.sidebarOffset.W}px
   position: fixed;
 #{if Style.sidebarLocation[0] is 'right' then "
-  #{Style.agent}transform: rotate(90deg);
-  #{Style.agent}transform-origin: bottom right;"
+  #{agent}transform: rotate(90deg);
+  #{agent}transform-origin: bottom right;"
 else "
-  #{Style.agent}transform: rotate(-90deg);
-  #{Style.agent}transform-origin: bottom left;
+  #{agent}transform: rotate(-90deg);
+  #{agent}transform-origin: bottom left;
 "}
   z-index: 6;
   margin: 0;
@@ -1125,11 +1128,11 @@ else "
 #{if _conf["Faded 4chan Banner"] then "
 .boardBanner {
   opacity: 0.5;
-  #{Style.agent}transition: opacity 0.3s ease-in-out .5s;
+  #{agent}transition: opacity 0.3s ease-in-out .5s;
 }
 .boardBanner:hover {
   opacity: 1;
-  #{Style.agent}transition: opacity 0.3s ease-in;
+  #{agent}transition: opacity 0.3s ease-in;
 }
 " else ""}
 #{if _conf["4chan Banner Reflection"] then "
@@ -1355,7 +1358,7 @@ else "
   bottom: 0;
   right: 0;
   font-size: #{_conf['Font Size']}px;
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
   height: 1.6em;
   width: 1.4em;
   text-align: center;
@@ -1375,7 +1378,7 @@ else "
   font-size: 0;
   color: transparent;
   overflow: hidden;
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
 }
 #boardNavDesktopFoot a,
 #boardNavDesktopFoot a::after,
@@ -1434,7 +1437,7 @@ hide: "
   width: #{width}px;
   #{Style.sidebarLocation[0]}: 2px !important;
   #{Style.sidebarLocation[1]}: auto !important;
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
 }
 #watcher .move {
   cursor: default;
@@ -1468,7 +1471,7 @@ hide: "
   margin: 0;
 }
 #globalMessage:hover {
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
   overflow-y: auto;
 }
 #globalMessage:not(:hover) {
@@ -1490,7 +1493,7 @@ hide: "
   float: right;
   margin: 0 3px;
   opacity: 0;
-  #{Style.agent}transition: opacity .3s ease-out 0s;
+  #{agent}transition: opacity .3s ease-out 0s;
 }
 .post:hover .hide_reply_button,
 .post:hover .menu_button,
@@ -1533,7 +1536,7 @@ s {
 /* OP */
 #{if _conf["OP Background"] then "
 .op.post {
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
 }
 .op .postInfo {
   padding: 3px 3px 0;
@@ -1778,8 +1781,8 @@ input:checked + .rice {
   #{Style.sidebarLocation[1]}: auto !important;
 }
 #qr #qrtab {
-  #{Style.agent}transform: rotate(#{(if Style.sidebarLocation[0] is "left" then "" else "-")}90deg);
-  #{Style.agent}transform-origin: bottom #{Style.sidebarLocation[0]};
+  #{agent}transform: rotate(#{(if Style.sidebarLocation[0] is "left" then "" else "-")}90deg);
+  #{agent}transform-origin: bottom #{Style.sidebarLocation[0]};
   position: absolute;
   top: 0;
   #{Style.sidebarLocation[0]}: 100%;
@@ -1808,13 +1811,13 @@ input:checked + .rice {
   #{Style.sidebarLocation[0]}: 2px !important;
   #{Style.sidebarLocation[1]}: auto !important;
   opacity: 0.2;
-  #{Style.agent}transition: opacity .3s ease-in-out 1s;
+  #{agent}transition: opacity .3s ease-in-out 1s;
 }
 #qr:hover,
 #qr.focus,
 #qr.dump {
   opacity: 1;
-  #{Style.agent}transition: opacity .3s linear;
+  #{agent}transition: opacity .3s linear;
 }"
 }[_conf['Post Form Style']] or ""}
 
@@ -1832,18 +1835,18 @@ else ""}
 #{
 if _conf['Post Form Style'] isnt 'float' and _conf["Post Form Slideout Transitions"] then "
 #qr {
-  #{Style.agent}transition: #{Style.sidebarLocation[0]} .3s ease-in-out 1s;
+  #{agent}transition: #{Style.sidebarLocation[0]} .3s ease-in-out 1s;
 }
 #qr:hover,
 #qr.focus,
 #qr.dump {
-  #{Style.agent}transition: #{Style.sidebarLocation[0]} .3s linear;
+  #{agent}transition: #{Style.sidebarLocation[0]} .3s linear;
 }
 #qrtab {
-  #{Style.agent}transition: opacity .3s ease-in-out 1s;
+  #{agent}transition: opacity .3s ease-in-out 1s;
 }
 #qr:hover #qrtab {
-  #{Style.agent}transition: opacity .3s linear;
+  #{agent}transition: opacity .3s linear;
 }"
 }
 
@@ -1927,7 +1930,7 @@ input.field.tripped:not(:hover):not(:focus) {
 .selectrice,
 button,
 input:not([type=radio]) {
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
   font-size: #{parseInt(_conf['Font Size'], 10)}px;
   height: 1.6em;
   margin: 1px 0 0;
@@ -1957,7 +1960,7 @@ input:not([type=radio]) {
 }
 /* Fake File Input */
 #file {
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
   display: inline-block;
   width: 74.6%;
   margin-right: 0.4%;
@@ -2001,7 +2004,7 @@ input:not([type=radio]) {
   overflow-x: auto;
 }
 .thumbnail {
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
   cursor: move;
   border: 1px solid transparent;
   background: rgba(0,0,0,.2) 50% 20% cover;
@@ -2013,7 +2016,7 @@ input:not([type=radio]) {
   overflow: hidden;
   position: relative;
   text-shadow: 0 1px 1px #000;
-  #{Style.agent}transition: opacity .25s ease-in-out;
+  #{agent}transition: opacity .25s ease-in-out;
   vertical-align: top;
 }
 .thumbnail:hover,
@@ -2074,7 +2077,7 @@ a:only-of-type > .remove {
 .middlead img,
 .bottomad img {
   opacity: 0.3;
-  #{Style.agent}transition: opacity .3s linear;
+  #{agent}transition: opacity .3s linear;
 }
 .topad img:hover,
 .middlead img:hover,
@@ -2314,7 +2317,7 @@ article li {
 }
 .mascot .mascotoptions {
 opacity: 0;
-  #{Style.agent}transition: opacity .3s linear;
+  #{agent}transition: opacity .3s linear;
 }
 .mascot:hover .mascotoptions {
   opacity: 1;
@@ -2348,7 +2351,7 @@ opacity: 0;
   right: 300px;
   bottom: 10px;
   margin: 0;
-  #{Style.agent}transition: all .2s ease-in-out;
+  #{agent}transition: all .2s ease-in-out;
   opacity: 0;
 }
 .theme_tab .selectedtheme h1 {
@@ -2404,7 +2407,7 @@ opacity: 0;
 }
 #mascotConf .option,
 #mascotConf .optionlabel {
-  #{Style.agent}box-sizing: border-box;
+  #{agent}box-sizing: border-box;
   width: 50%;
   display: inline-block;
   vertical-align: middle;
@@ -2560,6 +2563,7 @@ opacity: 0;
 
   theme: (theme) ->
     _conf = Conf
+    agent = Style.agent
 
     bgColor = new Style.color Style.colorToHex backgroundC = theme["Background Color"]
 
@@ -2589,7 +2593,7 @@ opacity: 0;
 .filter_highlight > .reply {
   box-shadow: -5px 0 #{theme["Backlinked Reply Outline"]};
 }
-::#{Style.agent}selection {
+::#{agent}selection {
   background: #{theme["Text"]};
   color: #{backgroundC};
 }
@@ -2925,12 +2929,12 @@ a .name {
   box-shadow: #{if _conf['Quote Shadows'] then "5px 5px 5px #{theme['Shadow Color']}" else  ""};
 }
 .placeholder,
-#qr input::#{Style.agent}placeholder,
-#qr textarea::#{Style.agent}placeholder {
+#qr input::#{agent}placeholder,
+#qr textarea::#{agent}placeholder {
   color: #{if Style.lightTheme then "rgba(0,0,0,0.3)" else "rgba(255,255,255,0.2)"} !important;
 }
-#qr input:#{Style.agent}placeholder,
-#qr textarea:#{Style.agent}placeholder,
+#qr input:#{agent}placeholder,
+#qr textarea:#{agent}placeholder,
 .placeholder {
   color: #{if Style.lightTheme then "rgba(0,0,0,0.3)" else "rgba(255,255,255,0.2)"} !important;
 }
@@ -3027,7 +3031,7 @@ data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='filters' 
     if _conf["Alternate Post Colors"]
       css += """
 .replyContainer:not(.hidden):nth-of-type(2n+1) .post {
-  background-image: #{Style.agent}linear-gradient(#{if Style.lightTheme then "rgba(0,0,0,0.05), rgba(0,0,0,0.05)" else "rgba(255,255,255,0.02), rgba(255,255,255,0.02)"});
+  background-image: #{agent}linear-gradient(#{if Style.lightTheme then "rgba(0,0,0,0.05), rgba(0,0,0,0.05)" else "rgba(255,255,255,0.02), rgba(255,255,255,0.02)"});
 }\n
 """
 
