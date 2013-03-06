@@ -1577,6 +1577,10 @@ else ""
   font-style: italic;
   #{if _conf["Bolds"] then 'font-weight: 800;' else ''}
 }
+.filtered,
+.quotelink.filtered {
+  text-decoration: underline; text-decoration: line-through !important;
+}
 /* Backlinks */
 #{{
 "lower left": "
