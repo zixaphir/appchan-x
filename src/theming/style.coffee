@@ -807,8 +807,9 @@ div.navLinks > a:first-of-type::after {
 
   layout: ->
 
-    _conf = Conf
-    agent = Style.agent
+    _conf   = Conf
+    agent   = Style.agent
+    xOffset = if _conf["Sidebar Location"] is "left" then '' else '-'
 
     # Position of submenus in relation to the post menu.
     position = {
@@ -1763,8 +1764,7 @@ input:checked + .rice {
 #qr:hover,
 #qr.focus,
 #qr.dump {
-  #{Style.sidebarLocation[0]}: 0 !important;
-  #{Style.sidebarLocation[1]}: auto !important;
+  #{agent}transform: translate(#{xOffset + (233 + Style.sidebarOffset.W)}px);
 }"
 
 "tabbed slideout": "
@@ -1777,8 +1777,7 @@ input:checked + .rice {
 #qr:hover,
 #qr.focus,
 #qr.dump {
-  #{Style.sidebarLocation[0]}: 0 !important;
-  #{Style.sidebarLocation[1]}: auto !important;
+  #{agent}transform: translate(#{xOffset + (251 + Style.sidebarOffset.W)}px);
 }
 #qr #qrtab {
   #{agent}transform: rotate(#{(if Style.sidebarLocation[0] is "left" then "" else "-")}90deg);
@@ -1835,12 +1834,12 @@ else ""}
 #{
 if _conf['Post Form Style'] isnt 'float' and _conf["Post Form Slideout Transitions"] then "
 #qr {
-  #{agent}transition: #{Style.sidebarLocation[0]} .3s ease-in-out 1s;
+  #{agent}transition: #{agent}transform .3s ease-in-out 1s;
 }
 #qr:hover,
 #qr.focus,
 #qr.dump {
-  #{agent}transition: #{Style.sidebarLocation[0]} .3s linear;
+  #{agent}transition: #{agent}transform .3s linear;
 }
 #qrtab {
   #{agent}transition: opacity .3s ease-in-out 1s;
