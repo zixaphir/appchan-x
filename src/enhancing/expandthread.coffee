@@ -67,12 +67,10 @@ ExpandThread =
       $.rm backlink unless $.id backlink.hash[1..]
     
     # Parse posts and add features.
-    posts = []
     for node in nodes
+      frag = $.frag()
+      $.add frag, node
       post = Main.preParse node
       post.threadID = threadID
-      posts.push post
-
-    Main.node posts
-
-    $.after a, nodes
+      Main.node post
+      $.add thread, frag
