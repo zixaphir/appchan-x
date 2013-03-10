@@ -3122,6 +3122,7 @@ data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='filters' 
       background = new Style.color Style.colorToHex theme["Reply Background"]
       css += """
 body::before {
+  z-index: -1;
   background: none repeat scroll 0% 0% rgba(#{background.shiftRGB -18}, 0.8);
   border-#{Style.sidebarLocation[1]}: 2px solid #{backgroundC};
   box-shadow:
