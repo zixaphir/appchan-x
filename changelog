@@ -1,5 +1,13 @@
 master
 
+1.2.0
+Zixaphir
+- CSS Rewrite
+- Code restructuring to parse posts more efficiently.
+- Fixes to filter, reply and thread hiding, etc.
+- Fixes to linkifier causing text to be placed incorrectly.
+- Individual features now have their own customizable callbacks.
+
 1.1.2
 Zixaphir
 - Bugfixes.
