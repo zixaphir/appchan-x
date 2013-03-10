@@ -1001,17 +1001,20 @@ hr {
 "sticky top": "
   position: fixed;
   top: 0;
-  border-top-width: 0;"
+  border-top-width: 0;
+  #{if _conf["Rounded Edges"] then "border-radius: 0 0 3px 3px;" else ""}"
 
 "sticky bottom": "
   position: fixed;
   bottom: 0;
-  border-bottom-width: 0;"
+  border-bottom-width: 0;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px 3px 0 0;" else ""}"
 
 "top": "
   position: absolute;
   top: 0;
-  border-top-width: 0;"
+  border-top-width: 0;
+  #{if _conf["Rounded Edges"] then "border-radius: 0 0 3px 3px;" else ""}"
 
 "hide": "
   position: fixed;
@@ -1055,20 +1058,24 @@ else "
 "sticky top": "
   position: fixed;
   top: 0;
-  border-top-width: 0;"
+  border-top-width: 0;
+  #{if _conf["Rounded Edges"] then "border-radius: 0 0 3px 3px;" else ""}"
 
 "sticky bottom": "
   position: fixed;
   bottom: 0;
-  border-bottom-width: 0;"
+  border-bottom-width: 0;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px 3px 0 0;" else ""}"
 
 "top": "
   position: absolute;
   top: 0;
-  border-top-width: 0;"
+  border-top-width: 0;
+  #{if _conf["Rounded Edges"] then "border-radius: 0 0 3px 3px;" else ""}"
 
 "bottom": "
-  position: static;"
+  position: static;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px 3px 0 0;" else ""}"
 
 "hide": "
   display: none;"
@@ -1271,6 +1278,7 @@ else "
   z-index: 10;
   padding: 0 1px 1px;
   border: 1px solid transparent;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 #updater:not(:hover) > div:not(.move) {
   display: none;
@@ -1283,6 +1291,11 @@ else "
 }
 #updater .field {
   width: 50px;
+}
+/* Stats */
+#stats {
+  position: fixed;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 /* Image Expansion */
 #imgControls .rice {
@@ -1430,6 +1443,7 @@ hide: "
   position: fixed;
   z-index: 14;
   padding: 2px;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 #{ if _conf['Slideout Watcher'] then "
 #watcher {
@@ -1457,6 +1471,7 @@ hide: "
 /* Announcements */
 #globalMessage {
   text-align: center;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 #{if _conf['Announcements'] is 'slideout' then "
 #globalMessage {
@@ -1520,6 +1535,9 @@ hide: "
 .reply.post {
   display: inline-block;
   #{if _conf["Fit Width Replies"] then "width: 100%;" else ""}
+}
+.post {
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 .post blockquote {
   margin: #{_conf['Vertical Post Padding']}px #{_conf['Horizontal Post Padding']}px;
@@ -1697,16 +1715,14 @@ else ""
   margin: 2px 3px;
   display: inline-block;
   vertical-align: bottom;
+  #{if _conf["Rounded Edges"] then "border-radius: 2px;" else ""}
+  #{if _conf["Circle Checkboxes"] then "border-radius: 6px;" else ""}
 }
 input:checked + .rice {
   background-attachment: scroll;
   background-repeat: no-repeat;
   background-position: bottom right;
 }
-#{if _conf["Circle Checkboxes"] then "
-.rice {
-  border-radius: 6px;
-}" else ""}
 /* Selects */
 .selectrice {
   position: relative;
@@ -1745,6 +1761,10 @@ input:checked + .rice {
   padding: 1px;
   border: 1px solid transparent;
   min-width: #{width}px;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px 3px 0 0;" else ""}
+}
+#qrtab {
+  #{if _conf["Rounded Edges"] then "border-radius: 3px 3px 0 0;" else ""}
 }
 
 #{{
@@ -2120,6 +2140,7 @@ img[src*='support.4chan.org'] {
   margin-left: -500px;
   position: absolute;
   padding: .3em;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 #options h3,
 .keybinds_tab,
@@ -2135,6 +2156,10 @@ img[src*='support.4chan.org'] {
 }
 #options ul {
   padding: 0;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
+}
+#options .selectrice ul {
+  border-radius: 0;
 }
 #optionsContent {
   overflow: auto;
@@ -2143,12 +2168,14 @@ img[src*='support.4chan.org'] {
   right: 5px;
   bottom: 5px;
   left: 5px;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 #optionsbar {
   padding: 0 3px;
 }
 #optionsbar label {
   cursor: pointer;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px 3px 0 0;" else ""}
 }
 .tabs label {
   position: relative;
@@ -2282,6 +2309,7 @@ article li {
 .mascots {
   padding: 0;
   text-align: center;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 .mascot,
 .mascotcontainer {
@@ -2444,6 +2472,7 @@ opacity: 0;
 #post-preview {
   position: absolute;
   z-index: 22;
+  #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
 #settings,
 #threads,
