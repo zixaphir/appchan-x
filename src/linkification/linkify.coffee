@@ -11,19 +11,19 @@ Linkify =
 
   regString: ///(
     \b(
-      [a-z]+:// # http://, ftp://
+      [a-z]+://
       |
       [a-z]{3,}\.[-a-z0-9]+\.[a-z]+
       |
-      [-a-z0-9]+\.[a-z]{2,4} # this-is-my-web-sight.net.
+      [-a-z0-9]+\.[a-z]
       |
-      [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ # IP Address
+      [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+
       |
-      [a-z]{3,}:[a-z0-9?] # mailto:, magnet:
+      [a-z]{3,}:[a-z0-9?]
       |
-      [a-z0-9._%+-:]+@[a-z0-9.-]+\.[a-z0-9] # E-mails, also possibly anonymous:password@192.168.2.1
+      [a-z0-9._%+-:]+@[a-z0-9.-]+\.[a-z0-9]
     )
-    [^\s'"]+ # Terminate at Whitespace
+    [^\s'"]+
   )///gi
 
   cypher: $.el 'div'

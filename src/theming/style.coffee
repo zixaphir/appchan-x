@@ -1212,7 +1212,7 @@ else "
 #boardTitle {
   font-size: #{parseInt(_conf["Font Size"], 10) + 10}px;
   text-align: center;
-  z-index: 2;
+  z-index: 4;
 #{{
 "at sidebar top": "
   position: fixed;
@@ -2437,6 +2437,7 @@ opacity: 0;
   top: 0;
   bottom: 0;
   width: 296px;
+  z-index: 10;
 }
 #themebar input {
   width: 30%;
@@ -2464,6 +2465,7 @@ opacity: 0;
   width: 500px;
   margin-left: -250px;
   overflow: auto;
+  z-index: 10;
 }
 #mascotConf .option,
 #mascotConf .optionlabel {
