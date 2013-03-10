@@ -1500,10 +1500,14 @@ hide: "
   border: 0 none;
 }" else ""}
 /* Posts */
+.board {
+  margin: #{parseInt _conf["Top Thread Padding"], 10}px 0 #{parseInt _conf["Bottom Thread Padding"], 10}px 0;
+  #{if _conf["Rounded Edges"] then "border-radius: 4px;" else ""}
+}
 .summary {
   margin-bottom: #{Style.replyMargin}px;
 }
-.postContainer {
+.post {
   margin-bottom: #{Style.replyMargin}px;
 }
 .menu_button,
@@ -2007,8 +2011,11 @@ input:not([type=radio]) {
 #file {
   #{agent}box-sizing: border-box;
   display: inline-block;
-  width: 74.6%;
+  width: 100px;
+  min-width: 74.6%;
+  max-width: 74.6%;
   margin-right: 0.4%;
+  overflow: hidden;
 }
 /* Thread Select / Spoiler Label */
 #threadselect {
@@ -2513,9 +2520,6 @@ opacity: 0;
   padding: 5px 0 3px;
   text-align: center;
 }
-.thread {
-  padding: 0;
-}
 .extended-small .thread,
 .small .thread {
   width: 165px;
@@ -2805,7 +2809,7 @@ textarea.field:focus {
   border-style: solid;
   border-color: #{theme["Navigation Border"]};
 }
-#delform {
+.board {
   background: #{theme["Thread Wrapper Background"]};
   border: 1px solid #{theme["Thread Wrapper Border"]};
 }

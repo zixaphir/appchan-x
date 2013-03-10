@@ -593,6 +593,16 @@ div.post.highlight {
         'The side of the page the sidebar content is on. It is highly recommended that you do not hide the sidebar if you change this option.'
         ['left', 'right']
       ]
+      'Top Thread Padding': [
+        '0'
+        'Add some spacing between the bottom edge of document and the threads.'
+        'text'
+      ]
+      'Bottom Thread Padding': [
+        '0'
+        'Add some spacing between the bottom edge of document and the threads.'
+        'text'
+      ]
       'Left Thread Padding': [
         '0'
         'Add some spacing between the left edge of document and the threads.'

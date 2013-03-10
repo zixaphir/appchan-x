@@ -678,9 +678,9 @@ div.reply.highlight div.reply {
     'Warnings'                    : 'rgb(87,87,123)'
     'Shadow Color'                : 'rgba(0,0,0,.07)'
     'Custom CSS'                  : """
-.replyContainer div.reply.post {
+.reply.post {
   background-color: transparent;
-  border-color: transparent transparent #ccc transparent;
+  border-color: #ccc transparent transparent transparent;
   border-style: solid;
   border-radius: 0 !important;
 }
@@ -735,15 +735,9 @@ div.reply.highlight div.reply {
   box-shadow: 0 20px 40px 10px rgba(0,0,0,0.1);
   border-radius: 4px;
 }
-.thread {
-  padding: 1px 0 2px 0;
-}
 :not(#themes) .rice {
   box-shadow: 1px 1px 1px rgb(204, 204, 204) inset,
     1px 1px 1px rgba(170, 170, 170,0.8);
-}
-.thread .replyContainer:last-of-type div.reply.post {
-  border: none;
 }
 #qp .prettyprint {
   background-color: rgba(0,0,0,0.3);
