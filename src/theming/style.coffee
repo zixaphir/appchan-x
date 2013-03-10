@@ -1522,6 +1522,10 @@ hide: "
   border-radius: 1em;
   font-size: 80%;
 }" else ""}
+.subject,
+.name {
+  #{if _conf["Bolds"] then 'font-weight: 600;' else ''}
+}
 .fileInfo {
   padding: 0 3px;
 }
@@ -2822,7 +2826,6 @@ a[style="cursor: pointer; float: right;"] ~ div[style^="width: 100%;"] > table {
 }
 .subject {
   color: #{theme["Subjects"]} !important;
-  #{if _conf["Bolds"] then 'font-weight: 600;' else ''}
 }
 .dateTime,
 .post-ago {
