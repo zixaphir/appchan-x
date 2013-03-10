@@ -907,8 +907,6 @@ body > hr {
   display: none !important;
 }
 /* Hidden Content */
-#{if _conf["Recursive Filtering"] then ".hidden + .threadContainer," else ""}
-.hidden,
 .hidden_thread ~ div,
 .hidden_thread ~ a,
 [hidden] {

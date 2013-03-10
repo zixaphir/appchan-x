@@ -30,8 +30,9 @@ ReplyHiding =
     $.set "hiddenReplies/#{g.BOARD}/", g.hiddenReplies
 
   hide: (root) ->
-    return if root.hidden # already hidden once by the filter
-    root.hidden = true
+    post = $ '.post', root
+    return if post.hidden # already hidden once by the filter
+    post.hidden = true
 
     $.addClass root, 'hidden'
 
@@ -43,13 +44,15 @@ ReplyHiding =
     a = stub.firstChild
     $.on  a, 'click', ->
       ReplyHiding.toggle button = @parentNode, root = $.id("pc#{@id[4..]}"), id
-    $.before root, stub
+    $.prepend root, stub
 
   show: (root) ->
-    $.rm stub if (stub = root.previousElementSibling) and stub.className is 'stub'
+    $.rm stub if (stub = $ '.stub', root)
 
-    root.hidden = false
+    post = $ '.post', root
+    post.hidden = false
+
     $.rmClass root, 'hidden'
 
   unhide: (post) ->
-    ReplyHiding.show post.root if post.root.hidden
+    ReplyHiding.show post.root if post.el.hidden
