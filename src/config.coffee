@@ -740,7 +740,11 @@ div.post.highlight {
       ]
       'Bolds': [
         true
-        'Bold text for names and such'
+        'Bold text for names and such.'
+      ]
+      'Italics': [
+        false
+        'Give tripcodes italics.'
       ]
       'Sidebar Glow': [
         false

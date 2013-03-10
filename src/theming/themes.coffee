@@ -680,8 +680,7 @@ div.reply.highlight div.reply {
     'Custom CSS'                  : """
 .replyContainer div.reply.post {
   background-color: transparent;
-  border-color: #ccc;
-  border-width: 0 0 1px 0;
+  border-color: transparent transparent #ccc transparent;
   border-style: solid;
   border-radius: 0 !important;
 }
@@ -878,8 +877,8 @@ div.reply.highlight div.reply {
   background-color:rgba(240,192,176,1);
   box-shadow:5px 5px 5px rgba(128,128,128,0.5);
 }
-.replyContainer div.post {
-  border-style: none solid solid none !important;
+.reply.post {
+  border-color: transparent rgba(240,224,214,1) rgba(240,224,214,1) transparent;
 }
 """
 
@@ -934,8 +933,8 @@ div.reply.highlight div.reply {
   background-color:rgba(214,186,208,1);
   box-shadow:5px 5px 5px rgba(128,128,128,0.5);
 }
-.replyContainer div.post {
-  border-style: none solid solid none !important;
+.reply.post {
+  border-color: transparent rgba(183,197,217,1) rgba(183,197,217,1) transparent;
 }
 """
 

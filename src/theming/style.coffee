@@ -934,6 +934,11 @@ a[style="cursor: pointer; float: right;"] {
 /* Defaults */
 a {
   text-decoration: none;
+  outline: none;
+}
+body, html {
+  min-height: 100%;
+  #{agent}box-sizing: border-box;
 }
 body {
   outline: none;
@@ -1526,6 +1531,9 @@ hide: "
 .name {
   #{if _conf["Bolds"] then 'font-weight: 600;' else ''}
 }
+.postertrip {
+  #{if _conf["Italics"] then 'font-style: italic;' else ''}
+}
 .fileInfo {
   padding: 0 3px;
 }
@@ -1538,6 +1546,7 @@ hide: "
 }
 .reply.post {
   display: inline-block;
+  #{agent}box-sizing: border-box;
   #{if _conf["Fit Width Replies"] then "width: 100%;" else ""}
 }
 .post {
@@ -1669,6 +1678,17 @@ else ""
 }"
 
 'default': ""}[_conf["Backlinks Position"]]}
+/* Code */
+.prettyprint {
+  #{agent}box-sizing: border-box;
+  font-family: monospace;
+  float: left;
+  clear: right;
+  white-space: pre-wrap;
+  border-radius: 2px;
+  overflow-x: auto;
+  padding: 3px;
+}
 /* Menu */
 .entry {
   border-bottom: 1px solid rgba(0,0,0,.25);
