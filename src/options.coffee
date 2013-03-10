@@ -1187,7 +1187,7 @@ Options =
 
       $.add d.body, mouseover
       
-    mouseover.innerHTML = @innerHTML
+    mouseover.innerHTML = @nextElementSibling.innerHTML
 
     UI.el = mouseover
 
