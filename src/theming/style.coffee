@@ -1089,7 +1089,7 @@ else "
   position: fixed;
   padding: 0;
   top: auto;
-  bottom: #{if ['fixed', 'transparent fade'].contains(_conf['Post Form Style']) then (20.2 + (if !g.REPLY or !!$ '#postForm input[name=spoiler]' then 1.4 else 0) + (if Conf['Show Post Form Header'] then 1.5 else 0) + (if Conf['Post Form Decorations'] then 0.2 else 0)) else .5}em;
+  bottom: #{if ['fixed', 'transparent fade'].contains(_conf['Post Form Style']) then (21.6 + (if Conf['Show Post Form Header'] then 1.5 else 0) + (if Conf['Post Form Decorations'] then 0.2 else 0)) else .5}em;
   #{Style.sidebarLocation[1]}: auto;
   #{Style.sidebarLocation[0]}: #{250 + Style.sidebarOffset.W}px
   position: fixed;
