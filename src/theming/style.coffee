@@ -1901,6 +1901,7 @@ if _conf['Post Form Style'] isnt 'float' and _conf["Post Form Slideout Transitio
 
 #qr .close {
   float: right;
+  padding: 0 3px;
 }
 #qr .warning {
   min-height: 1.6em;
@@ -2163,12 +2164,11 @@ img[src*='support.4chan.org'] {
   background: rgba(0,0,0,.5);
 }
 #options {
-  width: 1000px;
-  top: 10%;
-  bottom: 10%;
-  right: 50%;
-  left: 50%;
-  margin-left: -500px;
+  width: auto;
+  left: 15%;
+  right: 15%;
+  top: 15%;
+  bottom: 15%;
   position: absolute;
   padding: .3em;
   #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
