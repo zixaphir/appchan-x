@@ -1896,7 +1896,7 @@ if _conf['Post Form Style'] isnt 'float' and _conf["Post Form Slideout Transitio
 }
 #qr:hover #qrtab {
   #{agent}transition: opacity .3s linear;
-}"
+}" else ""
 }
 
 #qr .close {
