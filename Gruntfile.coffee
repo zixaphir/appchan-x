@@ -83,9 +83,9 @@ module.exports = (grunt) ->
           version = grunt.config ['pkg', 'version']
           return [
             'git checkout master'
-            'git commit -am "Release ' + name + ' v' + version + '."'
-            'git tag -a ' + version + ' -m "' + version + '"'
-            'git tag -af stable -m "' + version + '"'
+            "git commit -am 'Release #{name} v#{version}.'"
+            "git tag -a #{version} -m '#{version}'"
+            "git tag -af stable -m '#{version}'"
           ].join ' && '
         stdout: true
       push:
