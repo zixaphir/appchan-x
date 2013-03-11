@@ -167,7 +167,7 @@ Themes =
     'Warnings'                    : 'rgb(103,204,232)'
     'Shadow Color'                : 'rgba(0,0,0,.1)'
     'Custom CSS'                  : """
-div.replyContainer div.reply {
+.reply.post {
   box-shadow: inset 0px 1px 2px 1px #111;
 }
 #qr {
@@ -180,7 +180,7 @@ div.replyContainer div.reply {
 #qr input[title="Verification"] {
   box-shadow: inset 0px 1px 2px 0px #111;
 }
-#qp div.post {
+#qp .post {
   background-color: rgba(29,29,33,1);
   border: 1px solid rgba(95,137,172,0.4);
 }
@@ -447,7 +447,7 @@ div.post:hover .name {
     'Warnings'                    : 'rgb(187,187,187)'
     'Shadow Color'                : 'rgba(0,0,0,.1)'
     'Custom CSS'                  : """
-#options{
+#options {
   background-color: rgba(16,16,16,1) !important;
 }
 #delform blockquote {
@@ -490,8 +490,8 @@ div.reply,
   padding:4px 6px;
   padding-top:2px;
 }
-#delform,
-#delform blockquote {
+.board,
+.board blockquote {
   margin:0 10px 15px 0 !important;
   padding:0px;
 }
@@ -506,16 +506,16 @@ a.pointer{
   color:#777;
   padding-right:5px;
 }
-#delform .opContainer,
-#delform .replyContainer {
+.thread .opContainer,
+.thread .replyContainer {
   opacity:0.45;
   transition:all 0.5s ease;
 }
-#delform .opContainer:hover,
-#delform .replyContainer:hover {
+.thread .opContainer:hover,
+.thread .replyContainer:hover {
   opacity:1;
 }
-.replyContainer div.reply,
+.reply.post,
 .reply.highlight {
   background:transparent;
   border:0px;
@@ -554,8 +554,7 @@ a.forwardlink{
   letter-spacing: 3px;
   background: transparent;
 }
-div.replyContainer div.reply,
-div.reply.highlight div.reply {
+.reply.post {
   background-color: rgba(0,0,0,0) !important;
   border: none !important;
 }
@@ -678,17 +677,15 @@ div.reply.highlight div.reply {
     'Warnings'                    : 'rgb(87,87,123)'
     'Shadow Color'                : 'rgba(0,0,0,.07)'
     'Custom CSS'                  : """
-.reply.post {
+.thread .reply {
   background-color: transparent;
   border-color: #ccc transparent transparent transparent;
   border-style: solid;
   border-radius: 0 !important;
-}
-.thread .opContainer {
-  padding: 0 3px;
-}
-.thread .replyContainer {
   margin-bottom: 0;
+}
+.thread .op {
+  padding: 0 3px;
 }
 #themes {
   text-shadow: none;
@@ -699,8 +696,8 @@ div.reply.highlight div.reply {
     0 1px 0 rgb(0,0,0),
     1px 1px 2px rgb(0,0,0);
 }
-#qp .opContainer div.post,
-#qp .replyContainer div.post {
+#qp .op.post,
+#qp .reply.post {
   border: 1px rgba(0,0,0,0.7) solid;
   background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), transparent;
 }
@@ -736,8 +733,7 @@ div.reply.highlight div.reply {
   border-radius: 4px;
 }
 :not(#themes) .rice {
-  box-shadow: 1px 1px 1px rgb(204, 204, 204) inset,
-    1px 1px 1px rgba(170, 170, 170,0.8);
+  box-shadow:rgba(170, 170, 170,0.3) 0 1px;
 }
 #qp .prettyprint {
   background-color: rgba(0,0,0,0.3);
@@ -1087,7 +1083,7 @@ textarea,
     "Focused Input Border"        : "rgb(202,183,217)"
     "Buttons Background"          : "rgba(255,255,255,1.0)"
     "Buttons Border"              : "rgb(202,183,217)"
-    "Navigation Background"       : "rgba(248,243,254,0.8)"
+    "Navigation Background"       : "rgba(229, 219, 240,.9)"
     "Navigation Border"           : "rgb(238,221,255)"
     "Quotelinks"                  : "rgb(150,37,148)"
     "Links"                       : "rgb(150,37,148)"
@@ -1136,17 +1132,6 @@ textarea,
 .rice {
   transition:background .2s,box-shadow .2s;
 }
-#boardNavDesktop,
-.pagelist,
-#imgControls {
-  background:rgba(229, 219, 240,.9)!important;
-}
-.replyContainer,
-.hidden_thread,
-.stub {
-  border-left:0!important;
-  border-top:0!important;
-}
 .boardTitle {
   color: #591177 !important;
   text-shadow: 1px 1px 1px #222 !important;
@@ -1157,6 +1142,9 @@ textarea,
 }
 .postNum a {
   color: #000000 !important;
+}
+.reply.post {
+  border-color: transparent rgb(202,183,217) rgb(202,183,217) transparent;
 }
 """
 
@@ -1207,7 +1195,7 @@ textarea,
     "Shadow Color"                : "rgba(0,0,0,.1)"
     "Custom CSS"                  : """
 .thread {
-  padding: 1px 2px;
+  padding: 1px;
 }
 .rice {
   box-shadow:rgba(45,49,52,.3) 0 1px;
@@ -1285,7 +1273,7 @@ textarea,
     "Shadow Color"                : "rgba(0,0,0,.1)"
     "Custom CSS"                  : """
 .thread {
-  padding: 1px 2px;
+  padding: 1px;
 }
 .rice {
   box-shadow:rgba(72,74,78,.3) 0 1px;
@@ -1449,7 +1437,7 @@ textarea,
     "Shadow Color"                : "rgba(0,0,0,.05)"
     "Custom CSS"                  : """
 .thread {
-  padding: 1px 2px;
+  padding: 1px;
 }
 .rice {
   box-shadow:rgba(255,255,255,.3) 0 1px;
@@ -1582,7 +1570,7 @@ textarea,
     "Thread Wrapper Background"   : "rgba(35,36,37,.5)"
     "Thread Wrapper Border"       : "rgba(41,42,43,.9)"
     "Reply Background"            : "rgba(35,36,37,.9)"
-    "Reply Border"                : "rgb(41,42,43)"
+    "Reply Border"                : "rgba(35,36,37,.9)"
     "Highlighted Reply Background": "rgba(31,32,33,.9)"
     "Highlighted Reply Border"    : "rgb(172,155,176)"
     "Backlinked Reply Outline"    : "rgb(172,155,176)"
@@ -1620,7 +1608,7 @@ textarea,
     "Shadow Color"                : "rgba(0,0,0,.1)"
     "Custom CSS"                  : """
 .thread {
-  padding: 1px 2px;
+  padding: 1px;
 }
 .rice {
   box-shadow:rgba(67,68,69,.3) 0 1px;
@@ -1648,9 +1636,6 @@ input,
 textarea,
 .rice {
   transition:background .2s,box-shadow .2s;
-}
-.replyContainer div.post {
- border: 0 !important
 }
 """
 
@@ -1727,8 +1712,12 @@ textarea,
 .rice {
   transition:background .2s,box-shadow .2s;
 }
-thread>.replyContainer>.reply>div.postInfo {
-  box-shadow: 0px 2px 3px #0A0A0A !important;
+.postInfo {
+  box-shadow: 0px 2px 3px #0A0A0A;
+}
+#qp .postInfo,
+.inline .postInfo {
+  box-shadow: none;
 }
 """
 
@@ -1790,8 +1779,8 @@ textarea:hover,
 #options input:not([type=checkbox]):hover {
   box-shadow:inset rgba(0,0,0,.2) 0 1px 2px;
 }
-.replyContainer div.reply,
-.opContainer div.op {
+.reply.post,
+.op.post {
   background-color: transparent !important;
 }
 input[type=password]:focus,
@@ -1978,7 +1967,7 @@ a:not([href='javascript:;']){
     "Shadow Color"                : "rgba(0,0,0,.05)"
     "Custom CSS"                  : """
 .thread {
-  padding: 1px 2px;
+  padding: 1px;
 }
 .rice {
   box-shadow:rgba(255,255,255,.3) 0 1px;
@@ -1990,7 +1979,7 @@ input.field:hover,
 .webkit select:hover,
 textarea:hover,
 #options input:not([type=checkbox]):hover {
-  box-shadow:inset rgba(0,0,0,.2) 0 1px 2px;
+  box-shadow: inset rgba(0,0,0,.2) 0 1px 2px;
 }
 input[type=password]:focus,
 input[type=text]:focus,
@@ -1999,13 +1988,13 @@ input.field:focus,
 .webkit select:focus,
 textarea:focus,
 #options input:focus {
-  box-shadow:inset rgba(0,0,0,.2) 0 1px 2px;
+  box-shadow: inset rgba(0,0,0,.2) 0 1px 2px;
 }
 button,
 input,
 textarea,
 .rice {
-  transition:background .2s,box-shadow .2s;
+  transition: background .2s,box-shadow .2s;
 }"""
 
   "violaceous":
@@ -2017,7 +2006,7 @@ textarea,
     "Thread Wrapper Background"   : "rgba(27,27,27,.5)"
     "Thread Wrapper Border"       : "rgba(41,42,43,.9)"
     "Reply Background"            : "rgba(27,27,27,.9)"
-    "Reply Border"                : "rgb(41,42,43)"
+    "Reply Border"                : "rgba(27,27,27,.9)"
     "Highlighted Reply Background": "rgba(31,31,31,.9)"
     "Highlighted Reply Border"    : "rgb(42,127,160)"
     "Backlinked Reply Outline"    : "rgb(42,127,160)"
@@ -2055,7 +2044,7 @@ textarea,
     "Shadow Color"                : "rgba(0,0,0,.1)"
     "Custom CSS"                  : """
 .thread {
-  padding: 1px 2px;
+  padding: 1px;
 }
 .rice {
   box-shadow:rgba(59,59,59,.3) 0 1px;
@@ -2084,6 +2073,4 @@ textarea,
 .rice {
   transition:background .2s,box-shadow .2s;
 }
-div.post.reply {
-  border: 0 !important}
 """

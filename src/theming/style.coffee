@@ -974,7 +974,8 @@ hr {
   clear: both;
   border: 0;
   padding: 0;
-  margin: 0;
+  margin: 0 0 1px;
+  #{if _conf['Hide Horizontal Rules'] then 'visibility: hidden;' else ''}
 }
 .center {
   text-align: center;
@@ -1361,6 +1362,7 @@ else "
   border-style: solid;
   font-size: 0;
   color: transparent;
+  max-height: 1.6em;
 }
 .deleteform:hover {
   width: auto;
@@ -1500,7 +1502,7 @@ hide: "
   border: 0 none;
 }" else ""}
 /* Posts */
-.board {
+.thread {
   margin: #{parseInt _conf["Top Thread Padding"], 10}px 0 #{parseInt _conf["Bottom Thread Padding"], 10}px 0;
   #{if _conf["Rounded Edges"] then "border-radius: 4px;" else ""}
 }
@@ -1509,6 +1511,9 @@ hide: "
 }
 .post {
   margin-bottom: #{Style.replyMargin}px;
+}
+.replyContainer:last-of-type .post {
+  margin-bottom: 0;
 }
 .menu_button,
 .hide_thread_button,
@@ -1531,6 +1536,9 @@ hide: "
   border-radius: 1em;
   font-size: 80%;
 }" else ""}
+.postInfo > span {
+  vertical-align: bottom;
+}
 .subject,
 .name {
   #{if _conf["Bolds"] then 'font-weight: 600;' else ''}
@@ -1568,15 +1576,12 @@ s {
   clear: right;
 }
 /* OP */
+.favicon {
+  vertical-align: bottom;
+}
 #{if _conf["OP Background"] then "
 .op.post {
   #{agent}box-sizing: border-box;
-}
-.op .postInfo {
-  padding: 3px 3px 0;
-}
-.op .fileInfo {
-  padding: 0 3px;
 }
 .op blockquote::after {
   clear: both;
@@ -1740,7 +1745,7 @@ else ""
   cursor: pointer;
   width: 9px;
   height: 9px;
-  margin: 2px 3px;
+  margin: 2px 3px 3px;
   display: inline-block;
   vertical-align: bottom;
   #{if _conf["Rounded Edges"] then "border-radius: 2px;" else ""}
@@ -1799,7 +1804,7 @@ input:checked + .rice {
 "fixed": "
 #qr {
   top: auto !important;
-  bottom: 1.6em !important;
+  bottom: 1.7em !important;
   #{Style.sidebarLocation[0]}: 0 !important;
   #{Style.sidebarLocation[1]}: auto !important;
 }"
@@ -1807,7 +1812,7 @@ input:checked + .rice {
 "slideout": "
 #qr {
   top: auto !important;
-  bottom: 1.6em !important;
+  bottom: 1.7em !important;
   #{Style.sidebarLocation[0]}: -#{233 + Style.sidebarOffset.W}px !important;
   #{Style.sidebarLocation[1]}: auto !important;
 }
@@ -1820,14 +1825,14 @@ input:checked + .rice {
 "tabbed slideout": "
 #qr {
   top: auto !important;
-  bottom: 1.6em !important;
-  #{Style.sidebarLocation[0]}: -#{251 + Style.sidebarOffset.W}px !important;
+  bottom: 1.7em !important;
+  #{Style.sidebarLocation[0]}: -#{252 + Style.sidebarOffset.W}px !important;
   #{Style.sidebarLocation[1]}: auto !important;
 }
 #qr:hover,
 #qr.focus,
 #qr.dump {
-  #{agent}transform: translate(#{xOffset + (251 + Style.sidebarOffset.W)}px);
+  #{agent}transform: translate(#{xOffset + (252 + Style.sidebarOffset.W)}px);
 }
 #qr #qrtab {
   #{agent}transform: rotate(#{(if Style.sidebarLocation[0] is "left" then "" else "-")}90deg);
@@ -1856,7 +1861,7 @@ input:checked + .rice {
 #qr {
   overflow: visible;
   top: auto !important;
-  bottom: 1.6em !important;
+  bottom: 1.7em !important;
   #{Style.sidebarLocation[0]}: 2px !important;
   #{Style.sidebarLocation[1]}: auto !important;
   opacity: 0.2;
@@ -2139,15 +2144,16 @@ a:only-of-type > .remove {
 #{if _conf["Block Ads"] then "
 /* AdBlock Minus */
 .bottomad + hr,
-a[href*='jlist'],
-a[href*='engine.4chan-ads.org'],
-img[src*='support.4chan.org'] {
+.topad img,
+.middlead img,
+.bottomad img {
   display: none;
 }
 " else ""}
 #{if _conf["Shrink Ads"] then "
-a[href*='jlist'],
-img[src*='support.4chan.org'] {
+.topad a img,
+.middlead a img,
+.bottomad a img {
   width: 500px;
   height: auto;
 }
@@ -2809,7 +2815,7 @@ textarea.field:focus {
   border-style: solid;
   border-color: #{theme["Navigation Border"]};
 }
-.board {
+.thread {
   background: #{theme["Thread Wrapper Background"]};
   border: 1px solid #{theme["Thread Wrapper Border"]};
 }
@@ -3095,13 +3101,15 @@ data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='filters' 
     if _conf["Color Reply Headings"]
       css += """
 .postInfo {
-  background: #{if (replyHeading = new Style.color Style.colorToHex theme["Reply Background"]) then "rgb(" + (replyHeading.shiftRGB 10, true) + ")" else "rgba(0,0,0,0.1)"};
+  background: #{if (replyHeading = new Style.color Style.colorToHex theme["Reply Background"]) then "rgba(" + (replyHeading.shiftRGB -12, false) + ",0.8)" else "rgba(0,0,0,0.1)"};
+  border-bottom: 1px solid #{theme["Reply Border"]}
 }\n"""
 
     if _conf["Color File Info"]
       css += """
 .file {
-  background: #{if (fileHeading = new Style.color Style.colorToHex theme["Reply Background"]) then "rgb(" + (fileHeading.shiftRGB 6, true) + ")" else "rgba(0,0,0,0.1)"};
+  background: #{if (fileHeading = new Style.color Style.colorToHex theme["Reply Background"]) then "rgba(" + (fileHeading.shiftRGB -8, false) + ",0.8)" else "rgba(0,0,0,0.1)"};
+  border-bottom: 1px solid #{theme["Reply Border"]}
 }\n
 """
     if _conf["OP Background"]
