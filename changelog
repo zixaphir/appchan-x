@@ -1,5 +1,10 @@
 master
 
+1.2.2
+Zixaphir
+- Fix some broken keybinds
+- Fix .prettyprint and .forwarded
+
 1.2.1
 Zixaphir
 - CSS Rewrite
