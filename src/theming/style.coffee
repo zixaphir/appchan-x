@@ -907,6 +907,7 @@ body > hr {
   display: none !important;
 }
 /* Hidden Content */
+.forwarded,
 .hidden_thread ~ div,
 .hidden_thread ~ a,
 [hidden] {
@@ -1693,12 +1694,13 @@ else ""
 .prettyprint {
   #{agent}box-sizing: border-box;
   font-family: monospace;
-  float: left;
-  clear: right;
+  display: inline-block;
+  margin-right: auto;
   white-space: pre-wrap;
   border-radius: 2px;
   overflow-x: auto;
   padding: 3px;
+  max-width: 100%;
 }
 /* Menu */
 .entry {
