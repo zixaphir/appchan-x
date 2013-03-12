@@ -1200,7 +1200,7 @@ else "
 .boardBanner {
   position: relative;
   display: table;
-  margin: 0 auto;
+  margin: 12px auto;
   text-align: center;
 }"
 
@@ -1236,7 +1236,9 @@ else "
   width: #{width}px;
 "
 
-"at top": ""
+"at top": "
+  margin: 12px 0;
+"
 
 "hide": "
   display: none;
