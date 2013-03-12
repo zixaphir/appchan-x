@@ -78,15 +78,12 @@ module.exports = (grunt) ->
 
     exec:
       commit:
-        command: (grunt) ->
-          name    = grunt.config(['pkg', 'name']).replace /-/g, ' '
-          version = grunt.config ['pkg', 'version']
-          return [
-            'git checkout master'
-            "git commit -am 'Release #{name} v#{version}.'"
-            "git tag -a #{version} -m '#{version}'"
-            "git tag -af stable -m '#{version}'"
-          ].join ' && '
+        command: ->
+          com = [
+            "git commit -am 'Release #{pkg.name} v#{pkg.version}.'"
+            "git tag -a #{pkg.version} -m '#{pkg.version}'"
+            "git tag -af stable -m '#{pkg.version}'"
+          ].join(' && ')
         stdout: true
       push:
         command: 'git push && git push --tags',
