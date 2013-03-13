@@ -1465,6 +1465,10 @@ hide: "
 #watcher .move {
   cursor: default;
 }
+#watcher > div {
+  max-height: 1.6em;
+  overflow: hidden;
+}
 #watcher:hover {
   overflow-y: auto;
 }

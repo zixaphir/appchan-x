@@ -80,11 +80,9 @@ Watcher =
 
     watched = $.get 'watched', {}
     watched[g.BOARD] or= {}
-    thread =
-      href: "/#{g.BOARD}/res/#{id}"
-      textContent: Get.title thread
-    if thread.textContent.length > 100 then thread.textContent.length = 100
-    watched[g.BOARD][id] = thread
+    watched[g.BOARD][id] =
+      href:         "/#{g.BOARD}/res/#{id}"
+      textContent:  Get.title thread
     $.set 'watched', watched
     Watcher.refresh()
     true
