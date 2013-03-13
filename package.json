@@ -1,6 +1,6 @@
 {
   "name": "appchan-x",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "The most comprehensive 4chan userscript",
   "meta": {
     "name": "appchan-x",
@@ -13,13 +13,13 @@
     }
   },
   "devDependencies": {
-    "grunt": "~0.4.x",
-    "grunt-bump": "~0.0.x",
-    "grunt-contrib-clean": "~0.4.x",
-    "grunt-contrib-coffee": "~0.6.x",
-    "grunt-contrib-concat": "~0.1.x",
-    "grunt-contrib-watch": "~0.3.x",
-    "grunt-exec": "~0.4.x"
+    "grunt": "~0.4.0",
+    "grunt-bump": "~0.0.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-coffee": "~0.6.0",
+    "grunt-contrib-concat": "~0.1.0",
+    "grunt-contrib-watch": "~0.3.0",
+    "grunt-exec": "~0.4.0"
   },
   "repository": {
     "type": "git",

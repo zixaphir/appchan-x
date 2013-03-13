@@ -58,11 +58,11 @@ module.exports = (grunt) ->
         command: ->
           release = "#{pkg.meta.name} v#{pkg.version}"
           return [
-            "git checkout #{pkg.meta.mainBranch}"
-            "git commit -am 'Release #{release}.'"
-            "git tag -a #{pkg.version} -m '#{release}.'"
-            "git tag -af stable -m '#{release}.'"
-          ].join(' && ');
+            'git checkout master'
+            'git commit -am "Release ' + release + '."'
+            'git tag -a ' + pkg.version + ' -m "' + release + '."'
+            'git tag -af stable -m "' + release + '."'
+          ].join(' && ')
         stdout: true
 
       push:
