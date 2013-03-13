@@ -19,7 +19,7 @@
 // ==/UserScript==
 
 /*
- * appchan-x - Version 1.2.2 - 2013-03-12
+ * appchan-x - Version 1.2.2 - 2013-03-13
  *
  * Licensed under the MIT license.
  * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -272,7 +272,7 @@
         'Single Column Mode': [true, 'Presents options in a single column, rather than in blocks.'],
         'Sidebar': ['normal', 'Alter the sidebar size. Completely hiding it can cause content to overlap, but with the correct option combinations can create a minimal 4chan layout that has more efficient screen real-estate than vanilla 4chan.', ['large', 'normal', 'minimal', 'hide']],
         'Sidebar Location': ['right', 'The side of the page the sidebar content is on. It is highly recommended that you do not hide the sidebar if you change this option.', ['left', 'right']],
-        'Top Thread Padding': ['0', 'Add some spacing between the bottom edge of document and the threads.', 'text'],
+        'Top Thread Padding': ['0', 'Add some spacing between the top edge of document and the threads.', 'text'],
         'Bottom Thread Padding': ['0', 'Add some spacing between the bottom edge of document and the threads.', 'text'],
         'Left Thread Padding': ['0', 'Add some spacing between the left edge of document and the threads.', 'text'],
         'Right Thread Padding': ['0', 'Add some spacing between the right edge of document and the threads.', 'text'],
@@ -5380,10 +5380,14 @@
       }
       watched = $.get('watched', {});
       watched[_name = g.BOARD] || (watched[_name] = {});
-      watched[g.BOARD][id] = {
+      thread = {
         href: "/" + g.BOARD + "/res/" + id,
         textContent: Get.title(thread)
       };
+      if (thread.textContent.length > 100) {
+        thread.textContent.length = 100;
+      }
+      watched[g.BOARD][id] = thread;
       $.set('watched', watched);
       Watcher.refresh();
       return true;

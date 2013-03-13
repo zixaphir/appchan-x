@@ -595,7 +595,7 @@ div.post.highlight {
       ]
       'Top Thread Padding': [
         '0'
-        'Add some spacing between the bottom edge of document and the threads.'
+        'Add some spacing between the top edge of document and the threads.'
         'text'
       ]
       'Bottom Thread Padding': [

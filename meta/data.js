@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name                <%= meta.name %>
+// @name                <%= name %>
 // @namespace           zixaphir
 // @version             <%= version %>
 // @description         Cross-browser userscript for maximum lurking on 4chan.
