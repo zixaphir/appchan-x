@@ -4909,7 +4909,7 @@
         return;
       }
       el = post.el, root = post.root;
-      if (root.hidden || /\bop\b/.test(post["class"]) || post.isInlined) {
+      if (el.hidden || /\bop\b/.test(post["class"]) || post.isInlined) {
         return;
       }
       count = Unread.replies.push(el);
