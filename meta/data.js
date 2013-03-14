@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name                <%= name %>
+// @name                <%= name.replace(/-/g, ' ') %>
 // @namespace           zixaphir
 // @version             <%= version %>
 // @description         Cross-browser userscript for maximum lurking on 4chan.
