@@ -19,7 +19,7 @@
 // ==/UserScript==
 
 /*
- * appchan-x - Version 1.2.3 - 2013-03-13
+ * appchan-x - Version 1.2.3 - 2013-03-14
  *
  * Licensed under the MIT license.
  * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -10444,6 +10444,57 @@
       "Warnings": "rgb(79,79,79)",
       "Shadow Color": "rgba(0,0,0,.1)",
       "Custom CSS": ".thread {\n  padding: 1px;\n}\n.rice {\n  box-shadow:rgba(59,59,59,.3) 0 1px;\n}\ninput[type=password]:hover,\ninput[type=text]:not([disabled]):hover,\ninput#fs_search:hover,\ninput.field:hover,\n.webkit select:hover,\ntextarea:hover,\n#options input:not([type=checkbox]):hover {\n  box-shadow:inset rgba(0,0,0,.2) 0 1px 2px;\n}\ninput[type=password]:focus,\ninput[type=text]:focus,\ninput#fs_search:focus,\ninput.field:focus,\n.webkit select:focus,\ntextarea:focus,\n#options input:focus {\n  box-shadow:inset rgba(0,0,0,.2) 0 1px 2px;\n}\nbutton,\ninput,\ntextarea,\n.rice {\n  transition:background .2s,box-shadow .2s;\n}"
+    },
+    "Mesa": {
+      "Author": "Tristan",
+      "Author Tripcode": "!..NoTrip..",
+      "Background Color": "#3c212a",
+      "Thread Wrapper Background": "rgba(0,0,0,0)",
+      "Thread Wrapper Border": "rgba(0,0,0,0)",
+      "Dialog Background": "#3c212a",
+      "Dialog Border": "#171717",
+      "Reply Background": "#3c212a",
+      "Reply Border": "#171717",
+      "Highlighted Reply Background": "#3c212a",
+      "Highlighted Reply Border": "#bfa977",
+      "Backlinked Reply Outline": "#bfa977",
+      "Input Background": "#3c212a",
+      "Input Border": "#171717",
+      "Checkbox Background": "#3c212a",
+      "Checkbox Border": "#171717",
+      "Checkbox Checked Background": "rgba(17,17,17,1)",
+      "Buttons Background": "#3c212a",
+      "Buttons Border": "#171717",
+      "Focused Input Background": "#3c212a",
+      "Focused Input Border": "#171717",
+      "Hovered Input Background": "#3c212a",
+      "Hovered Input Border": "#171717",
+      "Navigation Background": "#3c212a",
+      "Navigation Border": "#171717",
+      "Quotelinks": "#bfa977",
+      "Backlinks": "#bfa977",
+      "Links": "#bfa977",
+      "Hovered Links": "#aa4775",
+      "Navigation Links": "#bfa977",
+      "Hovered Navigation Links": "#aa4775",
+      "Names": "#bfa977",
+      "Tripcodes": "#aa6d89",
+      "Emails": "#9c8aaa",
+      "Subjects": "#bfa977",
+      "Text": "#BFA977",
+      "Inputs": "#bfa977",
+      "Post Numbers": "#bfa977",
+      "Greentext": "#99848b",
+      "Sage": "rgb(150,150,150)",
+      "Board Title": "#aa9d8d",
+      "Timestamps": "#aa9d8d",
+      "Warnings": "#aa8575",
+      "Shadow Color": "rgba(0,0,0,.1)",
+      "Custom CSS": "",
+      "Background Image": "",
+      "Background Attachment": "",
+      "Background Position": "",
+      "Background Repeat": ""
     }
   };
 
