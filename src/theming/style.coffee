@@ -5,6 +5,8 @@ Style =
       'webkit': '-webkit-'
       'presto': '-o-'
     }[$.engine]
+    
+    @sizing = "#{if $.engine is 'gecko' then @agent else ''}box-sizing"
 
     $.ready ->
       Style.rice(d.body)
@@ -20,7 +22,6 @@ Style =
         if !g.REPLY
           $.add d.body, catalogLink
         catalogLink.id = 'catalog'
-
 
       # Give ExLinks and 4sight a little time to append their dialog links
       setTimeout (->
@@ -939,7 +940,7 @@ a {
 }
 body, html {
   min-height: 100%;
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
 }
 body {
   outline: none;
@@ -961,7 +962,7 @@ body::before {
   #{Style.sidebarLocation[0]}: 0;
   width: #{if _conf["Sidebar"] is 'large' then 305 else if _conf['Sidebar'] is 'normal' then 254 else if _conf['Sidebar'] is 'minimal' then 27 else 0}px;
   z-index: 1;
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   display: block;
 }
 " else ""}
@@ -1380,7 +1381,7 @@ else "
   bottom: 0;
   right: 0;
   font-size: #{_conf['Font Size']}px;
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   height: 1.6em;
   width: 1.4em;
   text-align: center;
@@ -1400,7 +1401,7 @@ else "
   font-size: 0;
   color: transparent;
   overflow: hidden;
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
 }
 #boardNavDesktopFoot a,
 #boardNavDesktopFoot a::after,
@@ -1460,7 +1461,7 @@ hide: "
   width: #{width}px;
   #{Style.sidebarLocation[0]}: 2px !important;
   #{Style.sidebarLocation[1]}: auto !important;
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
 }
 #watcher .move {
   cursor: default;
@@ -1499,7 +1500,7 @@ hide: "
   margin: 0;
 }
 #globalMessage:hover {
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   overflow-y: auto;
 }
 #globalMessage:not(:hover) {
@@ -1565,7 +1566,7 @@ hide: "
 }
 .reply.post {
   display: inline-block;
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   #{if _conf["Fit Width Replies"] then "width: 100%;" else ""}
 }
 .post {
@@ -1588,7 +1589,7 @@ s {
 }
 #{if _conf["OP Background"] then "
 .op.post {
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
 }
 .op blockquote::after {
   clear: both;
@@ -1696,7 +1697,7 @@ else ""
 'default': ""}[_conf["Backlinks Position"]]}
 /* Code */
 .prettyprint {
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   font-family: monospace;
   display: inline-block;
   margin-right: auto;
@@ -1993,7 +1994,7 @@ input.field.tripped:not(:hover):not(:focus) {
 .selectrice,
 button,
 input:not([type=radio]) {
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   font-size: #{parseInt(_conf['Font Size'], 10)}px;
   height: 1.6em;
   margin: 1px 0 0;
@@ -2023,7 +2024,7 @@ input:not([type=radio]) {
 }
 /* Fake File Input */
 #file {
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   display: inline-block;
   width: 100px;
   min-width: 74.6%;
@@ -2070,7 +2071,7 @@ input:not([type=radio]) {
   overflow-x: auto;
 }
 .thumbnail {
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   cursor: move;
   border: 1px solid transparent;
   background: rgba(0,0,0,.2) 50% 20% cover;
@@ -2483,7 +2484,7 @@ opacity: 0;
 }
 #mascotConf .option,
 #mascotConf .optionlabel {
-  #{agent}box-sizing: border-box;
+  #{Style.sizing}: border-box;
   width: 50%;
   display: inline-block;
   vertical-align: middle;
@@ -2578,7 +2579,7 @@ opacity: 0;
   left: 0 !important;
 }
 #boards .column {
-  -moz-box-sizing: border-box;
+  #{Style.sizing}: border-box;
   display: inline-block;
   width: 16em;
   text-align: left;
