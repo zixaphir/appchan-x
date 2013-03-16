@@ -45,8 +45,15 @@ module.exports = (grunt) ->
         options:
           process:
             data: pkg
-        src: 'meta/data.js',
+        src:  'meta/data.js',
         dest: '<%= pkg.meta.files.metajs %>'
+
+      latest:
+        options:
+          process:
+            data: pkg
+        src:  'meta/latest.js',
+        dest: 'latest.js'
 
     coffee:
       script:
@@ -104,6 +111,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'release', [
     'default'
+    'concat:latest'
     'exec:commit'
     'exec:push'
   ]
