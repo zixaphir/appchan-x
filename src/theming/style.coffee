@@ -1509,11 +1509,18 @@ hide: "
   padding: 0;
   border: 0 none;
 }" else ""}
-/* Posts */
+/* Threads */
 .thread {
   margin: #{parseInt _conf["Top Thread Padding"], 10}px 0 #{parseInt _conf["Bottom Thread Padding"], 10}px 0;
   #{if _conf["Rounded Edges"] then "border-radius: 4px;" else ""}
 }
+/* Thread Clearfix */
+.thread > div:last-of-type::after {
+  display: block;
+  content: ' ';
+  clear: both;
+}
+/* Posts */
 .summary {
   margin-bottom: #{Style.replyMargin}px;
 }
