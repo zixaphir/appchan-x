@@ -555,7 +555,7 @@ div.navLinks > a:first-of-type:hover::after,
       position = aligner(
         2
         [
-          true
+          notCatalog
           _conf['Slideout Navigation'] isnt 'hide'
           _conf['Announcements'] is 'slideout' and $ '#globalMessage', d.body
           notCatalog and _conf['Slideout Watcher'] and _conf['Thread Watcher']
@@ -678,7 +678,7 @@ body > a[style="cursor: pointer; float: right;"]::after {
         2 + (if _conf["4chan Banner"] is "at sidebar top" then (Style.logoOffset + 19) else 0)
         [
           notEither and _conf['Image Expansion']
-          true
+          notCatalog
           _conf['Slideout Navigation'] isnt 'hide'
           _conf['Announcements'] is 'slideout' and $ '#globalMessage', d.body
           notCatalog and _conf['Slideout Watcher'] and _conf['Thread Watcher']

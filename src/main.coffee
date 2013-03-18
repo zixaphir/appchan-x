@@ -103,6 +103,8 @@ Main =
   catalog: ->
     _conf = Conf
 
+    MascotTools.init()
+
     if _conf['Custom Navigation']
       CustomNavigation.init()
 
@@ -111,9 +113,6 @@ Main =
 
     if _conf['Thread Hiding']
       ThreadHiding.init()
-
-    Options.init()
-    MascotTools.init()
 
     for nav in ['boardNavDesktop', 'boardNavDesktopFoot']
       if a = $ "a[href*='/#{g.BOARD}/']", $.id nav
