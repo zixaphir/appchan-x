@@ -935,7 +935,7 @@ a[style="cursor: pointer; float: right;"] {
 }
 /* Defaults */
 a {
-  text-decoration: none;
+  text-decoration: #{if _conf["Underline Links"] then "underline" else "none"};
   outline: none;
 }
 body, html {
@@ -1465,6 +1465,7 @@ hide: "
 }
 #watcher .move {
   cursor: default;
+  text-decoration: #{if _conf["Underline Links"] then "underline" else "none"};
 }
 #watcher > div {
   max-height: 1.6em;
@@ -1566,6 +1567,9 @@ hide: "
 .postertrip {
   #{if _conf["Italics"] then 'font-style: italic;' else ''}
 }
+.replylink {
+  text-decoration: #{if _conf["Underline Links"] then "underline" else "none"};
+}
 .fileInfo {
   padding: 0 3px;
 }
@@ -1636,11 +1640,21 @@ else ""
   font-style: italic;
   #{if _conf["Bolds"] then 'font-weight: 800;' else ''}
 }
+.quotelink {
+  text-decoration: #{if _conf["Underline Links"] then "underline" else "none"};
+}
 .filtered,
 .quotelink.filtered {
-  text-decoration: underline; text-decoration: line-through !important;
+  text-decoration: underline;
+  text-decoration: line-through !important;
 }
 /* Backlinks */
+.backlink {
+  text-decoration: #{if _conf["Underline Links"] then "underline" else "none"};
+}
+.backlink.dead {
+  text-decoration: none;
+}
 #{{
 "lower left": "
 .container {
@@ -2917,7 +2931,7 @@ textarea {
   color: #{theme["Greentext"]};
 }
 .forwardlink {
-  text-decoration: none;
+  text-decoration: #{if _conf["Underline Links"] then "underline" else "none"};
   border-bottom: 1px dashed #{theme["Backlinks"]};
 }
 .container::before {
