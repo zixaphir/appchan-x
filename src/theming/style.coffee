@@ -953,7 +953,7 @@ body {
   margin-#{Style.sidebarLocation[1]}: 2px;
   padding: 0 #{parseInt(_conf["Right Thread Padding"], 10) + editSpace["right"]}px 0 #{parseInt(_conf["Left Thread Padding"], 10) + editSpace["left"]}px;
 }
-#{if _conf["4chan SS Sidebar"] then "
+#{if _conf["4chan SS Sidebar"] and /^boards\.4chan\.org$/.test location.hostname then "
 body::before {
   content: '';
   position: fixed;
@@ -964,6 +964,9 @@ body::before {
   z-index: 1;
   #{Style.sizing}: border-box;
   display: block;
+}
+body {
+  padding-#{Style.sidebarLocation[0]}: 2px;
 }
 " else ""}
 button,
