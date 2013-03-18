@@ -10956,29 +10956,26 @@
       }
     },
     catalog: function() {
-      var _conf;
+      var a, nav, _conf, _i, _len, _ref;
       _conf = Conf;
+      if (_conf['Custom Navigation']) {
+        CustomNavigation.init();
+      }
       if (_conf['Catalog Links']) {
         CatalogLinks.init();
       }
       if (_conf['Thread Hiding']) {
         ThreadHiding.init();
       }
-      $.ready(function() {
-        var a, nav, _i, _len, _ref;
-        if (_conf['Custom Navigation']) {
-          CustomNavigation.init();
+      Options.init();
+      MascotTools.init();
+      _ref = ['boardNavDesktop', 'boardNavDesktopFoot'];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        nav = _ref[_i];
+        if (a = $("a[href*='/" + g.BOARD + "/']", $.id(nav))) {
+          $.addClass(a, 'current');
         }
-        Options.init();
-        MascotTools.init();
-        _ref = ['boardNavDesktop', 'boardNavDesktopFoot'];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          nav = _ref[_i];
-          if (a = $("a[href*='/" + g.BOARD + "/']", $.id(nav))) {
-            $.addClass(a, 'current');
-          }
-        }
-      });
+      }
     },
     features: function() {
       var _conf;

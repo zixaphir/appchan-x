@@ -102,24 +102,24 @@ Main =
 
   catalog: ->
     _conf = Conf
+
+    if _conf['Custom Navigation']
+      CustomNavigation.init()
+
     if _conf['Catalog Links']
       CatalogLinks.init()
 
     if _conf['Thread Hiding']
       ThreadHiding.init()
 
-    $.ready ->
-      if _conf['Custom Navigation']
-        CustomNavigation.init()
+    Options.init()
+    MascotTools.init()
 
-      Options.init()
-      MascotTools.init()
+    for nav in ['boardNavDesktop', 'boardNavDesktopFoot']
+      if a = $ "a[href*='/#{g.BOARD}/']", $.id nav
+        # Gotta make it work in temporary boards.
+        $.addClass a, 'current'
 
-      for nav in ['boardNavDesktop', 'boardNavDesktopFoot']
-        if a = $ "a[href*='/#{g.BOARD}/']", $.id nav
-          # Gotta make it work in temporary boards.
-          $.addClass a, 'current'
-      return
     return
 
   features: ->
