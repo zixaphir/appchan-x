@@ -1268,12 +1268,12 @@ else "
   position: fixed;
   z-index: 22;
 }
-#qp blockquote::after {
+#qp .postMessage::after {
   clear: both;
   display: block;
   content: "";
 }
-#qp img {
+#qp .fullSize {
   max-height: 300px;
   max-width: 500px;
 }
@@ -1534,9 +1534,14 @@ hide: "
 .post:hover .hide_reply_button,
 .post:hover .menu_button,
 .post:hover .hide_thread_button,
+.hidden_thread .hide_thread_button,
+.hidden_thread .menu_button,
 .inline .hide_reply_button,
 .inline .menu_button {
   opacity: 1;
+}
+.hidden_thread {
+  text-align: right;
 }
 #{if _conf['Color user IDs'] then "
 .posteruid .hand {
@@ -1560,8 +1565,6 @@ hide: "
 .fileThumb {
   float: left;
   margin: 3px 20px;
-}
-.fileThumb img {
   outline: none;
 }
 .reply.post {
@@ -1572,7 +1575,7 @@ hide: "
 .post {
   #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
-.post blockquote {
+.postMessage {
   margin: #{_conf['Vertical Post Padding']}px #{_conf['Horizontal Post Padding']}px;
 }
 .spoiler,
@@ -1580,8 +1583,16 @@ s {
   text-decoration: none;
 }
 /* Reply Clearfix */
-.reply.post blockquote {
+.reply.post .postMessage {
   clear: right;
+}
+#{if _conf['Force Reply Break'] or _conf["OP Background"] then "
+.op.post .postMessage {
+  display: block;
+  content: ' ';
+  clear: both;
+}
+" else ""
 }
 /* OP */
 .favicon {
@@ -1590,11 +1601,6 @@ s {
 #{if _conf["OP Background"] then "
 .op.post {
   #{Style.sizing}: border-box;
-}
-.op blockquote::after {
-  clear: both;
-  display: block;
-  content: '';
 }" else ""}
 /* Summary */
 #{
@@ -1613,7 +1619,7 @@ else ""
   display: inline-block;
 }
 /* Inlined Clearfix */
-.inline blockquote::after {
+.inline .postMessage::after {
   clear: both;
   display: block;
   content: "";
