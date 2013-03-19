@@ -15,5 +15,5 @@
 // @run-at              document-start
 // @updateURL           https://github.com/zixaphir/appchan-x/raw/stable/appchan_x.meta.js
 // @downloadURL         https://github.com/zixaphir/appchan-x/raw/stable/appchan_x.user.js
-// @icon                data:image/gif;base64,R0lGODlhYAAQAJEAAGbMM////wAAAP///yH5BAEAAAMALAAAAABgABAAAAL8nI+py+0Po5y02ruEFmh7PnxbJ3KecR4pqoWr2iajIgR2AIb3bu43WPPhdENiLmg7Jn25EODZFDwBTSIPJRwir1tuElvshrNf1RR4lv2QPZzmG9zA16c4uO3+WeVl55Qq9RdVZlc4p3VYdcfXBpSo0ufyJ1gVx2j0huhmWKSW1Xhpd0czSZVBhucl1Hj6acVkBNnZIcggdgh7y0qTFIoaOypTqoiZCTpjiRwp66jp8RhsVmrq2bzbsbz3AcxpDfztBxUIVT0qij0LtsoN3c1MSx5eSQiNTqzL7mzed+4khfZPBrIRL1jEoFHCRYw6A1usKGiiQwgMFCtalFAAADs=
+// @icon                data:image/gif;base64,R0lGODlhIAAgAKIAAAQCBARmBHy6VKTShP///////wAAAAAAACH5BAEAAAUALAAAAAAgACAAAAO6WLrc/jDKWYK9VF3cts2Vx1hDaX4RaZaouqKQewZjINwCS3dBiQuwheWnc6h+weFPAGg6n88lcKf8Qa9OadLTJHi/4KZnV9t0wWixaHK+epsgRhv6BsQXZ/QXfi/k9QR8d3NPdX1+AHWFgXZxFnMKc0ESj4mMkZZqFCpXmE9FKT0DnYifA5NCokhkqUSnrBqqOKhVOa9GNku0uau4WrAhv75TN7vFucbEU8NKqLHPodAxVMA10ofY2REJADs=
 // ==/UserScript==

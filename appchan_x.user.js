@@ -15,11 +15,11 @@
 // @run-at              document-start
 // @updateURL           https://github.com/zixaphir/appchan-x/raw/stable/appchan_x.meta.js
 // @downloadURL         https://github.com/zixaphir/appchan-x/raw/stable/appchan_x.user.js
-// @icon                data:image/gif;base64,R0lGODlhYAAQAJEAAGbMM////wAAAP///yH5BAEAAAMALAAAAABgABAAAAL8nI+py+0Po5y02ruEFmh7PnxbJ3KecR4pqoWr2iajIgR2AIb3bu43WPPhdENiLmg7Jn25EODZFDwBTSIPJRwir1tuElvshrNf1RR4lv2QPZzmG9zA16c4uO3+WeVl55Qq9RdVZlc4p3VYdcfXBpSo0ufyJ1gVx2j0huhmWKSW1Xhpd0czSZVBhucl1Hj6acVkBNnZIcggdgh7y0qTFIoaOypTqoiZCTpjiRwp66jp8RhsVmrq2bzbsbz3AcxpDfztBxUIVT0qij0LtsoN3c1MSx5eSQiNTqzL7mzed+4khfZPBrIRL1jEoFHCRYw6A1usKGiiQwgMFCtalFAAADs=
+// @icon                data:image/gif;base64,R0lGODlhIAAgAKIAAAQCBARmBHy6VKTShP///////wAAAAAAACH5BAEAAAUALAAAAAAgACAAAAO6WLrc/jDKWYK9VF3cts2Vx1hDaX4RaZaouqKQewZjINwCS3dBiQuwheWnc6h+weFPAGg6n88lcKf8Qa9OadLTJHi/4KZnV9t0wWixaHK+epsgRhv6BsQXZ/QXfi/k9QR8d3NPdX1+AHWFgXZxFnMKc0ESj4mMkZZqFCpXmE9FKT0DnYifA5NCokhkqUSnrBqqOKhVOa9GNku0uau4WrAhv75TN7vFucbEU8NKqLHPodAxVMA10ofY2REJADs=
 // ==/UserScript==
 
 /*
- * appchan-x - Version 1.2.4 - 2013-03-18
+ * appchan-x - Version 1.2.4 - 2013-03-19
  *
  * Licensed under the MIT license.
  * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -79,6 +79,7 @@
  *   WakiMiko
  *   btmcsweeney
  *   AppleBloom
+ *   Gógol
  *
  * All the people who've taken the time to write bug reports.
  *
@@ -389,6 +390,7 @@
 
   $ = function(selector, root) {
     var result;
+
     root || (root = d.body);
     if (result = root.querySelector(selector)) {
       return result;
@@ -397,6 +399,7 @@
 
   $.extend = function(object, properties) {
     var key, val;
+
     for (key in properties) {
       val = properties[key];
       object[key] = val;
@@ -406,6 +409,7 @@
   $.extend(Array.prototype, {
     add: function(object, position) {
       var keep;
+
       keep = this.slice(position);
       this.length = position;
       this.push(object);
@@ -416,6 +420,7 @@
     },
     indexOf: function(object) {
       var i;
+
       i = this.length;
       while (i--) {
         if (this[i] === object) {
@@ -426,6 +431,7 @@
     },
     pushArrays: function() {
       var arg, args, _i, _len;
+
       args = arguments;
       for (_i = 0, _len = args.length; _i < _len; _i++) {
         arg = args[_i];
@@ -435,6 +441,7 @@
     },
     remove: function(object) {
       var index;
+
       if ((index = this.indexOf(object)) > -1) {
         return this.splice(index, 1);
       } else {
@@ -463,6 +470,7 @@
     engine: /WebKit|Presto|Gecko/.exec(navigator.userAgent)[0].toLowerCase(),
     ready: function(fc) {
       var cb;
+
       if (['interactive', 'complete'].contains(d.readyState)) {
         return setTimeout(fc);
       }
@@ -470,6 +478,7 @@
         $.callbacks = [];
         cb = function() {
           var callback, _i, _len, _ref;
+
           _ref = $.callbacks;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             callback = _ref[_i];
@@ -484,6 +493,7 @@
     },
     sync: function(key, cb) {
       var parse;
+
       key = Main.namespace + key;
       parse = JSON.parse;
       return $.on(window, 'storage', function(e) {
@@ -497,6 +507,7 @@
     },
     formData: function(arg) {
       var fd, key, val;
+
       if (arg instanceof HTMLFormElement) {
         fd = new FormData(arg);
       } else {
@@ -512,6 +523,7 @@
     },
     ajax: function(url, callbacks, opts) {
       var form, headers, key, r, type, upCallbacks, val;
+
       if (!opts) {
         opts = {};
       }
@@ -534,6 +546,7 @@
     },
     cache: function(url, cb) {
       var req;
+
       if (req = $.cache.requests[url]) {
         if (req.readyState === 4) {
           return cb.call(req);
@@ -544,6 +557,7 @@
         req = $.ajax(url, {
           onload: function() {
             var _i, _len, _ref;
+
             _ref = this.callbacks;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               cb = _ref[_i];
@@ -573,6 +587,7 @@
     },
     addStyle: function(css, identifier) {
       var style;
+
       style = $.el('style', {
         innerHTML: css,
         id: identifier
@@ -605,6 +620,7 @@
     },
     nodes: function(nodes) {
       var frag, node, _i, _len;
+
       if (!(nodes instanceof Array)) {
         return nodes;
       }
@@ -635,6 +651,7 @@
     },
     el: function(tag, properties) {
       var el;
+
       el = d.createElement(tag);
       if (properties) {
         $.extend(el, properties);
@@ -643,6 +660,7 @@
     },
     on: function(el, events, handler) {
       var event, _i, _len, _ref;
+
       _ref = events.split(' ');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         event = _ref[_i];
@@ -651,6 +669,7 @@
     },
     off: function(el, events, handler) {
       var event, _i, _len, _ref;
+
       _ref = events.split(' ');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         event = _ref[_i];
@@ -662,6 +681,7 @@
     },
     globalEval: function(code) {
       var script;
+
       script = $.el('script', {
         textContent: "(" + code + ")()"
       });
@@ -670,6 +690,7 @@
     },
     shortenFilename: function(filename, isOP) {
       var threshold;
+
       threshold = 30 + 10 * isOP;
       if (filename.replace(/\.\w+$/, '').length > threshold) {
         return "" + filename.slice(0, threshold - 5) + "(...)" + (filename.match(/\.\w+$/));
@@ -679,6 +700,7 @@
     },
     bytesToString: function(size) {
       var unit;
+
       unit = 0;
       while (size >= 1024) {
         size /= 1024;
@@ -701,6 +723,7 @@
     },
     get: function(name, defaultValue) {
       var value;
+
       name = Main.namespace + name;
       if ((value = GM_getValue(name)) && value !== 'undefined') {
         return JSON.parse(value);
@@ -722,6 +745,7 @@
     },
     get: function(name, defaultValue) {
       var value;
+
       if (value = localStorage.getItem(Main.namespace + name)) {
         return JSON.parse(value);
       } else {
@@ -738,6 +762,7 @@
 
   $$ = function(selector, root) {
     var result;
+
     root || (root = d.body);
     if (result = __slice.call(root.querySelectorAll(selector))) {
       return result;
@@ -748,6 +773,7 @@
   UI = {
     dialog: function(id, position, html) {
       var el, move;
+
       el = $.el('div', {
         className: 'reply dialog',
         innerHTML: html,
@@ -761,6 +787,7 @@
     },
     dragstart: function(e) {
       var el, rect;
+
       e.preventDefault();
       UI.el = el = this.parentNode;
       d.addEventListener('mousemove', UI.drag, false);
@@ -773,6 +800,7 @@
     },
     drag: function(e) {
       var left, style, top;
+
       left = e.clientX - UI.dx;
       top = e.clientY - UI.dy;
       left = left < 10 ? '0px' : UI.width - left < 10 ? null : left + 'px';
@@ -791,6 +819,7 @@
     },
     hover: function(e, mode) {
       var clientHeight, clientWidth, clientX, clientY, height, style, top, _ref;
+
       clientX = e.clientX, clientY = e.clientY;
       style = UI.el.style;
       _ref = d.documentElement, clientHeight = _ref.clientHeight, clientWidth = _ref.clientWidth;
@@ -828,6 +857,7 @@
   Options = {
     init: function() {
       var a;
+
       if (!$.get('firstrun')) {
         $.set('firstrun', true);
         if (!Favicon.el) {
@@ -847,6 +877,7 @@
     },
     dialog: function(tab) {
       var archiver, arr, back, category, checked, customCSS, description, dialog, div, favicon, fileInfo, filter, height, hiddenNum, hiddenThreads, input, key, label, li, liHTML, name, obj, optionname, optionvalue, overlay, sauce, selectoption, styleSetting, time, toSelect, tr, ul, updateIncrease, updateIncreaseB, value, width, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _ref4;
+
       if (Conf['editMode'] === "theme") {
         if (confirm("Opening the options dialog will close and discard any theme changes made with the theme editor.")) {
           ThemeTools.close();
@@ -1041,6 +1072,7 @@
         label = _ref[_i];
         $.on(label, 'click', function() {
           var previous;
+
           if (previous = $.id('selected_tab')) {
             previous.id = '';
           }
@@ -1214,6 +1246,7 @@
       this.themeTab(dialog);
       $.on($('#mascot_tab', Options.el), 'click', function() {
         var el;
+
         if (el = $.id("mascotContainer")) {
           $.rm(el);
         }
@@ -1241,6 +1274,7 @@
     },
     indicators: function(dialog) {
       var indicator, indicators, key, _i, _j, _len, _len1, _ref, _ref1;
+
       indicators = {};
       _ref = $$('.warning', dialog);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1265,6 +1299,7 @@
     },
     themeTab: function(dialog, mode) {
       var div, keys, name, parentdiv, suboptions, theme, _i, _j, _len, _len1;
+
       if (dialog == null) {
         dialog = Options.el;
       }
@@ -1299,6 +1334,7 @@
             });
             $.on($('a.export', div), 'click', function(e) {
               var exportTheme, exportedTheme;
+
               e.preventDefault();
               e.stopPropagation();
               exportTheme = Themes[this.name];
@@ -1312,6 +1348,7 @@
             });
             $.on($('a.delete', div), 'click', function(e) {
               var container, settheme, userThemes;
+
               e.preventDefault();
               e.stopPropagation();
               container = $.id(this.name);
@@ -1380,6 +1417,7 @@
             });
             $.on(div, 'click', function() {
               var userThemes;
+
               if (confirm("Are you sure you want to undelete \"" + this.id + "\"?")) {
                 Themes[this.id]["Deleted"] = false;
                 userThemes = $.get("userThemes", {});
@@ -1408,6 +1446,7 @@
     mascotTab: {
       dialog: function(dialog, mode) {
         var batchmascots, categories, category, header, keys, li, mascot, mascotHide, name, option, parentdiv, suboptions, ul, _i, _j, _k, _len, _len1, _len2, _ref;
+
         dialog || (dialog = Options.el);
         ul = {};
         categories = [];
@@ -1472,6 +1511,7 @@
               });
               $.on($('a.delete', li), 'click', function(e) {
                 var type, _k, _len2, _ref1;
+
                 e.stopPropagation();
                 if (confirm("Are you sure you want to delete \"" + this.name + "\"?")) {
                   if (Conf['mascot'] === this.name) {
@@ -1490,6 +1530,7 @@
               });
               $.on($('a.export', li), 'click', function(e) {
                 var exportMascot, exportedMascot;
+
                 e.stopPropagation();
                 exportMascot = Mascots[this.name];
                 exportMascot['Mascot'] = this.name;
@@ -1526,6 +1567,7 @@
           });
           $.on($('#clear', batchmascots), 'click', function() {
             var enabledMascots, _k, _len2;
+
             enabledMascots = JSON.parse(JSON.stringify(Conf[g.MASCOTSTRING]));
             for (_k = 0, _len2 = enabledMascots.length; _k < _len2; _k++) {
               name = enabledMascots[_k];
@@ -1602,6 +1644,7 @@
       },
       toggle: function() {
         var i, name, setting, type, _i, _len, _ref;
+
         if (this.checked) {
           $.id(this.name).hidden = true;
           Conf["Hidden Categories"].push(this.name);
@@ -1632,6 +1675,7 @@
     customNavigation: {
       dialog: function(dialog) {
         var addLink, div, index, input, item, itemIndex, li, link, navOptions, removeLink, ul, _ref;
+
         div = $("#customNavigation", dialog);
         ul = $.el("ul", {
           textContent: "Custom Navigation"
@@ -1704,6 +1748,7 @@
           });
           $.on(addLink, "click", function() {
             var blankLink;
+
             blankLink = ["ex", "example", "http://www.example.com/"];
             userNavigation.links.add(blankLink, this.parentElement.firstChild.value);
             return Options.customNavigation.cleanup();
@@ -1725,6 +1770,7 @@
         });
         $.on($('a[name=add]', li), "click", function() {
           var blankLink;
+
           blankLink = ["ex", "example", "http://www.example.com/"];
           userNavigation.links.push(blankLink);
           return Options.customNavigation.cleanup();
@@ -1745,6 +1791,7 @@
     persona: {
       init: function() {
         var input, item, key, _i, _len, _ref;
+
         key = Conf['Per Board Persona'] ? g.BOARD : 'global';
         Options.persona.newButton();
         _ref = Options.persona.array;
@@ -1754,6 +1801,7 @@
           input.value = this.data[key][item] || "";
           $.on(input, 'blur', function() {
             var pers;
+
             pers = Options.persona;
             pers.data[pers.select.value][this.name] = this.value;
             return $.set('persona', pers.data);
@@ -1764,6 +1812,7 @@
       array: ['name', 'email', 'sub'],
       change: function() {
         var input, item, key, _i, _len, _ref;
+
         key = this.value;
         Options.persona.newButton();
         _ref = Options.persona.array;
@@ -1775,6 +1824,7 @@
       },
       copy: function() {
         var change, data, select, _ref;
+
         _ref = Options.persona, select = _ref.select, data = _ref.data, change = _ref.change;
         if (select.value === 'global') {
           data.global = JSON.parse(JSON.stringify(data[select.value]));
@@ -1802,6 +1852,7 @@
     },
     keybind: function(e) {
       var key;
+
       if (e.keyCode === 9) {
         return;
       }
@@ -1815,6 +1866,7 @@
     },
     filter: function() {
       var article, el, name, ta;
+
       el = this.nextSibling.nextSibling;
       if ((name = this.value) !== 'guide') {
         ta = $.el('textarea', {
@@ -1863,6 +1915,7 @@
     },
     selectTheme: function() {
       var currentTheme;
+
       if (currentTheme = $.id(Conf['theme'])) {
         $.rmClass(currentTheme, 'selectedtheme');
       }
@@ -1877,6 +1930,7 @@
     },
     mouseover: function(e) {
       var child, children, mouseover, _i, _len;
+
       if (mouseover = $.id('mouseover')) {
         if (children = mouseover.childNodes) {
           for (_i = 0, _len = children.length; _i < _len; _i++) {
@@ -1901,6 +1955,7 @@
     },
     mouseout: function(e) {
       var child, mouseover, _i, _len, _ref;
+
       mouseover = UI.el;
       _ref = mouseover.childNodes;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1915,6 +1970,7 @@
   BanChecker = {
     init: function() {
       var reason;
+
       this.now = Date.now();
       if (!Conf['Check for Bans constantly'] && (reason = $.get('isBanned'))) {
         return BanChecker.prepend(reason);
@@ -1927,6 +1983,7 @@
       return $.ajax(this.url, {
         onloadend: function() {
           var doc, msg, reason;
+
           if (this.status === 200 || 304) {
             if (!Conf['Check for Bans constantly']) {
               $.set('lastBanCheck', BanChecker.now);
@@ -1949,6 +2006,7 @@
     },
     prepend: function(reason) {
       var el;
+
       if (!BanChecker.el) {
         Banchecker.el = el = $.el('h2', {
           id: 'banmessage',
@@ -1973,6 +2031,7 @@
   CatalogLinks = {
     init: function() {
       var a, el;
+
       el = $.el('span', {
         id: 'toggleCatalog',
         innerHTML: '[<a href=javascript:;></a>]'
@@ -1983,6 +2042,7 @@
     },
     toggle: function(onLoad) {
       var a, board, useCatalog, _i, _len, _ref;
+
       if (onLoad === true) {
         useCatalog = $.get('CatalogIsToggled', g.CATALOG);
       } else {
@@ -2016,6 +2076,7 @@
   CustomNavigation = {
     init: function() {
       var a, i, len, link, navNodes, navigation, node, nodes;
+
       navigation = $("#boardNavDesktop", d.body);
       navNodes = navigation.childNodes;
       i = navNodes.length;
@@ -2049,6 +2110,7 @@
   ExpandComment = {
     init: function() {
       var a, _i, _len, _ref;
+
       _ref = $$('.abbr');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         a = _ref[_i];
@@ -2058,6 +2120,7 @@
     callbacks: [],
     node: function(node) {
       var callback, _i, _len, _ref;
+
       _ref = ExpandComment.callbacks;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         callback = _ref[_i];
@@ -2066,6 +2129,7 @@
     },
     expand: function(e) {
       var a, replyID, threadID, _, _ref;
+
       e.preventDefault();
       _ref = this.href.match(/(\d+)#p(\d+)/), _ = _ref[0], threadID = _ref[1], replyID = _ref[2];
       this.textContent = "Loading No." + replyID + "...";
@@ -2076,6 +2140,7 @@
     },
     parse: function(req, a, threadID, replyID) {
       var bq, clone, href, post, posts, quote, quotes, spoilerRange, _conf, _i, _j, _len, _len1, _ref;
+
       _conf = Conf;
       if (req.status !== 200) {
         a.textContent = "" + req.status + " " + req.statusText;
@@ -2123,6 +2188,7 @@
   ExpandThread = {
     init: function() {
       var a, span, _i, _len, _ref;
+
       _ref = $$('.summary');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         span = _ref[_i];
@@ -2139,6 +2205,7 @@
     },
     toggle: function(thread) {
       var a, num, replies, reply, url, _i, _len;
+
       url = "//api.4chan.org/" + g.BOARD + "/res/" + thread.id.slice(1) + ".json";
       a = $('.summary', thread);
       switch (a.textContent[0]) {
@@ -2176,6 +2243,7 @@
     },
     parse: function(req, thread, a) {
       var backlink, frag, id, link, node, nodes, post, posts, replies, reply, spoilerRange, status, threadID, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _results;
+
       if ((status = req.status) !== 200) {
         a.textContent = "" + status + " " + req.statusText;
         $.off(a, 'click', ExpandThread.cb.toggle);
@@ -2235,6 +2303,7 @@
     },
     node: function(post) {
       var alt, filename, node, _ref;
+
       if (!post.fileInfo) {
         return;
       }
@@ -2255,6 +2324,7 @@
     },
     setFormats: function() {
       var code;
+
       code = Conf['fileInfo'].replace(/%(.)/g, function(s, c) {
         if (c in FileInfo.formatters) {
           return "' + f.formatters." + c + "() + '";
@@ -2266,6 +2336,7 @@
     },
     convertUnit: function(unitT) {
       var i, size, unitF, units;
+
       size = this.data.size;
       unitF = this.data.unit;
       if (unitF !== unitT) {
@@ -2340,6 +2411,7 @@
   Keybinds = {
     init: function() {
       var node, _i, _len, _ref;
+
       this.bindings = this.bind();
       _ref = $$('[accesskey]');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -2350,6 +2422,7 @@
     },
     bind: function() {
       var keys, _conf;
+
       _conf = Conf;
       keys = {};
       keys[_conf.openQR] = function(thread, target, nodeName) {
@@ -2365,6 +2438,7 @@
       };
       keys[_conf.close] = function() {
         var o;
+
         if (o = $.id('overlay')) {
           return Options.close.call(o);
         } else if (QR.el) {
@@ -2438,12 +2512,14 @@
       };
       keys[_conf.nextPage] = function() {
         var form;
+
         if (form = $('.next form')) {
           return window.location = form.action;
         }
       };
       keys[_conf.previousPage] = function() {
         var form;
+
         if (form = $('.prev form')) {
           return window.location = form.action;
         }
@@ -2484,6 +2560,7 @@
     },
     keydown: function(e) {
       var bind, key, nodeName, target, thread;
+
       if (!(key = Keybinds.keyCode(e))) {
         return;
       }
@@ -2502,6 +2579,7 @@
     },
     keyCode: function(e) {
       var c, kc, key;
+
       key = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90].contains(kc = e.keyCode) ? (c = String.fromCharCode(kc), e.shiftKey ? c : c.toLowerCase()) : ((function() {
         switch (kc) {
           case 8:
@@ -2537,6 +2615,7 @@
     },
     tags: function(tag, ta) {
       var range, selEnd, selStart, value;
+
       value = ta.value;
       selStart = ta.selectionStart;
       selEnd = ta.selectionEnd;
@@ -2547,6 +2626,7 @@
     },
     img: function(thread, all) {
       var thumb;
+
       if (all) {
         return $.id('imageExpand').click();
       } else {
@@ -2564,6 +2644,7 @@
     },
     open: function(thread, tab) {
       var id, url;
+
       if (g.REPLY) {
         return;
       }
@@ -2577,6 +2658,7 @@
     },
     hl: function(delta, thread) {
       var axis, next, post, rect, replies, reply, _i, _len;
+
       if (post = $('.reply.highlight', thread)) {
         $.rmClass(post, 'highlight');
         rect = post.getBoundingClientRect();
@@ -2624,6 +2706,7 @@
   Nav = {
     init: function() {
       var next, prev, span;
+
       span = $.el('span', {
         id: 'navlinks'
       });
@@ -2654,6 +2737,7 @@
     },
     getThread: function(full) {
       var bottom, i, rect, thread, _i, _len, _ref;
+
       Nav.threads = $$('.thread:not(.hidden)');
       _ref = Nav.threads;
       for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
@@ -2671,6 +2755,7 @@
     },
     scroll: function(delta) {
       var i, rect, thread, top, _ref, _ref1;
+
       _ref = Nav.getThread(true), thread = _ref[0], i = _ref[1], rect = _ref[2];
       top = rect.top;
       if (!((delta === -1 && Math.ceil(top) < 0) || (delta === +1 && top > 1))) {
@@ -2716,6 +2801,7 @@
     },
     post: function(board, postID) {
       var archive, name, _base1, _ref;
+
       if (Redirect.post[board] === void 0) {
         _ref = this.archiver;
         for (name in _ref) {
@@ -2781,8 +2867,10 @@
     },
     select: function(board) {
       var archive, name;
+
       return (function() {
         var _ref, _results;
+
         _ref = this.archiver;
         _results = [];
         for (name in _ref) {
@@ -2796,11 +2884,13 @@
     },
     to: function(data) {
       var archive, board, isSearch, threadID;
+
       board = data.board, threadID = data.threadID, isSearch = data.isSearch;
       return ((archive = this.archiver[$.get("archiver/" + board + "/", this.select(board)[0])]) ? this.path(archive.base, archive.type, data) : threadID && !isSearch ? "//boards.4chan.org/" + board + "/" : null);
     },
     path: function(base, archiver, data) {
       var board, isSearch, postID, threadID, type, url, value;
+
       board = data.board, type = data.type, value = data.value, threadID = data.threadID, postID = data.postID, isSearch = data.isSearch;
       if (isSearch) {
         type = type === 'name' ? 'username' : type === 'md5' ? 'image' : type;
@@ -2822,12 +2912,14 @@
     },
     node: function(post) {
       var node;
+
       node = $('.postInfo > .dateTime', post.el);
       Time.date = new Date(node.dataset.utc * 1000);
       return node.textContent = Time.funk(Time);
     },
     foo: function() {
       var code;
+
       code = Conf['time'].replace(/%([A-Za-z])/g, function(s, c) {
         if (c in Time.formatters) {
           return "' + Time.formatters." + c + "() + '";
@@ -2913,6 +3005,7 @@
     },
     node: function(post) {
       var name, parent, trip;
+
       name = $('.postInfo .name', post.el);
       name.textContent = 'Anonymous';
       if ((trip = name.nextElementSibling) && trip.className === 'postertrip') {
@@ -2927,7 +3020,8 @@
   Filter = {
     filters: {},
     init: function() {
-      var boards, filter, hl, key, op, regexp, stub, top, _i, _len, _ref, _ref1, _ref2, _ref3, _ref4;
+      var boards, err, filter, hl, key, op, regexp, stub, top, _i, _len, _ref, _ref1, _ref2, _ref3, _ref4;
+
       for (key in Config.filter) {
         this.filters[key] = [];
         _ref = Conf[key].split('\n');
@@ -2949,7 +3043,8 @@
           } else {
             try {
               regexp = RegExp(regexp[1], regexp[2]);
-            } catch (err) {
+            } catch (_error) {
+              err = _error;
               alert(err.message);
               continue;
             }
@@ -2957,6 +3052,7 @@
           op = ((_ref2 = filter.match(/[^t]op:(yes|no|only)/)) != null ? _ref2[1] : void 0) || 'no';
           stub = (function() {
             var _ref3;
+
             switch ((_ref3 = filter.match(/stub:(yes|no)/)) != null ? _ref3[1] : void 0) {
               case 'yes':
                 return true;
@@ -2983,6 +3079,7 @@
     },
     createFilter: function(regexp, op, stub, hl, top) {
       var settings, test;
+
       test = typeof regexp === 'string' ? function(value) {
         return regexp === value;
       } : function(value) {
@@ -3006,6 +3103,7 @@
     },
     node: function(post) {
       var filter, isOP, key, result, root, value, _i, _len, _ref;
+
       if (post.isInlined) {
         return;
       }
@@ -3043,6 +3141,7 @@
     },
     uniqueid: function(post) {
       var uid;
+
       if (uid = $('.posteruid', post.el)) {
         return uid.textContent.slice(5, -1);
       }
@@ -3050,6 +3149,7 @@
     },
     tripcode: function(post) {
       var trip;
+
       if (trip = $('.postertrip', post.el)) {
         return trip.textContent;
       }
@@ -3057,6 +3157,7 @@
     },
     mod: function(post) {
       var mod;
+
       if (mod = $('.capcode', post.el)) {
         return mod.textContent;
       }
@@ -3064,6 +3165,7 @@
     },
     email: function(post) {
       var mail;
+
       if (mail = $('.useremail', post.el)) {
         return decodeURIComponent(mail.href.slice(7));
       }
@@ -3071,6 +3173,7 @@
     },
     subject: function(post) {
       var subject;
+
       if ((subject = $('.postInfo .subject', post.el)).textContent.length !== 0) {
         return subject.textContent;
       }
@@ -3078,6 +3181,7 @@
     },
     comment: function(post) {
       var content, data, i, nodes, text, _i, _ref;
+
       text = [];
       nodes = d.evaluate('.//br|.//text()', post.blockquote, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
       for (i = _i = 0, _ref = nodes.snapshotLength; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
@@ -3090,6 +3194,7 @@
     },
     country: function(post) {
       var flag;
+
       if (flag = $('.countryFlag', post.el)) {
         return flag.title;
       }
@@ -3097,6 +3202,7 @@
     },
     filename: function(post) {
       var file, fileInfo;
+
       fileInfo = post.fileInfo;
       if (fileInfo) {
         if (file = $('.fileText > span', fileInfo)) {
@@ -3109,6 +3215,7 @@
     },
     dimensions: function(post) {
       var fileInfo, match;
+
       fileInfo = post.fileInfo;
       if (fileInfo && (match = fileInfo.textContent.match(/\d+x\d+/))) {
         return match[0];
@@ -3117,6 +3224,7 @@
     },
     filesize: function(post) {
       var img;
+
       img = post.img;
       if (img) {
         return img.alt.replace('Spoiler Image, ', '');
@@ -3125,6 +3233,7 @@
     },
     md5: function(post) {
       var img;
+
       img = post.img;
       if (img) {
         return img.dataset.md5;
@@ -3133,6 +3242,7 @@
     },
     menuInit: function() {
       var div, entry, type, _i, _len, _ref;
+
       div = $.el('div', {
         textContent: 'Filter'
       });
@@ -3152,6 +3262,7 @@
     },
     createSubEntry: function(text, type) {
       var el, onclick, open;
+
       el = $.el('a', {
         href: 'javascript:;',
         textContent: text
@@ -3159,6 +3270,7 @@
       onclick = null;
       open = function(post) {
         var value;
+
         value = Filter[type](post);
         if (value === false) {
           return false;
@@ -3166,6 +3278,7 @@
         $.off(el, 'click', onclick);
         onclick = function() {
           var re, save, select, ta, tl;
+
           re = type === 'md5' ? value : value.replace(/\/|\\|\^|\$|\n|\.|\(|\)|\{|\}|\[|\]|\?|\*|\+|\|/g, function(c) {
             if (c === '\n') {
               return '\\n';
@@ -3207,6 +3320,7 @@
     },
     node: function(post) {
       var el, hide;
+
       if (post.isInlined || post.ID === post.threadID) {
         return;
       }
@@ -3217,6 +3331,7 @@
       });
       $.on(hide.firstElementChild, 'click', function() {
         var button, id, root;
+
         return ReplyHiding.toggle(button = this.parentNode.parentNode, root = $.id("pc" + (id = this.id.slice(4))), id);
       });
       $.add(el, hide);
@@ -3226,6 +3341,7 @@
     },
     toggle: function(button, root, id) {
       var quote, quotes, _i, _j, _len, _len1;
+
       quotes = $$(".quotelink[href$='#p" + id + "'], .backlink[href$='#p" + id + "']");
       if (/\bstub\b/.test(button.className)) {
         ReplyHiding.show(root);
@@ -3246,6 +3362,7 @@
     },
     hide: function(root) {
       var a, id, menuButton, post, stub;
+
       post = $('.post', root);
       if (post.hidden) {
         return;
@@ -3267,12 +3384,14 @@
       }
       $.on(a, 'click', function() {
         var button;
+
         return ReplyHiding.toggle(button = this.parentNode, root = $.id("pc" + this.id.slice(4)), id);
       });
       return $.prepend(root, stub);
     },
     show: function(root) {
       var post, stub;
+
       if ((stub = $('.stub', root))) {
         $.rm(stub);
       }
@@ -3293,6 +3412,7 @@
     },
     node: function(post) {
       var el, quote, _i, _len, _ref;
+
       if (post.isInlined) {
         return;
       }
@@ -3313,6 +3433,7 @@
   ThreadHiding = {
     init: function() {
       var a, thread, _i, _len, _ref;
+
       this.hiddenThreads = $.get("hiddenThreads/" + g.BOARD + "/", {});
       ThreadHiding.sync();
       if (g.CATALOG) {
@@ -3337,6 +3458,7 @@
     },
     sync: function() {
       var hiddenThreadsCatalog, id;
+
       hiddenThreadsCatalog = JSON.parse(localStorage.getItem("4chan-hide-t-" + g.BOARD)) || {};
       if (g.CATALOG) {
         for (id in this.hiddenThreads) {
@@ -3354,6 +3476,7 @@
     },
     toggle: function(thread) {
       var id;
+
       id = thread.id.slice(1);
       if (thread.hidden || /\bhidden_thread\b/.test(thread.firstChild.className)) {
         ThreadHiding.show(thread);
@@ -3366,6 +3489,7 @@
     },
     hide: function(thread) {
       var menuButton, num, opInfo, span, stub, text;
+
       if (!Conf['Show Stubs']) {
         thread.hidden = true;
         thread.nextElementSibling.hidden = true;
@@ -3399,6 +3523,7 @@
     },
     show: function(thread) {
       var stub;
+
       if (stub = $('.hidden_thread', thread)) {
         $.rm(stub);
       }
@@ -3410,6 +3535,7 @@
   FappeTyme = {
     init: function() {
       var el;
+
       if (g.CATALOG || g.BOARD === 'f') {
         return;
       }
@@ -3444,6 +3570,7 @@
     },
     node: function(post) {
       var a;
+
       if (!post.img || post.hasPDF) {
         return;
       }
@@ -3466,6 +3593,7 @@
       },
       all: function() {
         var i, thumb, thumbs, _i, _j, _k, _len, _len1, _len2, _ref;
+
         ImageExpand.on = this.checked;
         if (ImageExpand.on) {
           thumbs = $$('img[data-md5]');
@@ -3495,6 +3623,7 @@
       },
       typeChange: function() {
         var klass;
+
         klass = (function() {
           switch (this.value) {
             case 'full':
@@ -3521,6 +3650,7 @@
     },
     toggle: function(a) {
       var rect, thumb;
+
       thumb = a.firstChild;
       if (thumb.hidden) {
         rect = a.getBoundingClientRect();
@@ -3553,6 +3683,7 @@
     },
     expand: function(thumb, src) {
       var a, img;
+
       if ($.x('ancestor-or-self::*[@hidden]', thumb)) {
         return;
       }
@@ -3576,6 +3707,7 @@
     },
     error: function() {
       var src, thumb, timeoutID, url;
+
       thumb = this.previousSibling;
       ImageExpand.contract(thumb);
       $.rm(this);
@@ -3605,6 +3737,7 @@
     },
     dialog: function() {
       var controls, imageType, select;
+
       controls = $.el('div', {
         id: 'imgControls',
         innerHTML: "<div id=imgContainer><select id=imageType name=imageType><option value=full>Full</option><option value='fit width'>Fit Width</option><option value='fit height'>Fit Height</option value='fit screen'><option value='fit screen'>Fit Screen</option></select><label><input type=checkbox id=imageExpand></label></div>"
@@ -3637,6 +3770,7 @@
     },
     mouseover: function() {
       var el;
+
       if (el = $.id('ihover')) {
         if (el === UI.el) {
           delete UI.el;
@@ -3658,6 +3792,7 @@
     },
     load: function() {
       var style;
+
       if (!this.parentNode) {
         return;
       }
@@ -3670,6 +3805,7 @@
     error: function() {
       var src, timeoutID, url,
         _this = this;
+
       src = this.src.split('/');
       if (!(src[2] === 'images.4chan.org' && (url = Redirect.image(src[3], src[5])))) {
         if (g.dead) {
@@ -3714,6 +3850,7 @@
     },
     node: function(post) {
       var el, href, img, type;
+
       img = post.img;
       if (post.el.hidden || !img || /spoiler/.test(img.src)) {
         return;
@@ -3738,6 +3875,7 @@
     },
     dialog: function() {
       var controls, first, input;
+
       controls = $.el('label', {
         id: 'prefetch',
         innerHTML: "<input type=checkbox>Prefetch Images"
@@ -3754,6 +3892,7 @@
     },
     change: function() {
       var thumb, _i, _len, _ref;
+
       $.off(this, 'change', Prefetch.change);
       _ref = $$('a.fileThumb');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -3766,6 +3905,7 @@
     },
     node: function(post) {
       var img;
+
       img = post.img;
       if (post.el.hidden || !img) {
         return;
@@ -3784,6 +3924,7 @@
     },
     node: function(post) {
       var img, s;
+
       img = post.img;
       if (!(img && /^Spoiler/.test(img.alt)) || post.isArchived) {
         return;
@@ -3798,6 +3939,7 @@
   Sauce = {
     init: function() {
       var link, _i, _len, _ref;
+
       if (g.BOARD === 'f') {
         return;
       }
@@ -3817,6 +3959,7 @@
     },
     createSauceLink: function(link) {
       var domain, el, href, m;
+
       link = link.replace(/(\$\d)/g, function(parameter) {
         switch (parameter) {
           case '$1':
@@ -3840,6 +3983,7 @@
       });
       return function(img, isArchived) {
         var a;
+
         a = el.cloneNode(true);
         a.href = href(img, isArchived);
         return a;
@@ -3847,6 +3991,7 @@
     },
     node: function(post) {
       var img, link, nodes, _i, _len, _ref;
+
       img = post.img;
       if (!img) {
         return;
@@ -3867,6 +4012,7 @@
       if (Conf['Embedding']) {
         QuoteInline.callbacks.push(function(post) {
           var embed, _i, _len, _ref;
+
           _ref = $$('.embed', post.blockquote);
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             embed = _ref[_i];
@@ -3882,6 +4028,7 @@
     cypher: $.el('div'),
     node: function(post) {
       var a, child, cypher, cypherText, data, i, index, len, link, links, lookahead, name, next, node, nodes, snapshot, spoiler, text, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _results;
+
       snapshot = $.X('.//text()', post.blockquote);
       cypher = Linkify.cypher;
       i = -1;
@@ -3953,6 +4100,7 @@
     },
     toggle: function() {
       var el, embed, style, type, url;
+
       embed = this.previousElementSibling;
       if (this.className.contains("embedded")) {
         el = $.el('a', {
@@ -4035,6 +4183,7 @@
         regExp: /.*(?:soundcloud.com\/|snd.sc\/)([^#\&\?]*).*/,
         el: function() {
           var div;
+
           div = $.el('div', {
             className: "soundcloud",
             name: "soundcloud"
@@ -4051,6 +4200,7 @@
         regExp: /.*(?:pastebin.com\/)([^#\&\?]*).*/,
         el: function() {
           var div;
+
           return div = $.el('iframe', {
             src: "http://pastebin.com/embed_iframe.php?i=" + this.name
           });
@@ -4058,12 +4208,14 @@
       }
     },
     embedder: function(a) {
-      var callbacks, embed, key, match, service, title, titles, type, _ref;
+      var callbacks, embed, err, key, match, service, title, titles, type, _ref;
+
       if (!Conf['Embedding']) {
         return [a];
       }
       callbacks = function() {
         var title;
+
         return a.textContent = (function() {
           switch (this.status) {
             case 200:
@@ -4105,7 +4257,8 @@
           } else {
             try {
               $.cache(service.api.call(a), callbacks);
-            } catch (err) {
+            } catch (_error) {
+              err = _error;
               a.innerHTML = "[" + key + "] <span class=warning>Title Link Blocked</span> (are you using NoScript?)</a>";
             }
           }
@@ -4119,6 +4272,7 @@
   ArchiveLink = {
     init: function() {
       var div, entry, key, type, _ref;
+
       div = $.el('div', {
         textContent: 'Archive'
       });
@@ -4126,6 +4280,7 @@
         el: div,
         open: function(post) {
           var path;
+
           path = $('a[title="Highlight this post"]', post.el).pathname.split('/');
           if ((Redirect.to({
             board: path[1],
@@ -4156,12 +4311,14 @@
     },
     createSubEntry: function(text, type) {
       var el, open;
+
       el = $.el('a', {
         textContent: text,
         target: '_blank'
       });
       open = function(post) {
         var value;
+
         if (type === 'apost') {
           el.href = Redirect.to({
             board: post.info[0],
@@ -4191,6 +4348,7 @@
   DeleteLink = {
     init: function() {
       var aImage, aPost, children, div;
+
       div = $.el('div', {
         className: 'delete_link',
         textContent: 'Delete'
@@ -4227,6 +4385,7 @@
         el: div,
         open: function(post) {
           var node, seconds;
+
           if (post.isArchived) {
             return false;
           }
@@ -4246,6 +4405,7 @@
     },
     "delete": function() {
       var board, form, id, m, menu, pwd, self;
+
       menu = $.id('menu');
       id = menu.dataset.id;
       if (DeleteLink.cooldown[id]) {
@@ -4275,6 +4435,7 @@
     },
     load: function(self, html) {
       var doc, msg, s;
+
       doc = d.implementation.createHTMLDocument('');
       doc.documentElement.innerHTML = html;
       if (doc.title === '4chan - Banned') {
@@ -4294,11 +4455,13 @@
     cooldown: {
       start: function(e) {
         var seconds;
+
         seconds = g.BOARD === 'q' ? 600 : 30;
         return DeleteLink.cooldown.count(e.detail.postID, seconds, seconds);
       },
       count: function(postID, seconds, length) {
         var el;
+
         if (!((0 <= seconds && seconds <= length))) {
           return;
         }
@@ -4323,6 +4486,7 @@
   DownloadLink = {
     init: function() {
       var a;
+
       if ($.el('a').download == null) {
         return;
       }
@@ -4334,6 +4498,7 @@
         el: a,
         open: function(post) {
           var fileText;
+
           if (!post.img) {
             return false;
           }
@@ -4349,6 +4514,7 @@
   EmbedLink = {
     init: function() {
       var a;
+
       a = $.el('a', {
         className: 'embed_link',
         textContent: 'Embed all in post'
@@ -4358,6 +4524,7 @@
         el: a,
         open: function(post) {
           var quote;
+
           if ($('.embed', (quote = post.blockquote))) {
             if ($('.embedded', quote)) {
               this.el.textContent = 'Unembed all in post';
@@ -4372,6 +4539,7 @@
     },
     toggle: function() {
       var embed, id, menu, root, _i, _len, _ref;
+
       menu = $.id('menu');
       id = menu.dataset.id;
       root = $.id("m" + id);
@@ -4411,6 +4579,7 @@
     },
     node: function(post) {
       var a;
+
       if (post.isInlined && !post.isCrosspost) {
         a = $('.menu_button', post.el);
       } else {
@@ -4421,6 +4590,7 @@
     },
     toggle: function(e) {
       var lastOpener, post;
+
       e.preventDefault();
       e.stopPropagation();
       if (Menu.el.parentNode) {
@@ -4436,11 +4606,13 @@
     },
     open: function(button, post) {
       var bLeft, bRect, bTop, el, entry, funk, mRect, _i, _len, _ref;
+
       el = Menu.el;
       el.setAttribute('data-id', post.ID);
       el.setAttribute('data-rootid', post.root.id);
       funk = function(entry, parent) {
         var child, children, subMenu, _i, _len;
+
         children = entry.children;
         if (!entry.open(post)) {
           return;
@@ -4479,6 +4651,7 @@
     },
     close: function() {
       var el, focused, _i, _len, _ref;
+
       el = Menu.el;
       $.rm(el);
       _ref = $$('.focused.entry', el);
@@ -4494,6 +4667,7 @@
     },
     keybinds: function(e) {
       var el, next, subMenu;
+
       el = Menu.focusedEntry;
       switch (Keybinds.keyCode(e) || e.keyCode) {
         case 'Esc':
@@ -4532,6 +4706,7 @@
     },
     focus: function(el) {
       var focused, _i, _len, _ref;
+
       if (focused = $.x('parent::*/child::*[contains(@class,"focused")]', el)) {
         $.rmClass(focused, 'focused');
       }
@@ -4545,8 +4720,10 @@
     },
     addEntry: function(entry) {
       var funk;
+
       funk = function(entry) {
         var child, children, el, _i, _len;
+
         el = entry.el, children = entry.children;
         $.addClass(el, 'entry');
         $.on(el, 'focus mouseover', function(e) {
@@ -4570,6 +4747,7 @@
   ReplyHideLink = {
     init: function() {
       var a;
+
       if (!Conf['Reply Hiding']) {
         Main.callbacks.push(this.node);
       }
@@ -4580,6 +4758,7 @@
       });
       $.on(a, 'click', function() {
         var button, id, menu, root;
+
         menu = Menu.el;
         id = menu.dataset.id;
         root = $.id("pc" + id);
@@ -4611,6 +4790,7 @@
   ReportLink = {
     init: function() {
       var a;
+
       a = $.el('a', {
         className: 'report_link',
         href: 'javascript:;',
@@ -4626,6 +4806,7 @@
     },
     report: function() {
       var a, id, set, url;
+
       a = $('a[title="Highlight this post"]', $.id(this.parentNode.dataset.rootid));
       url = "//sys.4chan.org/" + (a.pathname.split('/')[1]) + "/imgboard.php?mode=report&no=" + this.parentNode.dataset.id;
       id = Date.now();
@@ -4637,6 +4818,7 @@
   ThreadHideLink = {
     init: function() {
       var a;
+
       if (!Conf['Thread Hiding']) {
         $.ready(this.iterate);
       }
@@ -4647,6 +4829,7 @@
       });
       $.on(a, 'click', function() {
         var menu, thread;
+
         menu = Menu.el;
         thread = $.id("t" + menu.dataset.id);
         ThreadHiding.toggle(thread);
@@ -4665,6 +4848,7 @@
     },
     iterate: function() {
       var thread, _i, _len, _ref;
+
       ThreadHiding.hiddenThreads = $.get("hiddenThreads/" + g.BOARD + "/", {});
       _ref = $$('.thread');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -4679,6 +4863,7 @@
   Favicon = {
     init: function() {
       var href;
+
       if (this.el) {
         return;
       }
@@ -4731,6 +4916,7 @@
     },
     node: function(post) {
       var str, uid;
+
       if (!(uid = $('.postInfo .hand', post.el))) {
         return;
       }
@@ -4753,6 +4939,7 @@
     ids: {},
     compute: function(str) {
       var hash, rgb;
+
       hash = this.hash(str);
       rgb = [(hash >> 24) & 0xFF, (hash >> 16) & 0xFF, (hash >> 8) & 0xFF];
       rgb[3] = ((rgb[0] * 0.299) + (rgb[1] * 0.587) + (rgb[2] * 0.114)) > 125;
@@ -4761,11 +4948,13 @@
     },
     apply: function() {
       var rgb;
+
       rgb = IDColor.ids[this] || IDColor.compute(this);
       return ("background-color: rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "); color: ") + (rgb[3] ? "black;" : "white;");
     },
     hash: function(str) {
       var i, j, msg;
+
       msg = 0;
       i = 0;
       j = str.length;
@@ -4780,6 +4969,7 @@
     },
     idClick: function(str) {
       var last, post, value, _i, _j, _len, _len1, _ref, _ref1;
+
       _ref = this.highlight.current;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         post = _ref[_i];
@@ -4810,6 +5000,7 @@
     },
     node: function(post) {
       var owned, posts, quote, _i, _len, _ref;
+
       posts = MarkOwn.posts;
       _ref = post.quotes;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -4830,6 +5021,7 @@
   ThreadStats = {
     init: function() {
       var container, dialog, move;
+
       ThreadStats.postcount = $.el('span', {
         id: 'postcount',
         textContent: '0'
@@ -4904,6 +5096,7 @@
     },
     node: function(post) {
       var count, el, index, root;
+
       if ((index = Unread.foresee.indexOf(post.ID)) !== -1) {
         Unread.foresee.splice(index, 1);
         return;
@@ -4927,6 +5120,7 @@
     },
     count: function() {
       var bottom, height, i, reply, _i, _len, _ref;
+
       height = d.documentElement.clientHeight;
       _ref = Unread.replies;
       for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
@@ -4955,6 +5149,7 @@
     },
     update: function(updateFavicon) {
       var count;
+
       if (!g.REPLY) {
         return;
       }
@@ -4988,6 +5183,7 @@
   Updater = {
     init: function() {
       var checkbox, checked, dialog, html, input, name, title, _i, _len, _ref;
+
       html = '<div class=move><span id=count></span> <span id=timer></span></div>';
       checkbox = Config.updater.checkbox;
       for (name in checkbox) {
@@ -5079,6 +5275,7 @@
       },
       interval: function() {
         var val;
+
         val = parseInt(this.value, 10);
         this.value = val > 0 ? val : 30;
         $.cb.value.call(this);
@@ -5159,6 +5356,7 @@
       },
       update: function(posts) {
         var count, frag, id, lastPost, node, nodes, post, scroll, spoilerRange, _i, _len, _ref;
+
         if (spoilerRange = posts[0].custom_spoiler) {
           Build.spoilerRange[g.BOARD] = spoilerRange;
         }
@@ -5166,6 +5364,7 @@
         id = +lastPost.id.slice(2);
         nodes = (function() {
           var _i, _len, _ref, _results;
+
           _ref = posts.reverse();
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -5212,6 +5411,7 @@
     },
     set: function(name, text) {
       var el, node;
+
       el = Updater[name];
       if (node = el.firstChild) {
         return node.data = text;
@@ -5221,6 +5421,7 @@
     },
     getInput: function(input) {
       var i, number, _i, _len, _results;
+
       while ((i = input.length) < 10) {
         input[i] = input[i - 1];
       }
@@ -5233,6 +5434,7 @@
     },
     getInterval: function() {
       var count, i, increase, increaseString, j, string;
+
       string = "Interval" + (Conf['Interval per board'] ? "_" + g.BOARD : "");
       increaseString = "updateIncrease";
       if ($.hidden()) {
@@ -5245,6 +5447,7 @@
     },
     timeout: function() {
       var n;
+
       Updater.timeoutID = setTimeout(Updater.timeout, 1000);
       n = 1 + parseInt(Updater.timer.firstChild.data, 10);
       if (n === 0) {
@@ -5260,6 +5463,7 @@
     },
     update: function() {
       var request, url;
+
       Updater.set('timer', 0);
       request = Updater.request;
       if (request) {
@@ -5280,6 +5484,7 @@
   Watcher = {
     init: function() {
       var favicon, html, input, _i, _len, _ref;
+
       html = '<div class=move>Thread Watcher</div>';
       this.dialog = UI.dialog('watcher', 'top: 50px; left: 0px;', html);
       $.add(d.body, this.dialog);
@@ -5303,6 +5508,7 @@
     },
     refresh: function(watched) {
       var board, div, favicon, id, link, nodes, props, watchedBoard, x, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+
       watched || (watched = $.get('watched', {}));
       nodes = [];
       for (board in watched) {
@@ -5345,11 +5551,13 @@
       },
       x: function() {
         var thread;
+
         thread = this.nextElementSibling.pathname.split('/');
         return Watcher.unwatch(thread[3], thread[1]);
       },
       post: function(e) {
         var postID, threadID, _ref;
+
         _ref = e.detail, postID = _ref.postID, threadID = _ref.threadID;
         if (threadID === '0') {
           if (Conf['Auto Watch']) {
@@ -5362,11 +5570,13 @@
     },
     toggle: function(thread) {
       var id;
+
       id = $('.favicon + input', thread).name;
       return Watcher.watch(id) || Watcher.unwatch(id, g.BOARD);
     },
     unwatch: function(id, board) {
       var watched;
+
       watched = $.get('watched', {});
       delete watched[board][id];
       $.set('watched', watched);
@@ -5374,6 +5584,7 @@
     },
     watch: function(id) {
       var thread, watched, _name;
+
       thread = $.id("t" + id);
       if ($('.favicon', thread).src === Favicon["default"]) {
         return false;
@@ -5393,6 +5604,7 @@
   Markdown = {
     format: function(text) {
       var pattern, tag, tag_patterns;
+
       tag_patterns = {
         bi: /(\*\*\*|___)(?=\S)([^\r\n]*?\S)\1/g,
         b: /(\*\*|__)(?=\S)([^\r\n]*?\S)\1/g,
@@ -5408,6 +5620,7 @@
     },
     unicode_convert: function(str, tag, inner) {
       var c, charcode, charcodes, codepoints, codes, fmt, i, unicode_text;
+
       fmt = (function() {
         switch (tag) {
           case '_':
@@ -5435,6 +5648,7 @@
       };
       charcodes = (function() {
         var _i, _len, _results;
+
         _results = [];
         for (i = _i = 0, _len = inner.length; _i < _len; i = ++_i) {
           c = inner[i];
@@ -5444,6 +5658,7 @@
       })();
       codes = (function() {
         var _i, _len, _results;
+
         _results = [];
         for (_i = 0, _len = charcodes.length; _i < _len; _i++) {
           charcode = charcodes[_i];
@@ -5496,6 +5711,7 @@
       */
 
       var output;
+
       output = '';
       if (value > 0xFFFF) {
         value -= 0x10000;
@@ -5517,6 +5733,7 @@
     },
     asyncInit: function() {
       var link;
+
       if (!Conf['Persistent QR']) {
         link = $.el('a', {
           innerHTML: "Open Post Form",
@@ -5555,6 +5772,7 @@
     },
     close: function() {
       var i, spoiler, _i, _len, _ref;
+
       QR.el.hidden = true;
       QR.abort();
       d.activeElement.blur();
@@ -5604,6 +5822,7 @@
     },
     status: function(data) {
       var disabled, input, value;
+
       if (data == null) {
         data = {};
       }
@@ -5655,6 +5874,7 @@
       },
       sync: function(cooldowns) {
         var id;
+
         for (id in cooldowns) {
           QR.cooldown.cooldowns[id] = cooldowns[id];
         }
@@ -5662,6 +5882,7 @@
       },
       set: function(data) {
         var cooldown, hasFile, isReply, isSage, start, type;
+
         if (!Conf['Cooldown']) {
           return;
         }
@@ -5692,6 +5913,7 @@
       },
       count: function() {
         var cooldown, cooldowns, elapsed, hasFile, isReply, isSage, now, post, seconds, start, type, types, update, _ref;
+
         if (Object.keys(QR.cooldown.cooldowns).length) {
           setTimeout(QR.cooldown.count, 1000);
         } else {
@@ -5743,6 +5965,7 @@
     },
     quote: function(e) {
       var caretPos, id, range, s, sel, ta, text, _ref;
+
       if (e != null) {
         e.preventDefault();
       }
@@ -5767,6 +5990,7 @@
     },
     characterCount: function() {
       var count, counter;
+
       counter = QR.charaCounter;
       count = this.textLength;
       counter.textContent = count;
@@ -5775,6 +5999,7 @@
     },
     drag: function(e) {
       var toggle;
+
       toggle = e.type === 'dragstart' ? $.off : $.on;
       toggle(d, 'dragover', QR.dragOver);
       return toggle(d, 'drop', QR.dropFile);
@@ -5794,6 +6019,7 @@
     },
     fileInput: function() {
       var file, _i, _len, _ref;
+
       QR.cleanError();
       if (this.files.length === 1) {
         file = this.files[0];
@@ -5833,10 +6059,10 @@
     },
     replies: [],
     reply: (function() {
-
       function _Class() {
         var key, persona, prev,
           _this = this;
+
         prev = QR.replies[QR.replies.length - 1];
         persona = $.get('persona', {
           global: {}
@@ -5885,6 +6111,7 @@
       _Class.prototype.setFile = function(file) {
         var fileUrl, img, url,
           _this = this;
+
         this.file = file;
         this.el.title = "" + file.name + " (" + ($.bytesToString(file.size)) + ")";
         if (QR.spoiler) {
@@ -5902,6 +6129,7 @@
         img = $.el('img');
         $.on(img, 'load', function() {
           var c, data, i, l, s, ui8a, _i;
+
           s = 90 * 3;
           if (img.height < s || img.width < s) {
             _this.url = fileUrl;
@@ -5937,6 +6165,7 @@
 
       _Class.prototype.rmFile = function() {
         var _base1;
+
         QR.resetFileInput();
         delete this.file;
         this.el.title = null;
@@ -5949,6 +6178,7 @@
 
       _Class.prototype.select = function() {
         var check, data, field, rectEl, rectList, _i, _len, _ref, _ref1;
+
         if (QR.selected === this) {
           return;
         }
@@ -6005,6 +6235,7 @@
 
       _Class.prototype.drop = function() {
         var el, index, newIndex, oldIndex, reply;
+
         el = $('.drag', this.parentNode);
         index = function(el) {
           return __slice.call(el.parentNode.children).indexOf(el);
@@ -6022,6 +6253,7 @@
 
       _Class.prototype.dragEnd = function() {
         var el;
+
         $.rmClass(this, 'drag');
         if (el = $('.over', this.parentNode)) {
           return $.rmClass(el, 'over');
@@ -6030,6 +6262,7 @@
 
       _Class.prototype.rm = function() {
         var index, _base1;
+
         QR.resetFileInput();
         $.rm(this.el);
         index = QR.replies.indexOf(this);
@@ -6050,6 +6283,7 @@
       init: function() {
         var observer, onMutationObserver,
           _this = this;
+
         if (d.cookie.contains('pass_enabled=') || !(this.isEnabled = !!$.id('captchaFormPart'))) {
           return;
         }
@@ -6075,6 +6309,7 @@
       ready: function() {
         var observer,
           _this = this;
+
         if (this.challenge = $.id('recaptcha_challenge_field_holder')) {
           $.off($.id('recaptcha_widget_div'), 'DOMNodeInserted', this.onready);
           delete this.onready;
@@ -6122,6 +6357,7 @@
       },
       save: function() {
         var captcha, captchas, response;
+
         if (!(response = this.input.value)) {
           return;
         }
@@ -6140,6 +6376,7 @@
       },
       load: function() {
         var challenge;
+
         this.timeout = Date.now() + 4 * $.MINUTE;
         challenge = this.challenge.firstChild.value;
         this.img.alt = challenge;
@@ -6167,6 +6404,7 @@
       },
       keydown: function(e) {
         var c;
+
         c = QR.captcha;
         if (e.keyCode === 8 && !c.input.value) {
           c.reload();
@@ -6180,6 +6418,7 @@
     },
     dialog: function() {
       var i, id, mimeTypes, name, size, spoiler, ta, thread, threads, _i, _j, _len, _len1, _ref, _ref1;
+
       QR.el = UI.dialog('qr', 'bottom: 0; right: 0;', '\
 <div id=qrtab class=move>\
   <label><input type=checkbox id=autohide title=Auto-hide> Post Form</label>\
@@ -6298,6 +6537,7 @@
         });
         $.on($("[name=" + name + "]", QR.el), 'input', function() {
           var _ref2;
+
           QR.selected[this.name] = this.value;
           if (QR.cooldown.auto && QR.selected === QR.replies[0] && (0 < (_ref2 = QR.cooldown.seconds) && _ref2 <= 5)) {
             return QR.cooldown.auto = false;
@@ -6321,6 +6561,7 @@
     },
     submit: function(e) {
       var callbacks, captcha, captchas, challenge, err, filetag, m, opts, post, reply, response, textOnly, threadID;
+
       if (e != null) {
         e.preventDefault();
       }
@@ -6443,6 +6684,7 @@
     },
     response: function(html) {
       var ban, board, doc, el, err, key, persona, postID, reply, threadID, _, _ref;
+
       doc = d.implementation.createHTMLDocument('');
       doc.documentElement.innerHTML = html;
       if (ban = $('.banType', doc)) {
@@ -6527,6 +6769,7 @@
     },
     abort: function() {
       var _ref;
+
       if ((_ref = QR.ajax) != null) {
         _ref.abort();
       }
@@ -6538,12 +6781,14 @@
   QuoteBacklink = {
     init: function() {
       var format;
+
       format = Conf['backlink'].replace(/%id/g, "' + id + '");
       this.funk = Function('id', "return '" + format + "'");
       return Main.callbacks.push(this.node);
     },
     node: function(post) {
       var a, container, el, link, nodes, owned, qid, quote, quotes, _i, _len, _ref, _ref1;
+
       if (post.isInlined) {
         return;
       }
@@ -6611,6 +6856,7 @@
     },
     node: function(post) {
       var path, quote, _i, _len, _ref;
+
       if (post.isInlined && !post.isCrosspost) {
         return;
       }
@@ -6637,6 +6883,7 @@
     callbacks: [],
     cb: function(post, root) {
       var callback, _i, _len, _ref;
+
       post.isCrosspost = post.isInlined = true;
       post.threadID = $.x('ancestor::div[parent::div[@class="board"]]', root).id.match(/\d+$/)[0];
       _ref = Main.callbacks;
@@ -6647,6 +6894,7 @@
     },
     cb2: function(post) {
       var callback, _i, _len, _ref;
+
       post.isInlined = true;
       _ref = QuoteInline.callbacks;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -6656,6 +6904,7 @@
     },
     node: function(post) {
       var quote, _i, _j, _len, _len1, _ref, _ref1;
+
       _ref = post.quotes;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         quote = _ref[_i];
@@ -6684,6 +6933,7 @@
     },
     toggle: function(e) {
       var id;
+
       if (e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || e.button !== 0) {
         return;
       }
@@ -6701,6 +6951,7 @@
     },
     add: function(q, id) {
       var board, el, i, inline, isBacklink, path, postID, root, threadID;
+
       if (q.host === 'boards.4chan.org') {
         path = q.pathname.split('/');
         board = path[1];
@@ -6742,6 +6993,7 @@
     },
     rm: function(q, id) {
       var div, inlined, _i, _len, _ref;
+
       div = $.x("following::div[@id='i" + id + "']", q);
       $.rm(div);
       if (!Conf['Forward Hiding']) {
@@ -6771,6 +7023,7 @@
     },
     node: function(post) {
       var quote, _i, _len, _ref;
+
       if (post.isInlined && !post.isCrosspost) {
         return;
       }
@@ -6799,6 +7052,7 @@
     callbacks: [],
     callback: function(node) {
       var callback, _i, _len, _ref;
+
       _ref = QuotePreview.callbacks;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         callback = _ref[_i];
@@ -6807,6 +7061,7 @@
     },
     node: function(post) {
       var quote, _i, _j, _len, _len1, _ref, _ref1;
+
       _ref = post.quotes;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         quote = _ref[_i];
@@ -6823,6 +7078,7 @@
     },
     mouseover: function(e) {
       var board, child, children, el, path, postID, qp, quote, quoterID, threadID, _conf, _i, _j, _len, _len1, _ref;
+
       if (UI.el || /\binlined\b/.test(this.className)) {
         return;
       }
@@ -6874,6 +7130,7 @@
     },
     mouseout: function(e) {
       var el, hash;
+
       delete UI.el;
       $.rm(QuotePreview.el.firstChild);
       if ((hash = this.hash) && (el = $.id(hash.slice(1)))) {
@@ -6893,6 +7150,7 @@
     },
     node: function(post) {
       var a, board, deadlink, id, m, postBoard, quote, _i, _len, _ref;
+
       if (post.isInlined && !post.isCrosspost) {
         return;
       }
@@ -6968,6 +7226,7 @@
     },
     fireEvent: function(el, evnt) {
       var ev;
+
       if (!el) {
         return;
       }
@@ -6977,6 +7236,7 @@
     },
     getRelMousePos: function(e) {
       var x, y;
+
       if (e == null) {
         e = window.event;
       }
@@ -6996,6 +7256,7 @@
     },
     color: function(target) {
       var HSV_RGB, RGB_HSV, THIS, abortBlur, blurTarget, blurValue, drawPicker, holdPad, holdSld, isPickerOwner, leavePad, leaveSld, leaveStyle, leaveValue, redrawPad, redrawSld, removePicker, setPad, setSld, styleElement, valueElement;
+
       this.hsv = [0, 0, 1];
       this.rgb = [1, 1, 1];
       this.valueElement = this.styleElement = target;
@@ -7022,6 +7283,7 @@
       };
       this.exportColor = function(flags) {
         var value;
+
         if (!(flags & leaveValue) && valueElement) {
           value = '#' + this.toString();
           valueElement.value = value;
@@ -7048,6 +7310,7 @@
       };
       this.fromRGB = function(r, g, b, flags) {
         var hsv;
+
         r = r != null ? $.minmax(r, 0.0, 1.0) : this.rgb[0];
         g = g != null ? $.minmax(g, 0.0, 1.0) : this.rgb[1];
         b = b != null ? $.minmax(b, 0.0, 1.0) : this.rgb[2];
@@ -7064,6 +7327,7 @@
       };
       this.fromString = function(number, flags) {
         var m, val;
+
         m = number.match(/^\W*([0-9A-F]{3}([0-9A-F]{3})?)\W*$/i);
         if (!m) {
           return false;
@@ -7081,6 +7345,7 @@
       };
       RGB_HSV = function(r, g, b) {
         var h, m, n, v;
+
         n = (n = r < g ? r : g) < b ? n : b;
         v = (v = r > g ? r : g) > b ? v : b;
         m = v - n;
@@ -7092,6 +7357,7 @@
       };
       HSV_RGB = function(h, s, v) {
         var f, i, m, n;
+
         if (h == null) {
           return [v, v, v];
         }
@@ -7121,6 +7387,7 @@
       };
       drawPicker = function(x, y) {
         var box, boxB, btn, btnS, elements, item, p, pad, padB, padM, sld, sldB, sldM, _i, _len;
+
         if (!(p = JSColor.picker)) {
           elements = ['box', 'boxB', 'pad', 'padB', 'padM', 'sld', 'sldB', 'sldM', 'btn'];
           p = {};
@@ -7193,6 +7460,7 @@
       };
       redrawPad = function() {
         var rgb;
+
         JSColor.picker.padM.style.backgroundPosition = "" + (4 + Math.round((THIS.hsv[0] / 6) * 180)) + "px " + (4 + Math.round((1 - THIS.hsv[1]) * 100)) + "px";
         rgb = HSV_RGB(THIS.hsv[0], THIS.hsv[1], 1);
         JSColor.picker.sld.style.backgroundColor = "rgb(" + (rgb[0] * 100) + "%, " + (rgb[1] * 100) + "%, " + (rgb[2] * 100) + "%)";
@@ -7215,6 +7483,7 @@
       };
       setPad = function(e) {
         var mpos, x, y;
+
         mpos = JSColor.getRelMousePos(e);
         x = mpos.x - 11;
         y = mpos.y - 11;
@@ -7222,6 +7491,7 @@
       };
       setSld = function(e) {
         var mpos, y;
+
         mpos = JSColor.getRelMousePos(e);
         y = mpos.y - 9;
         return THIS.fromHSV(null, null, 1 - y / 100, leavePad);
@@ -7265,6 +7535,7 @@
   MascotTools = {
     init: function(mascot) {
       var el, filters, location, position;
+
       if (mascot == null) {
         mascot = Conf[g.MASCOTSTRING][Math.floor(Math.random() * Conf[g.MASCOTSTRING].length)];
       }
@@ -7316,6 +7587,7 @@
     categories: ['Anime', 'Ponies', 'Questionable', 'Silhouette', 'Western'],
     dialog: function(key) {
       var dialog, div, fileInput, input, item, layout, name, option, optionHTML, setting, value, _i, _len, _ref;
+
       Conf['editMode'] = 'mascot';
       if (Mascots[key]) {
         editMascot = JSON.parse(JSON.stringify(Mascots[key]));
@@ -7439,6 +7711,7 @@
     },
     input: function(item, name) {
       var div, value;
+
       if (Array.isArray(editMascot[name])) {
         if (Style.lightTheme) {
           value = editMascot[name][1];
@@ -7457,10 +7730,12 @@
     },
     uploadImage: function(evt, el) {
       var file, reader;
+
       file = evt.target.files[0];
       reader = new FileReader();
       reader.onload = function(evt) {
         var val;
+
         val = evt.target.result;
         el.previousSibling.value = val;
         editMascot.image = val;
@@ -7470,6 +7745,7 @@
     },
     addMascot: function(mascot) {
       var el;
+
       if (el = this.el) {
         return el.src = Array.isArray(mascot.image) ? (Style.lightTheme ? mascot.image[1] : mascot.image[0]) : mascot.image;
       } else {
@@ -7482,6 +7758,7 @@
     },
     save: function(mascot) {
       var image, name, type, userMascots, _i, _len, _ref;
+
       name = mascot.name, image = mascot.image;
       if ((name == null) || name === "") {
         alert("Please name your mascot.");
@@ -7531,13 +7808,16 @@
     },
     importMascot: function(evt) {
       var file, reader;
+
       file = evt.target.files[0];
       reader = new FileReader();
       reader.onload = function(e) {
-        var imported, name, userMascots;
+        var err, imported, name, userMascots;
+
         try {
           imported = JSON.parse(e.target.result);
-        } catch (err) {
+        } catch (_error) {
+          err = _error;
           alert(err);
           return;
         }
@@ -8347,6 +8627,7 @@
       this.sizing = "" + ($.engine === 'gecko' ? this.agent : '') + "box-sizing";
       $.ready(function() {
         var catalogLink;
+
         Style.rice(d.body);
         if (!$.id('navtopright')) {
           return;
@@ -8365,6 +8646,7 @@
         }
         return setTimeout((function() {
           var exLink;
+
           Style.iconPositions();
           if (exLink = $("#navtopright .exlinksOptionsLink", d.body)) {
             return $.on(exLink, "click", function() {
@@ -8388,6 +8670,7 @@
     },
     observe: function() {
       var onMutationObserver;
+
       if (MutationObserver) {
         Style.observer = new MutationObserver(onMutationObserver = this.wrapper);
         return Style.observer.observe(d, {
@@ -8423,6 +8706,7 @@
     },
     addStyle: function(theme) {
       var _conf;
+
       _conf = Conf;
       if (!theme) {
         theme = Themes[_conf['theme']];
@@ -8435,6 +8719,7 @@
     headCount: 12,
     addStyleReady: function() {
       var theme;
+
       theme = Themes[Conf['theme']];
       $.extend(Style, {
         layoutCSS: $.addStyle(Style.layout(), 'layout'),
@@ -8448,6 +8733,7 @@
     },
     remStyle: function() {
       var i, node, nodes;
+
       nodes = d.head.children;
       i = nodes.length;
       while (i--) {
@@ -8464,6 +8750,7 @@
     },
     emoji: function(position) {
       var category, css, icon, key, margin, name, _conf, _i, _len;
+
       _conf = Conf;
       css = [];
       margin = "margin-" + (position === "before" ? "right" : "left") + ": " + (parseInt(_conf['Emoji Spacing'])) + "px;";
@@ -8484,6 +8771,7 @@
     },
     rice: function(source) {
       var checkbox, checkboxes, click, div, select, selects, _i, _j, _len, _len1;
+
       checkboxes = $$('[type=checkbox]:not(.riced)', source);
       click = function() {
         return this.check.click();
@@ -8510,6 +8798,7 @@
         });
         $.on(div, "click", function(e) {
           var clientHeight, li, option, rect, style, ul, _k, _len2, _ref;
+
           e.stopPropagation();
           if (Style.ul) {
             return Style.rmOption();
@@ -8537,6 +8826,7 @@
             li.setAttribute('data-value', option.value);
             $.on(li, 'click', function(e) {
               var container, ev;
+
               e.stopPropagation();
               container = this.parentElement.parentElement;
               select = container.previousSibling;
@@ -8565,6 +8855,7 @@
     },
     filter: function(text, background) {
       var bgHex, css, fgHex;
+
       css = function(fg, bg) {
         return "filter: url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='filters' color-interpolation-filters='sRGB'><feColorMatrix values='" + bg.r + " " + (-fg.r) + " 0 0 " + fg.r + " " + bg.g + " " + (-fg.g) + " 0 0 " + fg.g + " " + bg.b + " " + (-fg.b) + " 0 0 " + fg.b + " 0 0 0 1 0' /></filter></svg>#filters\");";
       };
@@ -8582,6 +8873,7 @@
     },
     banner: function() {
       var banner, child, children, i, title;
+
       banner = $(".boardBanner", d.body);
       title = $.el("div", {
         id: "boardTitle"
@@ -8619,6 +8911,7 @@
     },
     padding: function() {
       var css, sheet, _conf;
+
       if (!(sheet = Style.paddingSheet)) {
         return;
       }
@@ -8650,6 +8943,7 @@
     },
     trimGlobalMessage: function() {
       var child, el, _i, _len, _ref;
+
       if (el = $("#globalMessage", d.body)) {
         _ref = el.children;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -8668,11 +8962,13 @@
       this.rgb = this.private_rgb.join(",");
       this.isLight = function() {
         var rgb;
+
         rgb = this.private_rgb;
         return (rgb[0] + rgb[1] + rgb[2]) >= 400;
       };
       this.shiftRGB = function(shift, smart) {
         var minmax, rgb;
+
         minmax = function(base) {
           return Math.min(Math.max(base, 0), 255);
         };
@@ -8684,6 +8980,7 @@
     },
     colorToHex: function(color) {
       var digits, hex;
+
       if (color.substr(0, 1) === '#') {
         return color.slice(1, color.length);
       }
@@ -8699,11 +8996,13 @@
     },
     jsColorCSS: function() {
       var agent;
+
       agent = Style.agent;
       return ".jscBox {\n  width: 251px;\n  height: 155px;\n}\n.jscBoxB,\n.jscPadB,\n.jscPadM,\n.jscSldB,\n.jscSldM,\n.jscBtn {\n  position: absolute;\n  clear: both;\n}\n.jscBoxB {\n  left: 320px;\n  bottom: 20px;\n  z-index: 30;\n  border: 1px solid;\n  border-color: ThreeDHighlight ThreeDShadow ThreeDShadow ThreeDHighlight;\n  background: ThreeDFace;\n}\n.jscPad {\n  width: 181px;\n  height: 101px;\n  background-image: " + agent + "linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1)), " + agent + "linear-gradient(left, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);\n  background-repeat: no-repeat;\n  background-position: 0 0;\n}\n.jscPadB {\n  left: 10px;\n  top: 10px;\n  border: 1px solid;\n  border-color: ThreeDShadow ThreeDHighlight ThreeDHighlight ThreeDShadow;\n}\n.jscPadM {\n  left: 0;\n  top: 0;\n  width: 200px;\n  height: 121px;\n  cursor: crosshair;\n  background-image: url('data:image/gif;base64,R0lGODlhDwAPAKEBAAAAAP///////////yH5BAEKAAIALAAAAAAPAA8AAAIklB8Qx53b4otSUWcvyiz4/4AeQJbmKY4p1HHapBlwPL/uVRsFADs=');\n  background-repeat: no-repeat;\n}\n.jscSld {\n  width: 16px;\n  height: 101px;\n  background-image: " + agent + "linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1));\n}\n.jscSldB {\n  right: 10px;\n  top: 10px;\n  border: 1px solid;\n  border-color: ThreeDShadow ThreeDHighlight ThreeDHighlight ThreeDShadow;\n}\n.jscSldM {\n  right: 0;\n  top: 0;\n  width: 36px;\n  height: 121px;\n  cursor: pointer;\n  background-image: url('data:image/gif;base64,R0lGODlhBwALAKECAAAAAP///6g8eKg8eCH5BAEKAAIALAAAAAAHAAsAAAITTIQYcLnsgGxvijrxqdQq6DRJAQA7');\n  background-repeat: no-repeat;\n}\n.jscBtn {\n  right: 10px;\n  bottom: 10px;\n  padding: 0 15px;\n  height: 18px;\n  border: 1px solid;\n  border-color: ThreeDHighlight ThreeDShadow ThreeDShadow ThreeDHighlight;\n  color: ButtonText;\n  text-align: center;\n  cursor: pointer;\n}\n.jscBtnS {\n  line-height: 10px;\n}";
     },
     iconPositions: function() {
       var align, aligner, css, i, iconOffset, navlinks, notCatalog, notEither, position, _conf;
+
       css = "#navtopright .exlinksOptionsLink::after,\n#appchanOptions,\nbody > div.navLinks > a:first-of-type::after,\n" + (Conf['Slideout Watcher'] ? '#watcher::after,' : '') + "\n" + (Conf['Announcements'] === 'slideout' ? '#globalMessage::after,' : '') + "\n#boardNavDesktopFoot::after,\nbody > a[style=\"cursor: pointer; float: right;\"]::after,\n#imgControls label:first-of-type::after,\n#catalog::after,\n#fappeTyme {\n  z-index: 18;\n  position: fixed;\n  display: block;\n  width: 15px;\n  height: 15px;\n  content: \"\";\n  overflow: hidden;\n  opacity: " + (Conf['Invisible Icons'] ? 0 : 0.5) + ";\n}\n#navtopright .exlinksOptionsLink,\nbody > div.navLinks > a:first-of-type,\n" + (Conf['Slideout Watcher'] ? '#watcher,' : '') + "\n" + (Conf['Announcements'] === 'slideout' ? '#globalMessage,' : '') + "\n#boardNavDesktopFoot,\nbody > a[style=\"cursor: pointer; float: right;\"],\n#catalog {\n  z-index: 16;\n}\n#navtopright .exlinksOptionsLink:hover,\nbody > div.navLinks > a:first-of-type:hover,\n" + (Conf['Slideout Watcher'] ? '#watcher:hover,' : '') + "\n" + (Conf['Announcements'] === 'slideout' ? '#globalMessage:hover,' : '') + "\n#boardNavDesktopFoot:hover,\nbody > a[style=\"cursor: pointer; float: right;\"]:hover,\n#catalog:hover {\n  z-index: 17;\n}\n#imgControls {\n  z-index: 19;\n}\n#imgControls {\n  position: fixed;\n}\n#appchanOptions {\n  visibility: visible;\n  background-position: 0 0;\n}\nbody > div.navLinks > a:first-of-type::after {\n  cursor: pointer;\n  background-position: 0 -15px;\n}\n#watcher::after {\n  background-position: 0 -30px;\n}\n#globalMessage::after {\n  background-position: 0 -45px;\n}\n#boardNavDesktopFoot::after {\n  background-position: 0 -60px;\n}\nbody > a[style=\"cursor: pointer; float: right;\"]::after {\n  visibility: visible;\n  cursor: pointer;\n  background-position: 0 -75px;\n}\n#imgControls label:first-of-type::after {\n  position: static;\n  background-position: 0 -90px;\n}\n#navtopright .exlinksOptionsLink::after {\n  background-position: 0 -105px;\n}\n#catalog::after {\n  visibility: visible;\n  background-position: 0 -120px;\n}\n#fappeTyme {\n  background-position: 0 -135px;\n}\n#boardNavDesktopFoot:hover::after,\n#globalMessage:hover::after,\n#imgControls label:hover:first-of-type::after,\n#navlinks a:hover,\n#appchanOptions:hover,\n#navtopright .exlinksOptionsLink:hover::after,\n#qr #qrtab,\n#watcher:hover::after,\n.thumbnail#selected,\nbody > a[style=\"cursor: pointer; float: right;\"]:hover::after,\ndiv.navLinks > a:first-of-type:hover::after,\n#catalog:hover::after,\n#fappeTyme:hover {\n  opacity: 1;\n}";
       i = 0;
       align = Style.sidebarLocation[0];
@@ -8712,6 +9011,7 @@
       notEither = notCatalog && g.BOARD !== 'f';
       aligner = function(first, checks) {
         var enabled, position, _i, _len;
+
         position = [first];
         for (_i = 0, _len = checks.length; _i < _len; _i++) {
           enabled = checks[_i];
@@ -8741,6 +9041,7 @@
     },
     layout: function() {
       var agent, css, editSpace, position, width, xOffset, _conf;
+
       _conf = Conf;
       agent = Style.agent;
       xOffset = _conf["Sidebar Location"] === "left" ? '' : '-';
@@ -8817,6 +9118,7 @@
     },
     theme: function(theme) {
       var agent, background, backgroundC, bgColor, css, fileHeading, icons, replyHeading, _conf;
+
       _conf = Conf;
       agent = Style.agent;
       bgColor = new Style.color(Style.colorToHex(backgroundC = theme["Background Color"]));
@@ -8863,6 +9165,7 @@
   ThemeTools = {
     init: function(key) {
       var colorInput, div, fileInput, header, input, item, layout, themecontent, _i, _j, _len, _len1, _ref;
+
       Conf['editMode'] = "theme";
       if (Themes[key]) {
         editTheme = JSON.parse(JSON.stringify(Themes[key]));
@@ -8941,6 +9244,7 @@
         }
         $.on(input, 'blur', function() {
           var depth, i, toggle1, toggle2, _k, _ref1;
+
           depth = 0;
           if (!(this.value.length > 1000)) {
             for (i = _k = 0, _ref1 = this.value.length - 1; 0 <= _ref1 ? _k <= _ref1 : _k >= _ref1; i = 0 <= _ref1 ? ++_k : --_k) {
@@ -8993,10 +9297,12 @@
     },
     uploadImage: function(evt, el) {
       var file, reader;
+
       file = evt.target.files[0];
       reader = new FileReader();
       reader.onload = function(evt) {
         var val;
+
         val = 'url("' + evt.target.result + '")';
         el.previousSibling.value = val;
         editTheme["Background Image"] = val;
@@ -9006,13 +9312,16 @@
     },
     importtheme: function(origin, evt) {
       var file, reader;
+
       file = evt.target.files[0];
       reader = new FileReader();
       reader.onload = function(e) {
-        var bgColor, bgRPA, blinkColor, brderColor, imported, inputColor, inputbColor, jlinkColor, linkColor, linkHColor, mainColor, name, nameColor, quoteColor, sageColor, textColor, timeColor, titleColor, tripColor, userThemes;
+        var bgColor, bgRPA, blinkColor, brderColor, err, imported, inputColor, inputbColor, jlinkColor, linkColor, linkHColor, mainColor, name, nameColor, quoteColor, sageColor, textColor, timeColor, titleColor, tripColor, userThemes;
+
         try {
           imported = JSON.parse(e.target.result);
-        } catch (err) {
+        } catch (_error) {
+          err = _error;
           alert(err);
           return;
         }
@@ -9170,6 +9479,7 @@
     },
     save: function(theme) {
       var name, userThemes;
+
       name = theme["Theme"];
       if (Themes[name] && !Themes[name]["Deleted"]) {
         if (confirm("A theme with this name already exists. Would you like to over-write?")) {
@@ -10502,6 +10812,7 @@
   Get = {
     post: function(board, threadID, postID, root, cb, cb2) {
       var post, url;
+
       if (board === g.BOARD && (post = $.id("pc" + postID))) {
         post = Get.cleanPost(post.cloneNode(true));
         if (cb2) {
@@ -10523,6 +10834,7 @@
     },
     parsePost: function(req, board, threadID, postID, root, cb) {
       var post, postNode, posts, spoilerRange, status, url, _i, _len;
+
       status = req.status;
       if (status !== 200) {
         if (url = Redirect.post(board, postID)) {
@@ -10565,6 +10877,7 @@
     },
     parseArchivedPost: function(req, board, postID, root, cb) {
       var bq, comment, data, o, post, postNode, _ref;
+
       data = JSON.parse(req.response);
       if (data.error) {
         $.addClass(root, 'warning');
@@ -10649,6 +10962,7 @@
     },
     cleanPost: function(root) {
       var child, el, els, inline, inlined, now, post, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2;
+
       post = $('.post', root);
       _ref = __slice.call(root.childNodes);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -10683,6 +10997,7 @@
     },
     title: function(thread) {
       var el, op, span;
+
       op = $('.op', thread);
       el = $('.postInfo .subject', op);
       if (!el.textContent) {
@@ -10702,6 +11017,7 @@
     spoilerRange: {},
     shortFilename: function(filename, isOP) {
       var threshold;
+
       threshold = isOP ? 40 : 30;
       if (filename.length - 4 > threshold) {
         return "" + filename.slice(0, threshold - 5) + "(...)." + filename.slice(-3);
@@ -10711,6 +11027,7 @@
     },
     postFromObject: function(data, board) {
       var o;
+
       o = {
         postID: data.no,
         threadID: data.resto || data.no,
@@ -10754,6 +11071,7 @@
       */
 
       var a, board, capcode, capcodeClass, capcodeStart, closed, comment, container, date, dateUTC, email, emailEnd, emailStart, ext, file, fileDims, fileHTML, fileInfo, fileSize, fileThumb, filename, flag, flagCode, flagName, href, imgSrc, isClosed, isOP, isSticky, name, postID, quote, shortFilename, spoilerRange, staticPath, sticky, subject, threadID, tripcode, uniqueID, userID, _i, _len, _ref;
+
       postID = o.postID, threadID = o.threadID, board = o.board, name = o.name, capcode = o.capcode, tripcode = o.tripcode, uniqueID = o.uniqueID, email = o.email, subject = o.subject, flagCode = o.flagCode, flagName = o.flagName, date = o.date, dateUTC = o.dateUTC, isSticky = o.isSticky, isClosed = o.isClosed, comment = o.comment, file = o.file;
       isOP = postID === threadID;
       staticPath = '//static.4chan.org';
@@ -10849,6 +11167,7 @@
   Main = {
     init: function() {
       var key, mascot, name, now, path, pathname, settings, temp, theme, val, _conf, _ref, _ref1;
+
       Main.flatten(null, Config);
       for (key in Conf) {
         val = Conf[key];
@@ -10902,6 +11221,7 @@
           if (/report/.test(location.search)) {
             $.ready(function() {
               var field, form;
+
               form = $('form');
               field = $.id('recaptcha_response_field');
               $.on(field, 'keydown', function(e) {
@@ -10911,6 +11231,7 @@
               });
               return $.on(form, 'submit', function(e) {
                 var response;
+
                 e.preventDefault();
                 response = field.value.trim();
                 if (!/\s/.test(response)) {
@@ -10924,6 +11245,7 @@
         case 'images.4chan.org':
           $.ready(function() {
             var url;
+
             if (/^4chan - 404/.test(d.title) && _conf['404 Redirect']) {
               path = location.pathname.split('/');
               url = Redirect.image(path[1], path[3]);
@@ -10957,6 +11279,7 @@
     },
     catalog: function() {
       var a, nav, _conf, _i, _len, _ref;
+
       _conf = Conf;
       MascotTools.init();
       if (_conf['Custom Navigation']) {
@@ -10978,6 +11301,7 @@
     },
     features: function() {
       var _conf;
+
       _conf = Conf;
       if (_conf['Filter']) {
         Filter.init();
@@ -11075,6 +11399,7 @@
     },
     featuresReady: function() {
       var a, board, nav, node, nodes, now, ready, _conf, _i, _j, _len, _len1, _ref, _ref1;
+
       _conf = Conf;
       if (/^4chan - 404/.test(d.title)) {
         if (_conf['404 Redirect'] && /^\d+$/.test(g.THREAD_ID)) {
@@ -11186,6 +11511,7 @@
     },
     prune: function() {
       var cutoff, hiddenThreads, id, now, ownedPosts, timestamp, titles, _ref;
+
       now = Date.now();
       g.hiddenReplies = $.get("hiddenReplies/" + g.BOARD + "/", {});
       if ($.get('lastChecked', 0) < now - 1 * $.DAY) {
@@ -11226,6 +11552,7 @@
     },
     flatten: function(parent, obj) {
       var key, val;
+
       if (obj instanceof Array) {
         Conf[parent] = obj[0];
       } else if (typeof obj === 'object') {
@@ -11239,6 +11566,7 @@
     },
     message: function(e) {
       var version, xupdate;
+
       version = e.data.version;
       if (version && version !== Main.version) {
         xupdate = $.el('div', {
@@ -11254,6 +11582,7 @@
     },
     preParse: function(node) {
       var el, img, imgParent, parent, parentClass, post;
+
       parentClass = (parent = node.parentElement) ? parent.className : "";
       el = $('.post', node);
       post = {
@@ -11281,13 +11610,15 @@
       return post;
     },
     node: function(node, notify) {
-      var callback, _i, _len, _ref;
+      var callback, err, _i, _len, _ref;
+
       _ref = Main.callbacks;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         callback = _ref[_i];
         try {
           callback(node);
-        } catch (err) {
+        } catch (_error) {
+          err = _error;
           if (notify) {
             alert("AppChan X has experienced an error. You can help by sending this snippet to:\nhttps://github.com/zixaphir/appchan-x/issues\n\n" + Main.version + "\n" + window.location + "\n" + navigator.userAgent + "\n\n" + err + "\n" + err.stack);
           }
@@ -11296,12 +11627,14 @@
     },
     observe: function(mutations) {
       var addedNode, mutation, nodes, _i, _len, _results;
+
       nodes = [];
       _results = [];
       for (_i = 0, _len = mutations.length; _i < _len; _i++) {
         mutation = mutations[_i];
         _results.push((function() {
           var _j, _len1, _ref, _results1;
+
           _ref = mutation.addedNodes;
           _results1 = [];
           for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
@@ -11317,6 +11650,7 @@
     },
     listener: function(e) {
       var target;
+
       target = e.target;
       if (/\bpostContainer\b/.test(target.className)) {
         return Main.node(Main.preParse(target));
@@ -11324,6 +11658,7 @@
     },
     prettify: function(bq) {
       var code;
+
       if (!Main.hasCodeTags) {
         return;
       }
@@ -11331,6 +11666,7 @@
         case 'g':
           code = function() {
             var pre, _i, _len, _ref;
+
             _ref = document.getElementById('_id_').getElementsByClassName('prettyprint');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               pre = _ref[_i];
