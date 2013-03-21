@@ -1,5 +1,23 @@
 master
 
+1.2.5
+Zixaphir
+- New icon from Gógol
+- Options are now disabled on catalog to prevent issues
+- Custom Navigation and Catalog Links no longer conflict
+- 4chan SS Sidebar no longer causes a sidebar to appear on the front page
+- Thread Watcher now collapses when not set to slideout
+- Fix:
+    layout problems in Opera
+    "Force Reply Break" option
+    "Underline Links" option
+    "Announcements": "hide"
+    Delete buttons and updater z-indices
+    
+1.2.3/4
+Zixaphir
+- Fixed issues with script double-installing
+
 1.2.2
 Zixaphir
 - Fix some broken keybinds
