@@ -1461,6 +1461,10 @@ hide: "
   padding: 2px;
   #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
+#watcher > div {
+  max-height: 1.3em;
+  overflow: hidden;
+}
 #{ if _conf['Slideout Watcher'] then "
 #watcher {
   width: #{width}px;
@@ -1489,7 +1493,8 @@ hide: "
   width: 200px;
 }
 #watcher:not(:hover) {
-  max-height: 400px;
+  max-height: 200px;
+  overflow: hidden;
 }
 "}
 /* Announcements */
