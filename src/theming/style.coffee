@@ -1617,7 +1617,7 @@ s {
   clear: right;
 }
 #{if _conf['Force Reply Break'] or _conf["OP Background"] then "
-.op.post .postMessage {
+.op.post .postMessage::after {
   display: block;
   content: ' ';
   clear: both;
