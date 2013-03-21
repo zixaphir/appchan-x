@@ -665,7 +665,7 @@ body > a[style="cursor: pointer; float: right;"]::after {
 /* Updater + Stats */
 #updater,
 #stats {
-  #{align}: 2px !important;
+  #{align}: #{if _conf["Updater Position"] is "bottom" and not _conf["Hide Delete UI"] then 24 else 2}px !important;
   #{Style.sidebarLocation[1]}: auto !important;
   top: auto !important;
   bottom: auto !important;
@@ -797,7 +797,7 @@ div.navLinks > a:first-of-type::after {
 /* Updater + Stats */
 #updater,
 #stats {
-  #{align}: #{if _conf["Updater Position"] is "top" then "24" else "2"}px !important;
+  #{align}: #{if _conf["Updater Position"] is "top" or not _conf["Hide Delete UI"] then 24 else 2}px !important;
   #{Style.sidebarLocation[1]}: auto !important;
   top: #{if _conf["Updater Position"] == "top" then "-1px" else "auto"} !important;
   bottom: #{if _conf["Updater Position"] == "bottom" then "-2px" else "auto"} !important;
@@ -1290,8 +1290,10 @@ else "
   position: fixed;
   z-index: 10;
   padding: 0 1px 1px;
-  border: 1px solid transparent;
   #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
+}
+#updater:hover {
+  z-index: 30;
 }
 #updater:not(:hover) > div:not(.move) {
   display: none;
@@ -1309,6 +1311,7 @@ else "
 #stats {
   position: fixed;
   #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
+  z-index: 10;
 }
 /* Image Expansion */
 #imgControls .rice {
@@ -1369,7 +1372,6 @@ else "
   border-style: solid;
   font-size: 0;
   color: transparent;
-  max-height: 1.6em;
 }
 .deleteform:hover {
   width: auto;
@@ -1486,13 +1488,17 @@ hide: "
 #watcher {
   width: 200px;
 }
+#watcher:not(:hover) {
+  max-height: 400px;
+}
 "}
 /* Announcements */
 #globalMessage {
   text-align: center;
   #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
-#{if _conf['Announcements'] is 'slideout' then "
+#{{
+'slideout': "
 #globalMessage {
   position: fixed;
   padding: 2px;
@@ -1512,7 +1518,12 @@ hide: "
   overflow: hidden;
   padding: 0;
   border: 0 none;
-}" else ""}
+}"
+'hide': "
+#globalMessage {
+  display: none !important;
+}
+"}[_conf['Announcements']] or""}
 /* Threads */
 .thread {
   margin: #{parseInt _conf["Top Thread Padding"], 10}px 0 #{parseInt _conf["Bottom Thread Padding"], 10}px 0;
@@ -2746,8 +2757,7 @@ html {
 #prefetch,
 #showQR,
 #{unless _conf["Post Form Decorations"] then '#spoilerLabel,' else ''}
-#stats,
-#updater:not(:hover) .move {
+#stats {
   text-shadow:
      1px  1px 0 #{backgroundC},
     -1px -1px 0 #{backgroundC},
@@ -2785,7 +2795,7 @@ s:not(:hover) {
 #options,
 #qrtab,
 #{if _conf["Post Form Decorations"] then "#qr," else ""}
-#updater:hover,
+#updater,
 input[type="submit"],
 input[value="Report"],
 span[style="left: 5px; position: absolute;"] a {
