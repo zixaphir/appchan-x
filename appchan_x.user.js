@@ -19,7 +19,7 @@
 // ==/UserScript==
 
 /*
- * appchan-x - Version 1.2.5 - 2013-03-20
+ * appchan-x - Version 1.2.5 - 2013-03-21
  *
  * Licensed under the MIT license.
  * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -4181,6 +4181,7 @@
       },
       SoundCloud: {
         regExp: /.*(?:soundcloud.com\/|snd.sc\/)([^#\&\?]*).*/,
+        style: 'height: auto; width: 500px; display: inline-block;',
         el: function() {
           var div;
 
@@ -4188,12 +4189,13 @@
             className: "soundcloud",
             name: "soundcloud"
           });
-          return $.ajax("//soundcloud.com/oembed?show_artwork=false&&maxwidth=500px&show_comments=false&format=json&url=" + (this.getAttribute('data-originalURL')) + "&color=" + (Style.colorToHex(Themes[Conf['theme']]['Background Color'])), {
+          $.ajax("//soundcloud.com/oembed?show_artwork=false&&maxwidth=500px&show_comments=false&format=json&url=" + (this.getAttribute('data-originalURL')) + "&color=" + (Style.colorToHex(Themes[Conf['theme']]['Background Color'])), {
             div: div,
             onloadend: function() {
               return this.div.innerHTML = JSON.parse(this.responseText).html;
             }
           }, false);
+          return div;
         }
       },
       pastebin: {
