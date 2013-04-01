@@ -8814,16 +8814,10 @@
           rect = this.getBoundingClientRect();
           clientHeight = d.documentElement.clientHeight;
           style = ul.style;
-          style.width = "" + rect.width + "px";
-          if (clientHeight - rect.bottom < 200) {
-            style.bottom = "" + (clientHeight - rect.top) + "px";
-          } else {
-            style.top = "" + rect.bottom + "px";
-          }
-          style.left = "" + rect.left + "px";
+          style.cssText = ("width: " + rect.width + "px; left: " + rect.left + "px;") + (clientHeight - rect.bottom < 200 ? "bottom: " + (clientHeight - rect.top) + "px" : "top: " + rect.bottom + "px");
           Style.select = this.previousSibling;
           nodes = [];
-          _ref = select.options;
+          _ref = Style.select.options;
           for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
             option = _ref[_k];
             li = $.el('li', {

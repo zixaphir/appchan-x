@@ -168,17 +168,12 @@ a.useremail[href*='#{name.toUpperCase()}']:last-of-type::#{position} {
         {clientHeight} = d.documentElement
 
         {style} = ul
-        style.width = "#{rect.width}px"
-        if clientHeight - rect.bottom < 200
-          style.bottom = "#{clientHeight - rect.top}px"
-        else
-          style.top = "#{rect.bottom}px"
-        style.left = "#{rect.left}px"
+        style.cssText = "width: #{rect.width}px; left: #{rect.left}px;" + (if clientHeight - rect.bottom < 200 then "bottom: #{clientHeight - rect.top}px" else "top: #{rect.bottom}px")
         Style.select = @previousSibling
 
         nodes = []
 
-        for option in select.options
+        for option in Style.select.options
 
           li = $.el 'li',
             textContent: option.textContent
