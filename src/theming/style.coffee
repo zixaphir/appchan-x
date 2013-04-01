@@ -1598,9 +1598,25 @@ hide: "
   outline: none;
 }
 .reply.post {
-  display: inline-block;
   #{Style.sizing}: border-box;
-  #{if _conf["Fit Width Replies"] then "width: 100%;" else ""}
+}
+#{if _conf["Fit Width Replies"] then "
+.reply.post {
+  display: block;
+  overflow: hidden;
+}
+.image_expanded .reply.post {
+  width: 100%;
+}
+" else "
+.reply.post {
+  display: inline-block;
+}
+"}
+.image_expanded .reply.post {
+  display: inline-block;
+  overflow: visible;
+  clear: both;
 }
 .post {
   #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
@@ -1634,7 +1650,7 @@ s {
 }" else ""}
 /* Summary */
 #{
-if _conf["Fit Width Replies"]
+if _conf["Force Reply Break"]
   ".summary { clear: both; float: left; }"
 else ""
 }
