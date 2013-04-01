@@ -5,7 +5,7 @@ Style =
       'webkit': '-webkit-'
       'presto': '-o-'
     }[$.engine]
-    
+
     @sizing = "#{if $.engine is 'gecko' then @agent else ''}box-sizing"
 
     $.ready ->
@@ -152,14 +152,21 @@ a.useremail[href*='#{name.toUpperCase()}']:last-of-type::#{position} {
       div = $.el 'div',
         className: 'selectrice'
         innerHTML: "<div>#{select.options[select.selectedIndex].textContent or null}</div>"
+
       $.on div, "click", (e) ->
         e.stopPropagation()
-        if Style.ul
+
+        unless ul = Style.ul
+          Style.ul = ul = $.el 'ul',
+            id: "selectrice"
+          $.add d.body, ul
+
+        if ul.children.length > 0
           return Style.rmOption()
+
         rect = @getBoundingClientRect()
         {clientHeight} = d.documentElement
-        ul = Style.ul = $.el 'ul',
-          id: "selectrice"
+
         {style} = ul
         style.width = "#{rect.width}px"
         if clientHeight - rect.bottom < 200
@@ -167,32 +174,42 @@ a.useremail[href*='#{name.toUpperCase()}']:last-of-type::#{position} {
         else
           style.top = "#{rect.bottom}px"
         style.left = "#{rect.left}px"
-        select = @previousSibling
+        Style.select = @previousSibling
+
+        nodes = []
+
         for option in select.options
+
           li = $.el 'li',
             textContent: option.textContent
           li.setAttribute 'data-value', option.value
+
           $.on li, 'click', (e) ->
             e.stopPropagation()
-            container = @parentElement.parentElement
-            select = container.previousSibling
+            select = Style.select
+            container = select.nextElementSibling
             container.firstChild.textContent = @textContent
             select.value  = @getAttribute 'data-value'
             ev = document.createEvent 'HTMLEvents'
             ev.initEvent "change", true, true
             $.event select, ev
             Style.rmOption()
-          $.add ul, li
+
+          nodes.push li
+
+        $.add ul, nodes
+
         $.on ul, 'click scroll blur', (e) ->
           e.stopPropagation()
-        Style.rmOption = ->
-          $.off d, 'click scroll blur resize', Style.rmOption
-          $.rm Style.ul
-          delete Style.ul
+
         $.on d, 'click scroll blur resize', Style.rmOption
-        $.add @, ul
       $.after select, div
     return
+
+  rmOption: ->
+    $.off d, 'click scroll blur resize', Style.rmOption
+    for child in [Style.ul.children...]
+      $.rm child
 
   filter: (text, background) ->
 
@@ -350,7 +367,7 @@ body {
     else
       false
 
-  jsColorCSS: -> 
+  jsColorCSS: ->
     agent = Style.agent
     """
 .jscBox {
@@ -693,7 +710,7 @@ body > a[style="cursor: pointer; float: right;"]::after {
       )
 
       iconOffset = (
-        if g.REPLY and _conf['Prefetch'] 
+        if g.REPLY and _conf['Prefetch']
           250 + Style.sidebarOffset.W
         else
           20 + (
@@ -1850,13 +1867,17 @@ input:checked + .rice {
   top: 0;
 }
 /* Select Dropdown */
-.selectrice ul {
+#selectrice {
   padding: 0;
+  margin: 0;
   position: fixed;
   max-height: 120px;
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 32;
+}
+#selectrice:empty {
+  display: none;
 }
 /* Post Form */
 #qr {
@@ -2266,9 +2287,6 @@ a:only-of-type > .remove {
   padding: 0;
   #{if _conf["Rounded Edges"] then "border-radius: 3px;" else ""}
 }
-#options .selectrice ul {
-  border-radius: 0;
-}
 #optionsContent {
   overflow: auto;
   position: absolute;
@@ -2316,7 +2334,7 @@ a:only-of-type > .remove {
 .rice_tab li:nth-of-type(2n+1),
 .style_tab li:nth-of-type(2n+1),
 .keybinds_tab li:nth-of-type(2n+1),
-.selectrice li:nth-of-type(2n+1) {
+#selectrice li:nth-of-type(2n+1) {
   background-color: rgba(0, 0, 0, 0.05);
 }
 article li {
@@ -2842,9 +2860,9 @@ textarea {
 }
 #dump:hover,
 #file:hover,
-#options .selectrice li:nth-of-type(2n+1):hover,
+#selectrice li:hover,
+#selectrice li:nth-of-type(2n+1):hover,
 .selectrice:hover,
-.selectrice li:hover,
 input:hover,
 textarea:hover {
   background: #{theme["Hovered Input Background"]};
@@ -2853,8 +2871,8 @@ textarea:hover {
 }
 #dump:active,
 #dump:focus,
+#selectrice li:focus,
 .selectrice:focus,
-.selectrice li:focus,
 input:focus,
 textarea:focus,
 textarea.field:focus {
@@ -2956,7 +2974,7 @@ textarea {
 }
 #exlinks-options-content > table,
 #options ul,
-.selectrice ul {
+#selectrice {
   border-bottom: 1px solid #{theme["Reply Border"]};
   box-shadow: inset #{theme["Shadow Color"]} 0 0 5px;
 }
@@ -3075,11 +3093,11 @@ a .name {
 }
 #options ul,
 .boxcontent dd,
-.selectrice ul {
+#selectrice {
   border-color: #{if Style.lightTheme then "rgba(0,0,0,0.1)" else "rgba(255,255,255,0.1)"};
 }
 #options li,
-.selectrice li:not(:first-of-type) {
+#selectrice li:not(:first-of-type) {
   border-top: 1px solid #{if Style.lightTheme then "rgba(0,0,0,0.05)" else "rgba(255,255,255,0.025)"};
 }
 #navtopright .exlinksOptionsLink::after,
