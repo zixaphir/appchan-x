@@ -1315,6 +1315,7 @@ else "
 }
 #updater .rice {
   float: left;
+  clear: left;
 }
 #updater .field {
   width: 50px;
