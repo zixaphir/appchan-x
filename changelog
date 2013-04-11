@@ -1,5 +1,14 @@
 master
 
+1.2.6
+Zixaphir
+- Fix thread watcher from showing too many characters
+- Fix soundcloud embedding
+- Fix OP layout
+- Fix Select Rice
+- Fix Thread Updater
+- Replies can now be adjacent to the OP in "Fit Width" mode
+
 1.2.5
 Zixaphir
 - New icon from Gógol
