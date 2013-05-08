@@ -200,35 +200,26 @@ code {
     </style>
   </head>
   <body>
+
+  <body>
     <nav>
       <div><div>
         <a href=#install>Installation</a>
         <a href=#features>Features</a>
-        <a href=#bonus>Links &amp; Tips</a>
-        <a href=https://raw.github.com/zixaphir/appchan-x/stable/changelog>Changelog</a>
-        <a href=#bug-report>Bug Reports</a>
+        <a href=https://github.com/zixaphir/appchan-x/blob/master/CHANGELOG.md target='_blank'>Changelog</a>
+        <a href=https://github.com/zixaphir/appchan-x/blob/master/README.md#reporting-bugs-and-suggestions target='_blank'>Bug Reports</a>
       </div></div>
     </nav>
     <section data-id=install>
-      <p>The latest stable releases of <b class=chrome>Chrome</b>, <b class=firefox>Firefox</b>, and <b class=opera>Opera</b> are supported.</p>
+      <p>The latest stable releases of <b class=chrome>Chrome</b>, <b class=firefox>Firefox</b>, and <b class=opera>Opera</b> are supported.</p></center>
 
       <h1><a class=install data-id=installLink>Install Appchan X</a></h1>
+      <center style=margin-top:-20px;><a class=chrome href=https://chrome.google.com/webstore/detail/appchan-x/gfibffekgcmgabbfaibbbcapgnfobnoi></a><a href=https://github.com/zixaphir/appchan-x/raw/stable/builds/appchan-x.user.js class=firefox></a><a href=https://github.com/zixaphir/appchan-x/raw/stable/builds/appchan-x.js class=opera></a></center>
 
-      <b>Before you start</b>:
-      <ol>
-        <li>If you have 4chan X, disable or uninstall it. Appchan X has a custom version of 4chan X baked in and will break if 4chan X runs in parallel with it.</li>
-        <li>If you have a userstyle or userscript that themes 4chan, you may want to disable it.</li>
-      </ol>
-      
       <b class=chrome>Chrome</b>:
       <ol>
-        <li>Save the Appchan X file from the install button as <code>appchan_x.user.js</code>.</li>
-        <li>Drag and drop the file into the extensions page (<code>chrome://chrome/extensions/</code>).</li>
-        <li>Enjoy your customizable 4chan with the most powerful 4chan Extension.</li>
-        <ul>
-          <li>If a Windows user, adding <code>--enable-easy-off-store-extension-install</code> to Chrome's target flag will restore the old install functionality, allowing you to simply click the install link and install.</li>
-          <li>Make sure the filename is not saved as <code>appchan_x(1).user.js</code> or similar or Chrome might just resave the file instead of installing it.</li>
-        </ul>
+        <li>Install Appchan X. That's it.</li>
+        <li>appchan X will be automatically updated by Chrome.</li>
       </ol>
 
       <b class=firefox>Firefox</b>:
@@ -240,7 +231,6 @@ code {
           </ol>
         </li>
         <li>Install Appchan X.</li>
-        <li>Enjoy your customizable 4chan with the most powerful 4chan Extension.</li>
       </ol>
 
       <b class=opera>Opera</b>:
@@ -250,43 +240,19 @@ code {
             <li>Go to Preferences (<code>Ctrl + F12</code>) → Advanced → Content → JavaScript Options → User JavaScript Folder.</li>
             <li>Chose what will be your userscripts folder.</li>
             <li>Enable <code><a href=opera:config#UserPrefs|UserJavaScriptonHTTPS target=_blank>User JavaScript on HTTPS</a></code> and save your settings.</li>
+            <li>Set <code><a href=opera:config#PersistentStorage|UserJSStorageQuota target_blank>User JS Storage Quota</a></code> to a minimum of <code>5120</code>.
           </ol>
         </li>
-        <li>Save the Appchan X file as <code>appchan_x.js</code> into your userscripts folder.</li>
-        <li>Enjoy your customizable 4chan with the most powerful 4chan Extension.</li>
-      </ol>
-
-      <b class=opera>Opera Mobile</b>:
-      <ol>
-        <li>If you haven't set your userscripts folder:
-          <ol>
-            <li>Open <code><a target=opera:config#UserPrefs target=_blank>User Prefs</a></code>.</li>
-            <li>Enable <code>User JavaScript</code> and <code>User JavaScript on HTTPS</code>.</li>
-            <li>Set <code>User JavaScript File</code> to what will be your userscripts folder, <code>/sdcard/js</code> for example</li>
-            <li>Save your settings.</li>
-          </ol>
-        </li>
-        <li>Save the Appchan X file as <code>appchan_x.js</code> into your userscripts folder.</li>
-        <li>Enjoy your customizable 4chan with the most powerful 4chan Extension.</li>
+        <li>Save the Appchan X file into your userscripts folder.</li>
       </ol>
     </section>
-
     <section data-id=features>
-      <ul>
-        <li>Basics
           <ul>
-            <li>Appchan X is a hybrid style / extension userscript that adds an enormous amount of functionality while providing a wide variety of theming and stylistic options for 4chan.</li>
-          </ul>
-        </li>
-      </ul>
       <ul>
         <li>Enhancing
           <ul>
-            <li>Toggleable navigation links for boards and catalogs
-              <ul>
-                <li>Options for external catalogs, where available!</li>
-              </ul>
-            </li>
+            <li>Toggleable Catalog Links</li>
+            <li>External Catalog Support</li>
             <li>Archive Redirection for 404'd Threads</li>
             <li>Customizable Keybinds</li>
             <li>Time Localization + Custom Formatting</li>
@@ -296,6 +262,14 @@ code {
             <li>Styles and Theming</li>
             <li>Custom Navigation</li>
             <li>Ban Checking</li>
+            <li>Custom CSS</li>
+            <li>Emoji</li>
+          </ul>
+        </li>
+        <li>Linkification
+          <ul>
+            <li>Clickable Links</li>
+            <li>Video/Audio Link Embedding &amp; Titles</li>
           </ul>
         </li>
         <li>Filtering
@@ -306,19 +280,8 @@ code {
             <li>Optional Stubs</li>
           </ul>
         </li>
-        <li>Linkification
-          <ul>
-            <li>Convert text URLs to clickable links</li>
-            <li>Embedding and Title Links for various external video and audio hosting websites, like YouTube, Vimeo, and SoundCloud</li>
-          </ul>
-        </li>
         <li>Imaging
           <ul>
-            <li>Thumbnail Replacement
-              <ul>
-                <li>Fixes incorrect colors for PNG and auto-animates GIF thumbnails</li>
-              </ul>
-            </li>
             <li>Image Expansion</li>
             <li>Image Fit: Full, Width, Height or Screen</li>
             <li>Image Reload on Loading Error</li>
@@ -326,22 +289,34 @@ code {
             <li>Customizable Sauce Links</li>
             <li>Reveal Spoilers</li>
             <li>Image Prefetching</li>
+            <li>Remove Posts Without Images</li>
+            <li>Higher Quality Thumbnails</li>
+          </ul>
+        </li>
+        <li>Menu
+          <ul>
+            <li>Drop-down Menu</li>
+            <li>Report Link</li>
+            <li>Delete Link</li>
+            <li>Download Link</li>
+            <li>Archive Link</li>
+            <li>Embed Link</li>
+            <li>Thread &amp; Reply Hiding Link</li>
           </ul>
         </li>
         <li>Monitoring
           <ul>
-            <li>Thread Updater With Unread Count, minimum limit of 1 second
-              <ul>
-                <li>Optional configurable interval for background tabs</li>
-                <li>Optional additional delays for threads with slower post activity</li>
-              </ul>
-            </li>
+            <li>Fully Customizable Thread Updater</li>
             <li>Scrolling onto New Posts</li>
             <li>Unread Count with Favicon Indicator</li>
             <li>Post In Title</li>
             <li>Thread Stats</li>
+            <li>Merged Updater &amp; Stats</li>
             <li>Thread Watcher</li>
             <li>Auto Watch on Thread Creation &amp; Reply</li>
+            <li>Color User IDs</li>
+            <li>Marked Own Posts</li>
+            <li>Remove &amp; Indicate Spoilers</li>
           </ul>
         </li>
         <li>Posting
@@ -354,24 +329,26 @@ code {
             <li>Automatic Quote from Text Selection</li>
             <li>Auto-Hide</li>
             <li>Cooldown</li>
-            <li>Toggle Auto-Posting by trying to submit during a Cooldown</li>
+            <li>Auto-Posting</li>
             <li>Captcha Caching with Shift + Enter</li>
             <li>Captcha Reloading on Backspace</li>
             <li>Persistent QR</li>
             <li>Remember QR Size, Name, E-Mail, Subject, Image Spoiler, and Sage</li>
-            <li>Board-specific personas for those who maintain seperate identities on certain boards</li>
+            <li>Per Board Personas</li>
             <li>Markdown</li>
           </ul>
         </li>
         <li>Quoting
           <ul>
-            <li>Quote Backlinks + Custom Formatting</li>
+            <li>Quote Backlinks &amp; Custom Formatting</li>
             <li>Quote Inline</li>
+            <li>Quote Hash Navigation</li>
             <li>Quote Preview</li>
             <li>Quote Highlighting</li>
             <li>Resurrect Dead Quotes from Archives</li>
             <li>Indicate OP Quotes</li>
             <li>Indicate Cross-thread Quotes</li>
+            <li>Forward Hiding</li>
           </ul>
         </li>
         <li>Styling
@@ -439,60 +416,6 @@ code {
           </ul>
         </li>
       </ul>
-    </section>
-    <section data-id=bug-report>
-      <p>Before making one,</p>
-      <ol>
-        <li>Make sure your browser &amp; Appchan X are up to date.</li>
-        <li>Disable your other extensions &amp; scripts.</li>
-        <li>If your issue persists, report precise steps to reproduce and console errors, if any. Open your console with:
-          <ul>
-            <li><code>Ctrl + Shift + J</code> on <b class=chrome>Chrome</b> &amp; <b class=firefox>Firefox</b></li>
-            <li><code>Ctrl + Shift + O</code> on <b class=opera>Opera</b>.</li>
-          </ul>
-        </li>
-      </ol>
-
-      <hr>
-
-      <b>Known issues:</b>
-      <ul>
-        <li>Clearing your 4chan cookies will erase your settings!</li>
-      </ul>
-
-      <b class=chrome>Chrome</b>:
-      <ul>
-        <li>Appchan X only runs on 4chan! Chrome will say that it runs on all domains due to its match patterns.</li>
-      </ul>
-
-      <b class=firefox>Firefox</b>:
-      <ul>
-        <li>If Scriptish refuses to auto-update Appchan X, disable <code>Require user scripts to update using HTTPS</code> in Scriptish's preferences under Advanced → Update Security.</li>
-        <li>If you get an error stating <code>localStorage is null</code>, go to <code>about:config</code> and enable <code>dom.storage.enabled</code>.</li>
-        <li>If you get a <code>Security error</code>, make sure cookies are enabled.</li>
-      </ul>
-
-      <hr>
-
-      <h1><a href=https://github.com/zixaphir/appchan-x/issues>GitHub Issues Tracker</a></h1>
-    </section>
-    <section data-id=bonus>
-      <p>
-        <a href=http://userscripts.org/scripts/show/83584>YouTube Link Title</a>: Alternative to the media embedder in Appchan X.<br>
-        <a href=https://github.com/Hupotronic/ExLinks>ExLinks</a>: Exhentai sauce and links.
-      </p><p>
-        <a href=http://appchan.booru.org/>Mascots Booru</a>: Extra mascots, tagged with various identifiers like series, character name, gender, hair color, etc.<br>
-        <a href=http://firelordazula.minus.com/uploads>FireLord's Mascots</a>: A collection of mascots maintained and operated by FireLord.
-      </p><p>
-        <a href=https://addons.mozilla.org/firefox/addon/downthemall/>DownThemAll</a> for <b class=firefox>Firefox</b>: download all images in a thread with this fast filter: <code>/^http://images.4chan.org/</code>.<br>
-        <b>*nix</b>: Download all images in a thread with this shell function (add it to your <code>.bashrc</code>):
-      </p>
-<pre>dta() {
-  wget -O - $1 |
-  grep -Eo 'images.4chan.org/[^"]+' |
-  uniq |
-  xargs wget
-}</pre>
     </section>
   </body>
 </html>
