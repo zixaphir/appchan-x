@@ -1,4 +1,6 @@
 QR =
+  # Add empty mimeType to avoid errors with URLs selected in Window's file dialog.
+  mimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/x-shockwave-flash', '']
   init: ->
     return if !Conf['Quick Reply']
 
@@ -8,7 +10,7 @@ QR =
     if Conf['QR Shortcut']
       sc = $.el 'a',
         className: "qr-shortcut fa fa-comment-o #{unless Conf['Persistent QR'] then 'disabled' else ''}"
-        textContent: 'QR' 
+        textContent: 'QR'
         title: 'Quick Reply'
         href: 'javascript:;'
       $.on sc, 'click', ->
@@ -372,13 +374,6 @@ QR =
       pdf: 'application/pdf'
       swf: 'application/x-shockwave-flash'
 
-    # Allow only this board's supported files.
-    mimeTypes = $('ul.rules > li').textContent.trim().match(/: (.+)/)[1].toLowerCase().replace /\w+/g, (type) ->
-      check[type] or "image/#{type}"
-
-    QR.mimeTypes = mimeTypes.split ', '
-    # Add empty mimeType to avoid errors with URLs selected in Window's file dialog.
-    QR.mimeTypes.push ''
     nodes.fileInput.max = $('input[name=MAX_FILE_SIZE]').value
 
     QR.spoiler = !!$ 'input[name=spoiler]'
@@ -549,7 +544,7 @@ QR =
         QR.status()
         QR.error $.el 'span',
           innerHTML: """
-          4chan X encountered an error while posting. 
+          4chan X encountered an error while posting.
           [<a href="//4chan.org/banned" target=_blank>Banned?</a>] [<a href="https://github.com/seaweedchan/4chan-x/wiki/Frequently-Asked-Questions#what-does-4chan-x-encountered-an-error-while-posting-please-try-again-mean" target=_blank>More info</a>]
           """
     extra =
