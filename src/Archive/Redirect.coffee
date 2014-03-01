@@ -25,8 +25,8 @@ Redirect =
 
   archives:
     "Foolz":
-      boards: ["a", "co", "gd", "jp", "m", "sp", "tg", "tv", "v", "vg", "vp", "vr", "wsg"]
-      files:  ["a", "gd", "jp", "m", "tg", "vg", "vp", "vr", "wsg"]
+      boards: ["a", "biz", "co", "diy", "gd", "jp", "m", "sci", "sp", "tg", "tv", "v", "vg", "vp", "vr", "wsg"]
+      files:  ["a", "biz", "gd", "diy", "jp", "m", "sci", "tg", "vg", "vp", "vr", "wsg"]
       data:
         domain: "archive.foolz.us"
         http:  false
@@ -52,8 +52,8 @@ Redirect =
         software: "foolfuuka"
 
     "4plebs":
-      boards: ["hr", "pol", "s4s", "tg", "tv", "x"]
-      files:  ["hr", "pol", "s4s", "tg", "tv", "x"]
+      boards: ["adv", "hr", "o", "pol", "s4s", "tg", "tv", "x"]
+      files:  ["adv", "hr", "o", "pol", "s4s", "tg", "tv", "x"]
       data:
         domain: "archive.4plebs.org"
         http:  true
@@ -61,22 +61,22 @@ Redirect =
         software: "foolfuuka"
 
     "Nyafuu":
-      boards: ["c", "w", "wg"]
-      files:  ["c", "w", "wg"]
+      boards: ["c", "e", "w", "wg"]
+      files:  ["c", "e", "w", "wg"]
       data:
         domain: "archive.nyafuu.org"
         http:  true
         https: true
         software: "foolfuuka"
 
-    "Install Gentoo":
-      boards: ["diy", "g", "sci"]
-      files:  []
+    "Love is Over":
+      boards: ["d", "i"]
+      files:  ["d", "i"]
       data:
-        domain: "archive.installgentoo.net"
-        http:  false
+        domain: "loveisover.me"
+        http:  true
         https: true
-        software: "fuuka"
+        software: "foolfuuka"
 
     "Rebecca Black Tech":
       boards: ["cgl", "g", "mu", "w"]
@@ -96,17 +96,42 @@ Redirect =
         software: "fuuka"
 
     "warosu":
-      boards: ["3", "cgl", "ck", "fa", "ic", "jp", "lit", "tg", "vr"]
-      files:  ["3", "cgl", "ck", "fa", "ic", "jp", "lit", "tg", "vr"]
+      boards: ["3", "biz", "cgl", "ck", "diy", "fa", "g", "ic", "jp", "lit", "sci", "tg", "vr"]
+      files: ["3", "biz", "cgl", "ck", "diy", "fa", "g", "ic", "jp", "lit", "sci", "tg", "vr"]
       data:
-        domain: "fuuka.warosu.org"
+        domain: "warosu.org"
         http:  true
         https: true
         software: "fuuka"
 
+    "fgts":
+      boards: ["r", "soc"]
+      files:  ["r", "soc"]
+      data:
+        domain: "fgst.eu"
+        http:  true
+        https: true
+        software: "foolfuuka"
+
+    "maware":
+      boards: ["t"]
+      files:  ["t"]
+      data:
+        domain: "archive.mawa.re"
+        http:  true
+        software: "foolfuuka"
+
+    "installgentoo.com":
+      boards: ["g", "t"]
+      files:  ["g", "t"]
+      data:
+        domain: "chan.installgentoo.com"
+        http: true
+        software: "foolfuuka"
+
     "Foolz Beta":
-      boards: ["a", "co", "d", "gd", "h", "jp", "m", "mlp", "sp", "tg", "tv", "u", "v", "vg", "vp", "vr", "wsg"],
-      files:  ["a", "d", "gd", "h", "jp", "m", "tg", "u", "vg", "vp", "vr", "wsg"]
+      boards: ["a", "biz", "co", "d", "diy", "gd", "jp", "m", "mlp", "s4s", "sci", "sp", "tg", "tv", "u", "v", "vg", "vp", "vr", "wsg"]
+      files:  ["a", "biz", "d", "diy", "gd", "jp", "m", "s4s", "sci", "tg", "u", "vg", "vp", "vr", "wsg"]
       data:
         domain: "beta.foolz.us"
         http:  true
