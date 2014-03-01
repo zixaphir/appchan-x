@@ -1991,7 +1991,7 @@
       $.addClass(doc, args[0]);
       $.rmClass(doc, args[1]);
       Header.bar.parentNode.className = args[2];
-      return $[args[3]](Header.bar, Header.notify);
+      return $[args[3]](Header.bar, Header.noticesRoot);
     },
     toggleBarPosition: function() {
       $.cb.checked.call(this);
