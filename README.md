@@ -1,6 +1,4 @@
-# Discontinued.
-
-## Forking
+## Contributing
 
 ### Get started
 
