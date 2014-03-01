@@ -1,3 +1,12 @@
+### v1.3.5 
+*2014-03-01*
+
+**sachse**
+- Update archives
+
+**MayhemYDG**:
+- Fix the QR
+
 ### v1.3.4 
 *2014-02-17*
 
