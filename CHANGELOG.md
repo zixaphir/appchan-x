@@ -1,5 +1,14 @@
+### v1.3.7 
+*2014-03-09*
+
+**seaweedchan**
+- Make QR captcha load automatically like old behavior
+
 ### v1.3.6 
 *2014-03-01*
+
+**Spittie**:
+- Fix header crash on Chrome
 
 ### v1.3.5 
 *2014-03-01*
