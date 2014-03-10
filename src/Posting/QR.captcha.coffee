@@ -21,6 +21,10 @@ QR.captcha =
       input: input
 
     $.on input, 'focus', @setup
+    $.on input, 'click', 
+      @setup()
+      @setupObserver = new MutationObserver @afterSetup
+      @setupObserver.observe container, childList: true
 
     <% if (type === 'userscript') { %>
     # XXX Firefox lacks focusin/focusout support.

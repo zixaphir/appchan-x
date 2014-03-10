@@ -22,7 +22,7 @@
 // ==/UserScript==
 
 /*
-* 4chan X - Version 1.3.6 - 2014-03-01
+* 4chan X - Version 1.3.6 - 2014-03-09
 *
 * Licensed under the MIT license.
 * https://github.com/seaweedchan/4chan-x/blob/master/LICENSE
@@ -5447,6 +5447,7 @@
       if (QR.nodes) {
         QR.nodes.el.hidden = false;
         QR.unhide();
+        QR.captcha.nodes.input.click();
         return;
       }
       try {
@@ -5488,7 +5489,8 @@
       return QR.status();
     },
     focusin: function() {
-      return $.addClass(QR.nodes.el, 'has-focus');
+      $.addClass(QR.nodes.el, 'has-focus');
+      return QR.captcha.nodes.input.click();
     },
     focusout: function() {
       return $.queueTask(function() {
@@ -6136,6 +6138,9 @@
         input: input
       };
       $.on(input, 'focus', this.setup);
+      $.on(input, 'click', this.setup(), this.setupObserver = new MutationObserver(this.afterSetup), this.setupObserver.observe(container, {
+        childList: true
+      }));
       $.on(input, 'blur', QR.focusout);
       $.on(input, 'focus', QR.focusin);
       $.addClass(QR.nodes.el, 'has-captcha');

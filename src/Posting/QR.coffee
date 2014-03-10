@@ -90,6 +90,8 @@ QR =
     if QR.nodes
       QR.nodes.el.hidden = false
       QR.unhide()
+      QR.captcha.nodes.input.click()
+
       return
     try
       QR.dialog()
@@ -117,6 +119,7 @@ QR =
     QR.status()
   focusin: ->
     $.addClass QR.nodes.el, 'has-focus'
+    QR.captcha.nodes.input.click()
   focusout: ->
     <% if (type === 'crx') { %>
     $.rmClass QR.nodes.el, 'has-focus'
