@@ -1,3 +1,6 @@
+### v1.3.8 
+*2014-03-30*
+
 **seaweedchan**:
 - Fix QR refreshing. If you guys just emailed me or sent a pull request, you wouldn’t have to wait so long, you know. I might not browse 4chan but this shit takes five seconds.
 
