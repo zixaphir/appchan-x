@@ -1,7 +1,10 @@
+**seaweedchan**:
+- Fix QR refreshing. If you guys just emailed me or sent a pull request, you wouldn’t have to wait so long, you know. I might not browse 4chan but this shit takes five seconds.
+
 ### v1.3.7 
 *2014-03-09*
 
-**seaweedchan**
+**seaweedchan**:
 - Make QR captcha load automatically like old behavior
 
 ### v1.3.6 

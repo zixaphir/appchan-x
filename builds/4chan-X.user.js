@@ -22,7 +22,7 @@
 // ==/UserScript==
 
 /*
-* 4chan X - Version 1.3.7 - 2014-03-09
+* 4chan X - Version 1.3.7 - 2014-03-30
 *
 * Licensed under the MIT license.
 * https://github.com/seaweedchan/4chan-x/blob/master/LICENSE
@@ -6179,7 +6179,9 @@
       $.sync('captchas', QR.captcha.sync);
       QR.captcha.nodes.challenge = challenge;
       new MutationObserver(QR.captcha.load.bind(QR.captcha)).observe(challenge, {
-        childList: true
+        childList: true,
+        subtree: true,
+        attributes: true
       });
       return QR.captcha.load();
     },
