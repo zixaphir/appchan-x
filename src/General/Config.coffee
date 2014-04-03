@@ -313,6 +313,11 @@ Config =
         true
         'When disabled, shows a red border on the CAPTCHA input until a key is pressed instead of a notification.'
       ]
+      'Auto-load Captcha': [
+        true
+        'Automatically loads captcha images on comment entry focus.'
+      ]
+
 
     'Quote Links':
       'Quote Backlinks': [
