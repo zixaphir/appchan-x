@@ -1098,7 +1098,9 @@
       this.file.sizeInBytes = size;
       this.file.thumbURL = that.isArchived ? thumb.src : "" + location.protocol + "//t.4cdn.org/" + this.board + "/thumb/" + (this.file.URL.match(/(\d+)\./)[1]) + "s.jpg";
       this.file.name = (nameNode = $('span', fileText)) ? nameNode.title || nameNode.textContent : fileText.title;
-      if (this.file.isImage = /(jpg|png|gif)$/i.test(this.file.name)) {
+      this.file.isImage = /(jpg|png|gif)$/i.test(this.file.name);
+      this.file.isVideo = /webm$/i.test(this.file.name);
+      if (this.file.isImage || this.file.isVideo) {
         return this.file.dimensions = fileText.textContent.match(/\d+x\d+/)[0];
       }
     };
@@ -2788,10 +2790,11 @@
     gifIcon: window.devicePixelRatio >= 2 ? '@2x.gif' : '.gif',
     spoilerRange: {},
     shortFilename: function(filename, isReply) {
-      var threshold;
+      var ext, threshold;
       threshold = isReply ? 30 : 40;
-      if (filename.length - 4 > threshold) {
-        return "" + filename.slice(0, threshold - 5) + "(...)." + filename.slice(-3);
+      ext = filename.match(/\.[^.]+$/)[0];
+      if (filename.length - ext.length > threshold) {
+        return "" + filename.slice(0, threshold - 5) + "(...)" + ext;
       } else {
         return filename;
       }
@@ -3867,7 +3870,9 @@
       return false;
     },
     dimensions: function(post) {
-      if (post.file && post.file.isImage) {
+      var file;
+      file = post.file;
+      if (file && (file.isImage || file.isVideo)) {
         return post.file.dimensions;
       }
       return false;
@@ -5338,7 +5343,6 @@
   };
 
   QR = {
-    mimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/x-shockwave-flash', ''],
     init: function() {
       var sc;
       if (!Conf['Quick Reply']) {
@@ -5696,21 +5700,9 @@
       }
     },
     handleFile: function(file, isSingle, max) {
-      var post, _ref;
+      var post;
       if (file.size > max) {
         QR.error("" + file.name + ": File too large (file: " + ($.bytesToString(file.size)) + ", max: " + ($.bytesToString(max)) + ").");
-        return;
-      } else if (_ref = file.type, __indexOf.call(QR.mimeTypes, _ref) < 0) {
-        if (!/^text/.test(file.type)) {
-          QR.error("" + file.name + ": Unsupported file type.");
-          return;
-        }
-        if (isSingle) {
-          post = QR.selected;
-        } else if ((post = QR.posts[QR.posts.length - 1]).com) {
-          post = new QR.post();
-        }
-        post.pasteText(file);
         return;
       }
       if (isSingle) {
@@ -5718,7 +5710,11 @@
       } else if ((post = QR.posts[QR.posts.length - 1]).file) {
         post = new QR.post();
       }
-      return post.setFile(file);
+      if (/^text/.test(file.type)) {
+        return post.pasteText(file);
+      } else {
+        return post.setFile(file);
+      }
     },
     openFileInput: function(e) {
       var _ref;
@@ -7188,8 +7184,8 @@
       });
     },
     node: function() {
-      var thumb, _ref;
-      if (!((_ref = this.file) != null ? _ref.isImage : void 0)) {
+      var thumb;
+      if (!(this.file && (this.file.isImage || this.file.isVideo))) {
         return;
       }
       thumb = this.file.thumb;
@@ -7230,7 +7226,7 @@
           for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
             post = _ref1[_i];
             file = post.file;
-            if (!(file && file.isImage && doc.contains(post.nodes.root))) {
+            if (!(file && (file.isImage || file.isVideo) && doc.contains(post.nodes.root))) {
               continue;
             }
             if (ImageExpand.on && (!Conf['Expand spoilers'] && file.isSpoiler || Conf['Expand from here'] && Header.getTopOf(file.thumb) < 0)) {
@@ -7281,10 +7277,13 @@
     contract: function(post) {
       $.rmClass(post.nodes.root, 'expanded-image');
       $.rmClass(post.file.thumb, 'expanding');
-      return post.file.isExpanded = false;
+      post.file.isExpanded = false;
+      if (post.file.isVideo) {
+        return post.file.fullImage.pause();
+      }
     },
     expand: function(post, src) {
-      var img, thumb;
+      var file, thumb;
       thumb = post.file.thumb;
       if (post.isHidden || post.file.isExpanded || $.hasClass(thumb, 'expanding')) {
         return;
@@ -7292,23 +7291,28 @@
       $.addClass(thumb, 'expanding');
       if (post.file.fullImage) {
         $.asap((function() {
-          return post.file.fullImage.naturalHeight;
+          return post.file.isVideo || post.file.fullImage.naturalHeight;
         }), function() {
           return ImageExpand.completeExpand(post);
         });
         return;
       }
-      post.file.fullImage = img = $.el('img', {
+      file = post.file.isImage ? $.el('img', {
         className: 'full-image',
         src: src || post.file.URL
+      }) : $.el('video', {
+        className: 'full-image',
+        src: src || post.file.URL,
+        loop: true
       });
-      $.on(img, 'error', ImageExpand.error);
+      post.file.fullImage = file;
+      $.on(file, 'error', ImageExpand.error);
       $.asap((function() {
-        return post.file.fullImage.naturalHeight;
+        return post.file.isVideo || post.file.fullImage.naturalHeight;
       }), function() {
         return ImageExpand.completeExpand(post);
       });
-      return $.after(thumb, img);
+      return $.after(thumb, file);
     },
     completeExpand: function(post) {
       var bottom, thumb;
@@ -7317,6 +7321,9 @@
         return;
       }
       post.file.isExpanded = true;
+      if (post.file.isVideo) {
+        post.file.fullImage.play();
+      }
       if (!post.nodes.root.parentNode) {
         $.addClass(post.nodes.root, 'expanded-image');
         $.rmClass(post.file.thumb, 'expanding');
@@ -7434,8 +7441,7 @@
       });
     },
     node: function() {
-      var _ref;
-      if (!((_ref = this.file) != null ? _ref.isImage : void 0)) {
+      if (!(this.file && (this.file.isImage || this.file.isVideo))) {
         return;
       }
       return $.on(this.file.thumb, 'mouseover', ImageHover.mouseover);
@@ -7443,9 +7449,14 @@
     mouseover: function(e) {
       var el, post;
       post = Get.postFromNode(this);
-      el = $.el('img', {
+      el = post.file.isImage ? $.el('img', {
         id: 'ihover',
         src: post.file.URL
+      }) : $.el('video', {
+        id: 'ihover',
+        src: post.file.URL,
+        autoplay: true,
+        loop: true
       });
       el.dataset.fullID = post.fullID;
       $.add(Header.hover, el);
@@ -7455,7 +7466,7 @@
         latestEvent: e,
         endEvents: 'mouseout click',
         asapTest: function() {
-          return el.naturalHeight;
+          return post.file.isVideo || el.naturalHeight;
         }
       });
       return $.on(el, 'error', ImageHover.error);
@@ -10691,11 +10702,7 @@
         return FileInfo.convertUnit(this.file.sizeInBytes, 'MB');
       },
       r: function() {
-        if (this.file.isImage) {
-          return this.file.dimensions;
-        } else {
-          return 'PDF';
-        }
+        return this.file.dimensions || 'PDF';
       }
     }
   };
@@ -12220,6 +12227,7 @@
           sizeInBytes: 276 * 1024,
           dimensions: '1280x720',
           isImage: true,
+          isVideo: false,
           isSpoiler: true
         }
       };

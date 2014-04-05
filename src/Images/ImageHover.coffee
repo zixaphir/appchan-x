@@ -6,13 +6,20 @@ ImageHover =
       name: 'Image Hover'
       cb:   @node
   node: ->
-    return unless @file?.isImage
+    return unless @file and (@file.isImage or @file.isVideo)
     $.on @file.thumb, 'mouseover', ImageHover.mouseover
   mouseover: (e) ->
     post = Get.postFromNode @
-    el = $.el 'img',
-      id: 'ihover'
-      src: post.file.URL
+    el = if post.file.isImage
+      $.el 'img',
+        id: 'ihover'
+        src: post.file.URL
+    else
+      $.el 'video',
+        id: 'ihover'
+        src: post.file.URL
+        autoplay: true
+        loop: true
     el.dataset.fullID = post.fullID
     $.add Header.hover, el
     UI.hover
@@ -20,7 +27,7 @@ ImageHover =
       el: el
       latestEvent: e
       endEvents: 'mouseout click'
-      asapTest: -> el.naturalHeight
+      asapTest: -> post.file.isVideo or el.naturalHeight
     $.on el, 'error', ImageHover.error
   error: ->
     return unless doc.contains @
