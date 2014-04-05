@@ -34,7 +34,6 @@ QR.captcha =
     input.value = ''
     input.placeholder = 'Focus to load reCAPTCHA'
     $.on input, 'focus', @setup
-    $.on input, 'click', @setup if Conf['Auto-load Captcha']
     @setupObserver = new MutationObserver @afterSetup
     @setupObserver.observe $.id('captchaContainer'), childList: true
   setup: ->

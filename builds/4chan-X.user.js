@@ -22,7 +22,7 @@
 // ==/UserScript==
 
 /*
-* 4chan X - Version 1.3.9 - 2014-04-03
+* 4chan X - Version 1.3.9 - 2014-04-05
 *
 * Licensed under the MIT license.
 * https://github.com/seaweedchan/4chan-x/blob/master/LICENSE
@@ -5448,7 +5448,9 @@
       if (QR.nodes) {
         QR.nodes.el.hidden = false;
         QR.unhide();
-        QR.captcha.nodes.input.click();
+        if (QR.captcha.isEnabled && Conf['Auto-load Captcha']) {
+          QR.captcha.setup();
+        }
         return;
       }
       try {
@@ -5491,7 +5493,9 @@
     },
     focusin: function() {
       $.addClass(QR.nodes.el, 'has-focus');
-      return QR.captcha.nodes.input.click();
+      if (QR.captcha.isEnabled && Conf['Auto-load Captcha']) {
+        return QR.captcha.setup();
+      }
     },
     focusout: function() {
       return $.queueTask(function() {
@@ -5528,6 +5532,7 @@
       }
       if (QR.captcha.isEnabled && /captcha|verification/i.test(el.textContent)) {
         QR.captcha.nodes.input.focus();
+        QR.captcha.setup();
         if (Conf['Captcha Warning Notifications'] && !d.hidden) {
           QR.notify(el);
         } else {
@@ -6140,9 +6145,6 @@
       input.value = '';
       input.placeholder = 'Focus to load reCAPTCHA';
       $.on(input, 'focus', this.setup);
-      if (Conf['Auto-load Captcha']) {
-        $.on(input, 'click', this.setup);
-      }
       this.setupObserver = new MutationObserver(this.afterSetup);
       return this.setupObserver.observe($.id('captchaContainer'), {
         childList: true
@@ -6516,6 +6518,9 @@
         $.rmClass(QR.nodes.el, 'dump');
       } else if (this === QR.selected) {
         (QR.posts[index - 1] || QR.posts[index + 1]).select();
+        if (QR.captcha.isEnabled) {
+          QR.captcha.setup();
+        }
       }
       QR.posts.splice(index, 1);
       return QR.status();

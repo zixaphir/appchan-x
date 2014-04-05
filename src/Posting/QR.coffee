@@ -90,7 +90,8 @@ QR =
     if QR.nodes
       QR.nodes.el.hidden = false
       QR.unhide()
-      QR.captcha.nodes.input.click()
+      if QR.captcha.isEnabled and Conf['Auto-load Captcha']
+        QR.captcha.setup()
 
       return
     try
@@ -119,7 +120,8 @@ QR =
     QR.status()
   focusin: ->
     $.addClass QR.nodes.el, 'has-focus'
-    QR.captcha.nodes.input.click()
+    if QR.captcha.isEnabled and Conf['Auto-load Captcha']
+      QR.captcha.setup()
   focusout: ->
     <% if (type === 'crx') { %>
     $.rmClass QR.nodes.el, 'has-focus'
@@ -151,6 +153,7 @@ QR =
     if QR.captcha.isEnabled and /captcha|verification/i.test el.textContent
       # Focus the captcha input on captcha error.
       QR.captcha.nodes.input.focus()
+      QR.captcha.setup()
       if Conf['Captcha Warning Notifications'] and !d.hidden
         QR.notify el
       else
