@@ -1,3 +1,12 @@
+### v1.3.10 
+*2014-04-05*
+
+**MayhemYDG**:
+- Add webm support
+
+**Zixaphir/seaweedchan**:
+- More captcha fixes
+
 ### v1.3.9 
 *2014-04-03*
 
