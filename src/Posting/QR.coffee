@@ -419,7 +419,7 @@ QR =
       err = 'No file selected.'
     else if post.file and thread.fileLimit
       err = 'Max limit of image replies has been reached.'
-    else if !post.file and m = post.com.match /pic(ture)? related/i
+    else if !dismiss and !post.file and m = post.com.match /pic(ture)? related/i
       err = $.el 'span',
         innerHTML: """
         No file selected despite '#{m[0]}' in your post. <button>Dismiss</button>
@@ -429,8 +429,6 @@ QR =
     else for hook in QR.preSubmitHooks
       if err = hook post, thread
         break
-
-    err = false if dismiss
 
     if QR.captcha.isEnabled and !err
       {challenge, response} = QR.captcha.getOne()
