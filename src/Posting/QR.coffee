@@ -419,7 +419,7 @@ QR =
       err = 'No file selected.'
     else if post.file and thread.fileLimit
       err = 'Max limit of image replies has been reached.'
-    else if !dismiss and !post.file and m = post.com.match /pic(ture)? related/i
+    else if !dismiss and !post.file and m = post.com.match /pic(ture)? (un)?related/i
       err = $.el 'span',
         innerHTML: """
         No file selected despite '#{m[0]}' in your post. <button>Dismiss</button>
