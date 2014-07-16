@@ -1,3 +1,12 @@
+### 3.20.15 - *2014-06-20*
+
+- Compatibility fixes for Greasemonkey v2.
+
+### 3.20.14 - *2014-06-13*
+
+- The QR won't duplicate single-word captchas anymore if you've input numbers only (like a street address).
+- Removed the `Download Link` feature on Chrome/Opera as it is not working as intended anymore.
+
 ### 3.20.13 - *2014-05-09*
 
 - [Security fix](https://github.com/MayhemYDG/4chan-x/issues/1634).

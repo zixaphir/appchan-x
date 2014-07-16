@@ -30,7 +30,7 @@ Config =
       'Report Link':                  [true,  'Add a report link to the menu.']
       'Post Hiding Link':             [true,  'Add a link to hide threads and replies.']
       'Delete Link':                  [true,  'Add post and image deletion links to the menu.']
-      <% if (type === 'crx') { %>
+      <% if (false) { %>
       'Download Link':                [true,  'Add a download with original filename link to the menu.']
       <% } %>
       'Archive Link':                 [true,  'Add an archive link to the menu.']
@@ -53,7 +53,6 @@ Config =
       <% if (type === 'userscript') { %>
       'Remember QR Size':             [false, 'Remember the size of the Quick reply.']
       <% } %>
-      'Remember Subject':             [false, 'Remember the subject field, instead of resetting after posting.']
       'Remember Spoiler':             [false, 'Remember the spoiler state, instead of resetting after posting.']
       'Hide Original Post Form':      [true,  'Hide the normal post form.']
       'Cooldown':                     [true,  'Indicate the remaining time before posting again.']

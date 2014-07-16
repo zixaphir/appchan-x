@@ -29,11 +29,6 @@ QR =
       QR.nodes.com.focus()
     Header.addShortcut sc, 2
 
-    $.on d, 'QRGetSelectedPost', ({detail: cb}) ->
-      cb QR.selected
-    $.on d, 'QRAddPreSubmitHook', ({detail: cb}) ->
-      QR.preSubmitHooks.push cb
-
     <% if (type === 'crx') { %>
     $.on d, 'paste',              QR.paste
     <% } %>
@@ -386,7 +381,6 @@ QR =
     # Use it to extend the QR's functionalities, or for XTRM RICE.
     $.event 'QRDialogCreation', null, dialog
 
-  preSubmitHooks: []
   submit: (e, dismiss) ->
     e?.preventDefault()
 
@@ -426,9 +420,6 @@ QR =
         """
       $.on ($ 'button', err), 'click', ->
         QR.submit null, true
-    else for hook in QR.preSubmitHooks
-      if err = hook post, thread
-        break
 
     if QR.captcha.isEnabled and !err
       {challenge, response} = QR.captcha.getOne()
@@ -575,11 +566,11 @@ QR =
 
     # Post/upload confirmed as successful.
     $.event 'QRPostSuccessful', {
-      board: g.BOARD
+      boardID: g.BOARD.ID
       threadID
       postID
     }
-    $.event 'QRPostSuccessful_', {threadID, postID}
+    $.event 'QRPostSuccessful_', {boardID: g.BOARD.ID, threadID, postID}
 
     # Enable auto-posting if we have stuff left to post, disable it otherwise.
     postsCount = QR.posts.length - 1
