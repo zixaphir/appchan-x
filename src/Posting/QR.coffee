@@ -381,7 +381,7 @@ QR =
     # Use it to extend the QR's functionalities, or for XTRM RICE.
     $.event 'QRDialogCreation', null, dialog
 
-  submit: (e) ->
+  submit: (e, dismiss) ->
     e?.preventDefault()
 
     if QR.req
@@ -413,6 +413,13 @@ QR =
       err = 'No file selected.'
     else if post.file and thread.fileLimit
       err = 'Max limit of image replies has been reached.'
+    else if !dismiss and !post.file and m = post.com.match /pic(ture)? (un)?related/i
+      err = $.el 'span',
+        innerHTML: """
+        No file selected despite '#{m[0]}' in your post. <button>Dismiss</button>
+        """
+      $.on ($ 'button', err), 'click', ->
+        QR.submit null, true
 
     if QR.captcha.isEnabled and !err
       {challenge, response} = QR.captcha.getOne()
