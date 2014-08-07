@@ -68,11 +68,12 @@ QR.captcha =
       response = "#{response} #{response}"
     {challenge, response}
   load: ->
-    return unless @nodes.challenge.firstChild
-    # -1 minute to give upload some time.
-    challenge = @nodes.challenge.firstChild.value
-    @nodes.img.alt = challenge
-    @nodes.img.src = "//www.google.com/recaptcha/api/image?c=#{challenge}"
+    return unless challenge_image = $.id 'recaptcha_challenge_image'
+    # Copy attributes from the real reCaptcha image. This avoids making double
+    # the number of image requests if the challenge url query string differs
+    # in inconsequential ways that nonethless trigger a new request.
+    @nodes.img.alt = challenge_image.alt;
+    @nodes.img.src = challenge_image.src;
     @nodes.input.value = null
   reload: (focus) ->
     # the 't' argument prevents the input from being focused
