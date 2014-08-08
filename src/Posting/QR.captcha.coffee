@@ -68,12 +68,13 @@ QR.captcha =
       response = "#{response} #{response}"
     {challenge, response}
   load: ->
+    return unless challenge = @nodes.challenge.firstChild
     return unless challenge_image = $.id 'recaptcha_challenge_image'
+    @nodes.img.alt = challenge.value
     # Copy attributes from the real reCaptcha image. This avoids making double
     # the number of image requests if the challenge url query string differs
     # in inconsequential ways that nonethless trigger a new request.
-    @nodes.img.alt = challenge_image.alt;
-    @nodes.img.src = challenge_image.src;
+    @nodes.img.src = challenge_image.src
     @nodes.input.value = null
   reload: (focus) ->
     # the 't' argument prevents the input from being focused
