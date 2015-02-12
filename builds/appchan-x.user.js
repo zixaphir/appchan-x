@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.11 - 2015-10-23
+* appchan x - Version 2.10.11 - 2015-10-28
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -3541,7 +3541,7 @@
         size *= 1024;
       }
       this.file.sizeInBytes = size;
-      this.file.thumbURL = "" + location.protocol + "//t.4cdn.org/" + this.board + "/" + (this.file.URL.match(/(\d+)\./)[1]) + "s.jpg";
+      this.file.thumbURL = "" + location.protocol + "//i.4cdn.org/" + this.board + "/" + (this.file.URL.match(/(\d+)\./)[1]) + "s.jpg";
       this.file.isImage = /(jpg|png|gif)$/i.test(this.file.URL);
       this.file.isVideo = /webm$/i.test(this.file.URL);
       nameNode = $('a', fileText);
@@ -6106,13 +6106,6 @@
         return filename;
       }
     },
-    thumbRotate: (function() {
-      var t;
-      t = 0;
-      return function() {
-        return t = (t ? 0 : 1);
-      };
-    })(),
     sameThread: function(boardID, threadID) {
       return g.VIEW === 'thread' && g.BOARD.ID === boardID && g.THREADID === +threadID;
     },
@@ -6170,7 +6163,7 @@
           width: data.w,
           MD5: data.md5,
           size: data.fsize,
-          turl: "//" + (Build.thumbRotate()) + ".t.4cdn.org/" + boardID + "/" + data.tim + "s.jpg",
+          turl: "//i.4cdn.org/" + boardID + "/" + data.tim + "s.jpg",
           theight: data.tn_h,
           twidth: data.tn_w,
           isSpoiler: !!data.spoiler,
@@ -6795,7 +6788,7 @@
           width: data.media.media_w,
           MD5: data.media.media_hash,
           size: data.media.media_size,
-          turl: data.media.thumb_link || ("//t.4cdn.org/" + boardID + "/" + data.media.preview_orig),
+          turl: data.media.thumb_link || ("//i.4cdn.org/" + boardID + "/" + data.media.preview_orig),
           theight: data.media.preview_h,
           twidth: data.media.preview_w,
           isSpoiler: data.media.spoiler === '1'
