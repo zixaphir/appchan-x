@@ -78,10 +78,17 @@
     Lines starting with a <code>#</code> will be ignored.
   </p>
   <ul>You can use these settings with each item, separate them with semicolons:
-    <li>Possible items are: <code>name</code>, <code>options</code> (or equivalently <code>email</code>), <code>subject</code> and <code>password</code>.</li>
-    <li>Wrap values of items with quotes, like this: <code>options:"sage"</code>.</li>
+    <li>Possible fields are: <code>name</code>, <code>options</code> (or equivalently <code>email</code>), <code>subject</code> and <code>password</code>.</li>
+    <li>Wrap values of fields with quotes, like this: <code>options:"sage"</code>.</li>
     <li>Force values as defaults with the <code>always</code> keyword, for example: <code>options:"sage";always</code>.</li>
-    <li>Select specific boards for an item, separated with commas, for example: <code>options:"sage";boards:jp;always</code>.</li>
+    <li>Possible match fields:
+      <dl>
+        <dt><code>threads:/regex/,string,...</code></dt>
+        <dd>Match on thread subject.  Accepts a list of regular expressions or strings, only one has to match to activate the persona (think OR logic). Great for matching /vg/ generals.</dd>
+        <dt><code>boards:a,b,...</code></dt>
+        <dd>Make your persona board-specific.  Matches board IDs <em>without</em> slashes, and only one has to match to activate the persona.</dd>
+      </dl>
+    </li>
   </ul>
 </fieldset>
 

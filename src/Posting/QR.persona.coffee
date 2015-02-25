@@ -19,11 +19,49 @@ QR.persona =
     return unless match = item.match /(name|options|email|subject|password):"(.*)"/i
     [match, type, val]  = match
 
+    thread = g.threads["#{g.BOARD}.#{g.THREADID}"]
+
     # Don't mix up item settings with val.
     item = item.replace match, ''
 
     boards = item.match(/boards:([^;]+)/i)?[1].toLowerCase() or 'global'
     return if boards isnt 'global' and g.BOARD.ID not in boards.split ','
+
+    # Thread-specific rules (for anonymous shitposting)
+    # Matches on subject
+    threads = item.match(/threads:([^;]+)/i)?[1] or 'any'
+    if threads isnt 'any' and g.VIEW is 'thread'
+      #console.log("threads: directive found: #{threads}")
+      #console.log(thread)
+      found = false
+      threadRegex = null
+      for origthreadRegex in threads.split ','
+        if origthreadRegex[0] == '/'
+          try
+            # Please, don't write silly regular expressions.
+            threadRegex = RegExp origthreadRegex
+          catch err
+            # I warned you, bro.
+            new Notice 'warning', [
+              $.tn "Invalid regular expression filter: " + origthreadRegex,
+              $.el 'br'
+              $.tn err.message
+            ], 60
+            continue
+          if threadRegex.test thread.OP.info.subject
+            found = true
+            break
+            #console.log("Found regex #{origthreadRegex} in #{thread.OP.info.subject}!")
+          else
+            #console.log("Did not find regex #{origthreadRegex} in #{thread.OP.info.subject}.")
+        else
+          if origthreadRegex in thread.OP.info.subject
+            found = true
+            break
+            #console.log("Found string #{origthreadRegex} in #{thread.OP.info.subject}!")
+          else
+            #console.log("Did not find string #{origthreadRegex} in #{thread.OP.info.subject}.")
+      return if not found
 
 
     if type is 'password'
