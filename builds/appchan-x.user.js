@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.4 - 2015-01-27
+* appchan x - Version 2.10.4 - 2015-07-02
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -9791,7 +9791,11 @@
       }
       max = QR.nodes.fileInput.max;
       if (/^video\//.test(file.type)) {
-        max = Math.min(max, QR.max_size_video);
+        if (g.BOARD.ID === 'wsg' || g.BOARD.ID === 'gif') {
+          max = Math.min(max, QR.max_size_video_alt);
+        } else {
+          max = Math.min(max, QR.max_size_video);
+        }
       }
       if (file.size > max) {
         QR.error("" + file.name + ": File too large (file: " + ($.bytesToString(file.size)) + ", max: " + ($.bytesToString(max)) + ").");
@@ -9891,6 +9895,7 @@
       QR.max_height = +(match_max != null ? match_max[2] : void 0) || 10000;
       nodes.fileInput.max = $('input[name=MAX_FILE_SIZE]').value;
       QR.max_size_video = 3145728;
+      QR.max_size_video_alt = 4194304;
       QR.max_width_video = QR.max_height_video = 2048;
       QR.max_duration_video = 120;
       if (Conf['Show New Thread Option in Threads']) {
@@ -10510,7 +10515,7 @@
       });
     },
     parseItem: function(item, types) {
-      var boards, match, type, val, _ref, _ref1, _ref2;
+      var boards, err, found, match, origthreadRegex, thread, threadRegex, threads, type, val, _i, _len, _ref, _ref1, _ref2, _ref3, _ref4;
       if (item[0] === '#') {
         return;
       }
@@ -10518,10 +10523,45 @@
         return;
       }
       _ref = match, match = _ref[0], type = _ref[1], val = _ref[2];
+      thread = g.threads["" + g.BOARD + "." + g.THREADID];
       item = item.replace(match, '');
       boards = ((_ref1 = item.match(/boards:([^;]+)/i)) != null ? _ref1[1].toLowerCase() : void 0) || 'global';
       if (boards !== 'global' && (_ref2 = g.BOARD.ID, __indexOf.call(boards.split(','), _ref2) < 0)) {
         return;
+      }
+      threads = ((_ref3 = item.match(/threads:([^;]+)/i)) != null ? _ref3[1] : void 0) || 'any';
+      if (threads !== 'any' && g.VIEW === 'thread') {
+        found = false;
+        threadRegex = null;
+        _ref4 = threads.split(',');
+        for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
+          origthreadRegex = _ref4[_i];
+          if (origthreadRegex[0] === '/') {
+            try {
+              threadRegex = RegExp(origthreadRegex);
+            } catch (_error) {
+              err = _error;
+              new Notice('warning', [$.tn("Invalid regular expression filter: " + origthreadRegex, $.el('br')), $.tn(err.message)], 60);
+              continue;
+            }
+            if (threadRegex.test(thread.OP.info.subject)) {
+              found = true;
+              break;
+            } else {
+
+            }
+          } else {
+            if (__indexOf.call(thread.OP.info.subject, origthreadRegex) >= 0) {
+              found = true;
+              break;
+            } else {
+
+            }
+          }
+        }
+        if (!found) {
+          return;
+        }
       }
       if (type === 'password') {
         QR.persona.pwd = val;
@@ -19245,7 +19285,7 @@
     advanced: function(section) {
       var archBoards, boardID, boardOptions, boardSelect, boards, customCSS, files, i, input, inputs, interval, item, items, name, o, row, rows, software, ta, table, warning, withCredentials, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
       $.extend(section, {
-        innerHTML: "<fieldset><legend>Archiver</legend><div class=\"warning\" data-feature='404 Redirect'><code>404 Redirect</code> is disabled.</div><div><select id='archive-board-select'></select></div><table id='archive-table'><thead><th>Thread redirection</th><th>Post fetching</th><th>File redirection</th></thead><tbody></tbody></table><span class=note>Disabled selections indicate that only one archive is available for that board and redirection type.</span></fieldset><fieldset><legend>Custom Board Navigation</legend><div><textarea name=boardnav class=field spellcheck=false></textarea></div><span class=note>New lines will be converted into spaces.</span><br><br><div class=note>In the following examples for /g/, <code>g</code> can be changed to a different board ID (<code>a</code>, <code>b</code>, etc...), the current board (<code>current</code>), or the Twitter link (<code>@</code>).</div><div>Board link: <code>g</code></div><div>Archive link: <code>g-archive</code></div><div>Internal archive link: <code>g-expired</code></div><div>Title link: <code>g-title</code></div><div>Board link (Replace with title when on that board): <code>g-replace</code></div><div>Full text link: <code>g-full</code></div><div>Custom text link: <code>g-text:\"Install Gentoo\"</code></div><div>Index-only link: <code>g-index</code></div><div>Catalog-only link: <code>g-catalog</code></div><div>External link: <code>external-text:\"Google\",\"http://www.google.com\"</code></div><div>Index mode: <code>g-mode:\"type\"</code> where type is <code>paged</code>, <code>all threads</code> or <code>catalog</code></div><div>Index sort: <code>g-sort:\"type\"</code> where type is <code>bump order</code>, <code>last reply</code>, <code>creation date</code>, <code>reply count</code> or <code>file count</code></div<div>Combinations are possible: <code>g-index-text:\"Technology Index\"</code></div><div>Full board list toggle: <code>toggle-all</code></div><br><div class=note><code>[ toggle-all ] [current-title] [g-title / a-title / jp-title] [x / wsg / h] [t-text:\"Piracy\"]</code><br>will give you<br><code>[ + ] [Technology] [Technology / Anime & Manga / Otaku Culture] [x / wsg / h] [Piracy]</code><br>if you are on /g/.</div></fieldset><fieldset><legend>Time Formatting <span class=warning data-feature='Time Formatting'>is disabled.</span></legend><div><input name=time class=field spellcheck=false>: <span class=time-preview></span></div><div>Supported <a href=//en.wikipedia.org/wiki/Date_%28Unix%29#Formatting>format specifiers</a>:</div><div>Day: <code>%a</code>, <code>%A</code>, <code>%d</code>, <code>%e</code></div><div>Month: <code>%m</code>, <code>%b</code>, <code>%B</code></div><div>Year: <code>%y</code>, <code>%Y</code></div><div>Hour: <code>%k</code>, <code>%H</code>, <code>%l</code>, <code>%I</code>, <code>%p</code>, <code>%P</code></div><div>Minute: <code>%M</code></div><div>Second: <code>%S</code></div></fieldset><fieldset><legend>Quote Backlinks formatting <span class=warning data-feature='Quote Backlinks'>is disabled.</span></legend><div><input name=backlink class=field spellcheck=false>: <span class=backlink-preview></span></div></fieldset><fieldset><legend>File Info Formatting <span class=warning data-feature='File Info Formatting'>is disabled.</span></legend><div><input name=fileInfo class=field spellcheck=false>: <span class='file-info file-info-preview'></span></div><div>Link: <code>%l</code> (truncated), <code>%L</code> (untruncated), <code>%T</code> (Unix timestamp)</div><div>Original file name: <code>%n</code> (truncated), <code>%N</code> (untruncated), <code>%t</code> (Unix timestamp)</div><div>Spoiler indicator: <code>%p</code></div><div>Size: <code>%B</code> (Bytes), <code>%K</code> (KB), <code>%M</code> (MB), <code>%s</code> (4chan default)</div><div>Resolution: <code>%r</code> (Displays 'PDF' for PDF files)</div></fieldset><fieldset><legend>Quick Reply Personas</legend><textarea class=\"personafield field\" name=\"QR.personas\" spellcheck=\"false\"></textarea><p>One item per line.<br>Items will be added in the relevant input's auto-completion list.<br>Password items will always be used, since there is no password input.<br>Lines starting with a <code>#</code> will be ignored.</p><ul>You can use these settings with each item, separate them with semicolons:<li>Possible items are: <code>name</code>, <code>options</code> (or equivalently <code>email</code>), <code>subject</code> and <code>password</code>.</li><li>Wrap values of items with quotes, like this: <code>options:\"sage\"</code>.</li><li>Force values as defaults with the <code>always</code> keyword, for example: <code>options:\"sage\";always</code>.</li><li>Select specific boards for an item, separated with commas, for example: <code>options:\"sage\";boards:jp;always</code>.</li></ul></fieldset><fieldset><legend>Unread Favicon <span class=warning data-feature='Unread Favicon'>is disabled.</span></legend><select name=favicon><option value=ferongr>ferongr</option><option value=xat->xat-</option><option value=4chanJS>4chanJS</option><option value=Mayhem>Mayhem</option><option value=Original>Original</option><option value=Metro>Metro</option></select><span id=favicon-preview><img src=\"data:image/gif;base64,R0lGODlhEAAQAPAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D\"><img src=\"data:image/gif;base64,R0lGODlhEAAQAPAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D\"><img src=\"data:image/gif;base64,R0lGODlhEAAQAPAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D\"><img src=\"data:image/gif;base64,R0lGODlhEAAQAPAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D\"></span></fieldset><fieldset><legend>Thread Updater <span class=warning data-feature='Thread Updater'>is disabled.</span></legend><div>Interval: <input type=\"number\" name=\"Interval\" class=\"field\" min=\"1\"> seconds</div></fieldset><fieldset><legend><label><input type=checkbox name='Custom CSS'> Custom CSS</label></legend><button id=apply-css>Apply CSS</button><textarea name=usercss class=field spellcheck=false></textarea></fieldset>"
+        innerHTML: "<fieldset><legend>Archiver</legend><div class=\"warning\" data-feature='404 Redirect'><code>404 Redirect</code> is disabled.</div><div><select id='archive-board-select'></select></div><table id='archive-table'><thead><th>Thread redirection</th><th>Post fetching</th><th>File redirection</th></thead><tbody></tbody></table><span class=note>Disabled selections indicate that only one archive is available for that board and redirection type.</span></fieldset><fieldset><legend>Custom Board Navigation</legend><div><textarea name=boardnav class=field spellcheck=false></textarea></div><span class=note>New lines will be converted into spaces.</span><br><br><div class=note>In the following examples for /g/, <code>g</code> can be changed to a different board ID (<code>a</code>, <code>b</code>, etc...), the current board (<code>current</code>), or the Twitter link (<code>@</code>).</div><div>Board link: <code>g</code></div><div>Archive link: <code>g-archive</code></div><div>Internal archive link: <code>g-expired</code></div><div>Title link: <code>g-title</code></div><div>Board link (Replace with title when on that board): <code>g-replace</code></div><div>Full text link: <code>g-full</code></div><div>Custom text link: <code>g-text:\"Install Gentoo\"</code></div><div>Index-only link: <code>g-index</code></div><div>Catalog-only link: <code>g-catalog</code></div><div>External link: <code>external-text:\"Google\",\"http://www.google.com\"</code></div><div>Index mode: <code>g-mode:\"type\"</code> where type is <code>paged</code>, <code>all threads</code> or <code>catalog</code></div><div>Index sort: <code>g-sort:\"type\"</code> where type is <code>bump order</code>, <code>last reply</code>, <code>creation date</code>, <code>reply count</code> or <code>file count</code></div<div>Combinations are possible: <code>g-index-text:\"Technology Index\"</code></div><div>Full board list toggle: <code>toggle-all</code></div><br><div class=note><code>[ toggle-all ] [current-title] [g-title / a-title / jp-title] [x / wsg / h] [t-text:\"Piracy\"]</code><br>will give you<br><code>[ + ] [Technology] [Technology / Anime & Manga / Otaku Culture] [x / wsg / h] [Piracy]</code><br>if you are on /g/.</div></fieldset><fieldset><legend>Time Formatting <span class=warning data-feature='Time Formatting'>is disabled.</span></legend><div><input name=time class=field spellcheck=false>: <span class=time-preview></span></div><div>Supported <a href=//en.wikipedia.org/wiki/Date_%28Unix%29#Formatting>format specifiers</a>:</div><div>Day: <code>%a</code>, <code>%A</code>, <code>%d</code>, <code>%e</code></div><div>Month: <code>%m</code>, <code>%b</code>, <code>%B</code></div><div>Year: <code>%y</code>, <code>%Y</code></div><div>Hour: <code>%k</code>, <code>%H</code>, <code>%l</code>, <code>%I</code>, <code>%p</code>, <code>%P</code></div><div>Minute: <code>%M</code></div><div>Second: <code>%S</code></div></fieldset><fieldset><legend>Quote Backlinks formatting <span class=warning data-feature='Quote Backlinks'>is disabled.</span></legend><div><input name=backlink class=field spellcheck=false>: <span class=backlink-preview></span></div></fieldset><fieldset><legend>File Info Formatting <span class=warning data-feature='File Info Formatting'>is disabled.</span></legend><div><input name=fileInfo class=field spellcheck=false>: <span class='file-info file-info-preview'></span></div><div>Link: <code>%l</code> (truncated), <code>%L</code> (untruncated), <code>%T</code> (Unix timestamp)</div><div>Original file name: <code>%n</code> (truncated), <code>%N</code> (untruncated), <code>%t</code> (Unix timestamp)</div><div>Spoiler indicator: <code>%p</code></div><div>Size: <code>%B</code> (Bytes), <code>%K</code> (KB), <code>%M</code> (MB), <code>%s</code> (4chan default)</div><div>Resolution: <code>%r</code> (Displays 'PDF' for PDF files)</div></fieldset><fieldset><legend>Quick Reply Personas</legend><textarea class=\"personafield field\" name=\"QR.personas\" spellcheck=\"false\"></textarea><p>One item per line.<br>Items will be added in the relevant input's auto-completion list.<br>Password items will always be used, since there is no password input.<br>Lines starting with a <code>#</code> will be ignored.</p><ul>You can use these settings with each item, separate them with semicolons:<li>Possible fields are: <code>name</code>, <code>options</code> (or equivalently <code>email</code>), <code>subject</code> and <code>password</code>.</li><li>Wrap values of fields with quotes, like this: <code>options:\"sage\"</code>.</li><li>Force values as defaults with the <code>always</code> keyword, for example: <code>options:\"sage\";always</code>.</li><li>Possible match fields:<dl><dt><code>threads:/regex/,string,...</code></dt><dd>Match on thread subject.  Accepts a list of regular expressions or strings, only one has to match to activate the persona (think OR logic). Great for matching /vg/ generals.</dd><dt><code>boards:a,b,...</code></dt><dd>Make your persona board-specific.  Matches board IDs <em>without</em> slashes, and only one has to match to activate the persona.</dd></dl></li></ul></fieldset><fieldset><legend>Unread Favicon <span class=warning data-feature='Unread Favicon'>is disabled.</span></legend><select name=favicon><option value=ferongr>ferongr</option><option value=xat->xat-</option><option value=4chanJS>4chanJS</option><option value=Mayhem>Mayhem</option><option value=Original>Original</option><option value=Metro>Metro</option></select><span id=favicon-preview><img src=\"data:image/gif;base64,R0lGODlhEAAQAPAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D\"><img src=\"data:image/gif;base64,R0lGODlhEAAQAPAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D\"><img src=\"data:image/gif;base64,R0lGODlhEAAQAPAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D\"><img src=\"data:image/gif;base64,R0lGODlhEAAQAPAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAIOhI%2Bpy%2B0Po5y02ouzPgUAOw%3D%3D\"></span></fieldset><fieldset><legend>Thread Updater <span class=warning data-feature='Thread Updater'>is disabled.</span></legend><div>Interval: <input type=\"number\" name=\"Interval\" class=\"field\" min=\"1\"> seconds</div></fieldset><fieldset><legend><label><input type=checkbox name='Custom CSS'> Custom CSS</label></legend><button id=apply-css>Apply CSS</button><textarea name=usercss class=field spellcheck=false></textarea></fieldset>"
       });
       _ref = $$('.warning', section);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

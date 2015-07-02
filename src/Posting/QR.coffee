@@ -340,7 +340,11 @@ QR =
       QR.error "#{file.name}: Unsupported file type."
       return
     max = QR.nodes.fileInput.max
-    max = Math.min(max, QR.max_size_video) if /^video\//.test file.type
+    if /^video\//.test file.type
+      if g.BOARD.ID is 'wsg' or g.BOARD.ID is 'gif'
+      	max = Math.min(max, QR.max_size_video_alt)
+      else
+      	max = Math.min(max, QR.max_size_video)
     if file.size > max
       QR.error "#{file.name}: File too large (file: #{$.bytesToString file.size}, max: #{$.bytesToString max})."
       return
@@ -428,6 +432,7 @@ QR =
     nodes.fileInput.max = $('input[name=MAX_FILE_SIZE]').value
 
     QR.max_size_video = 3145728
+    QR.max_size_video_alt = 4194304
     QR.max_width_video = QR.max_height_video = 2048
     QR.max_duration_video = 120
 
