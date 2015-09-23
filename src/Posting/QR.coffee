@@ -435,6 +435,7 @@ QR =
     QR.max_size_video_alt = 4194304
     QR.max_width_video = QR.max_height_video = 2048
     QR.max_duration_video = 120
+    QR.max_duration_video_alt = 300
 
     if Conf['Show New Thread Option in Threads']
       $.addClass QR.nodes.el, 'show-new-thread-option'
