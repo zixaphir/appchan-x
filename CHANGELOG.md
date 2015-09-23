@@ -1,4 +1,10 @@
 ### v2.10.4 
+*2015-07-05*
+
+- Bugfixes.
+- Removed imcute.yt archiver (dead)
+
+### v2.10.4 
 *2015-01-20*
 
 - Bugfixes.
