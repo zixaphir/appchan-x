@@ -170,7 +170,7 @@ Header =
     if /^[^\w@]/.test t
       return $.tn t
 
-    text = '' 
+    text = ''
     url  = ''
     t = t.replace /-text:"([^"]+)"(?:,"([^"]+)")?/g, (m0, m1, m2) ->
       text = m1
@@ -196,9 +196,14 @@ Header =
 
     boardID = t.split('-')[0]
     boardID = g.BOARD.ID if boardID is 'current'
-    for a in as when a.textContent is boardID
-      a = a.cloneNode()
+    for b in as when b.textContent is boardID
+      a = b.cloneNode()
       break
+
+    # If the board is not in the passed board list, e.g., /qa/:
+    a or= $.el 'a',
+      href: "/#{boardID}/"
+      title: text or boardID
 
     if Conf['JSON Navigation']
       $.on a, 'click', Navigate.navigate
