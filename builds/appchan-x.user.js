@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.5 - 2015-09-24
+* appchan x - Version 2.10.5 - 2015-09-29
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -218,8 +218,6 @@
         'Unread Favicon': [true, 'Show a different favicon when there are unread posts.'],
         'Unread Line': [true, 'Show a line to distinguish read posts from unread ones.'],
         'Scroll to Last Read Post': [true, 'Scroll back to the last read post when reopening a thread.'],
-        'Thread Excerpt': [true, 'Show an excerpt of the thread in the tab title for threads in /f/.'],
-        'Remove Thread Excerpt': [false, 'Replace the excerpt of the thread in the tab title with the board title.'],
         'Thread Stats': [true, 'Display reply and image count.'],
         'IP Count in Stats': [true, 'Display the unique IP count in the thread stats.', 1],
         'Page Count in Stats': [true, 'Display the page count in the thread stats.', 1],
@@ -4588,7 +4586,7 @@
       });
     },
     mapCustomNavigation: function(t, as) {
-      var a, boardID, href, m, text, type, url, _i, _len;
+      var a, b, boardID, href, m, text, type, url, _i, _len;
       if (/^[^\w@]/.test(t)) {
         return $.tn(t);
       }
@@ -4624,13 +4622,17 @@
         boardID = g.BOARD.ID;
       }
       for (_i = 0, _len = as.length; _i < _len; _i++) {
-        a = as[_i];
-        if (!(a.textContent === boardID)) {
+        b = as[_i];
+        if (!(b.textContent === boardID)) {
           continue;
         }
-        a = a.cloneNode();
+        a = b.cloneNode();
         break;
       }
+      a || (a = $.el('a', {
+        href: "/" + boardID + "/",
+        title: text || boardID
+      }));
       if (Conf['JSON Navigation']) {
         $.on(a, 'click', Navigate.navigate);
       }
@@ -6500,7 +6502,7 @@
     threadExcerpt: function(thread) {
       var OP, excerpt, _ref;
       OP = thread.OP;
-      excerpt = ((_ref = OP.info.subject) != null ? _ref.trim() : void 0) || OP.info.comment.replace(/\n+/g, ' // ') || OP.info.nameBlock;
+      excerpt = ((_ref = OP.info.subject) != null ? _ref.trim() : void 0) || OP.info.comment.replace(/\n+/g, ' ') || OP.info.nameBlock;
       if (excerpt.length > 70) {
         excerpt = "" + excerpt.slice(0, 67) + "...";
       }
@@ -13708,7 +13710,7 @@
 
   ThreadExcerpt = {
     init: function() {
-      if ((g.BOARD.ID !== 'f' && g.BOARD.ID !== 'pol') || g.VIEW !== 'thread' || !Conf['Thread Excerpt'] || Conf['Remove Thread Excerpt']) {
+      if (g.VIEW !== 'thread') {
         return;
       }
       return Thread.callbacks.push({

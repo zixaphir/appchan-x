@@ -293,14 +293,6 @@ Config =
         true
         'Scroll back to the last read post when reopening a thread.'
       ]
-      'Thread Excerpt': [
-        true
-        'Show an excerpt of the thread in the tab title for threads in /f/.'
-      ]
-      'Remove Thread Excerpt': [
-        false
-        'Replace the excerpt of the thread in the tab title with the board title.'
-      ]
       'Thread Stats': [
         true
         'Display reply and image count.'
