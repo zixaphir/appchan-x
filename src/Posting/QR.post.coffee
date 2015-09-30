@@ -240,8 +240,12 @@ QR.post = class
         err.push "#{@file.name}: Video too small (video: #{videoHeight}x#{videoWidth}px, min: #{QR.min_height}x#{QR.min_width}px)"
       unless isFinite el.duration
         err.push "#{file.name}: Video lacks duration metadata (try remuxing)"
-      if duration > QR.max_duration_video
-        err.push "#{@file.name}: Video too long (video: #{duration}s, max: #{QR.max_duration_video}s)"
+      if g.BOARD.ID is 'wsg' or g.BOARD.ID is 'gif'
+        if duration > QR.max_duration_video_alt
+          err.push "#{@file.name}: Video too long (video: #{duration}s, max: #{QR.max_duration_video_alt}s)"
+      else
+        if duration > QR.max_duration_video
+          err.push "#{@file.name}: Video too long (video: #{duration}s, max: #{QR.max_duration_video}s)"
       <% if (type === 'userscript') { %>
       if el.mozHasAudio
         err.push "#{file.name}: Audio not allowed"

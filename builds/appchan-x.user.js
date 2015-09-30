@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.5 - 2015-07-05
+* appchan x - Version 2.10.5 - 2015-09-24
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -9898,6 +9898,7 @@
       QR.max_size_video_alt = 4194304;
       QR.max_width_video = QR.max_height_video = 2048;
       QR.max_duration_video = 120;
+      QR.max_duration_video_alt = 300;
       if (Conf['Show New Thread Option in Threads']) {
         $.addClass(QR.nodes.el, 'show-new-thread-option');
       }
@@ -10908,8 +10909,14 @@
         if (!isFinite(el.duration)) {
           err.push("" + file.name + ": Video lacks duration metadata (try remuxing)");
         }
-        if (duration > QR.max_duration_video) {
-          err.push("" + this.file.name + ": Video too long (video: " + duration + "s, max: " + QR.max_duration_video + "s)");
+        if (g.BOARD.ID === 'wsg' || g.BOARD.ID === 'gif') {
+          if (duration > QR.max_duration_video_alt) {
+            err.push("" + this.file.name + ": Video too long (video: " + duration + "s, max: " + QR.max_duration_video_alt + "s)");
+          }
+        } else {
+          if (duration > QR.max_duration_video) {
+            err.push("" + this.file.name + ": Video too long (video: " + duration + "s, max: " + QR.max_duration_video + "s)");
+          }
         }
         if (el.mozHasAudio) {
           err.push("" + file.name + ": Audio not allowed");
@@ -15374,7 +15381,7 @@
       }
       return Redirect.data = o;
     },
-    archives: [{"uid":0,"name":"Moe","domain":"archive.moe","http":false,"https":true,"software":"foolfuuka","boards":["a","biz","c","co","diy","gd","h","i","int","jp","k","m","mlp","out","po","r9k","s4s","sci","tg","tv","u","v","vg","vp","vr","wsg"],"files":["a","biz","c","co","diy","gd","h","i","jp","k","m","mlp","po","s4s","sci","tg","u","v","vg","vp","vr","wsg"]},{"uid":3,"name":"4plebs Archive","domain":"archive.4plebs.org","http":true,"https":true,"software":"foolfuuka","boards":["adv","f","hr","o","pol","s4s","tg","trv","tv","x"],"files":["adv","f","hr","o","pol","s4s","tg","trv","tv","x"]},{"uid":5,"name":"Love is Over","domain":"archive.loveisover.me","http":true,"https":true,"software":"foolfuuka","boards":["c","d","e","i","lgbt","t","u","w","wg"],"files":["c","d","e","i","lgbt","t","u","w","wg"]},{"uid":8,"name":"Rebecca Black Tech","domain":"archive.rebeccablacktech.com","http":false,"https":true,"software":"fuuka","boards":["cgl","g","mu","w"],"files":["cgl","g","mu","w"]},{"uid":10,"name":"warosu","domain":"warosu.org","http":false,"https":true,"software":"fuuka","boards":["3","biz","cgl","ck","diy","fa","g","ic","jp","lit","sci","tg","vr"],"files":["3","biz","cgl","ck","diy","fa","g","ic","jp","lit","sci","tg","vr"]},{"uid":15,"name":"fgts","domain":"fgts.jp","http":true,"https":true,"software":"foolfuuka","boards":["asp","cm","h","hc","hm","n","p","r","s","soc","y"],"files":["asp","cm","h","hc","hm","n","p","r","s","soc","y"]}],
+    archives: [{"uid":0,"name":"Moe","domain":"archive.moe","http":false,"https":true,"software":"foolfuuka","boards":["a","an","biz","c","co","diy","fit","gd","gif","h","i","int","jp","k","m","mlp","out","po","qa","r9k","s4s","sci","tg","tv","u","v","vg","vp","vr","wsg"],"files":["a","an","biz","c","co","diy","fit","gd","gif","h","i","int","jp","k","m","mlp","out","po","qa","r9k","s4s","sci","tg","u","v","vg","vp","vr","wsg"]},{"uid":3,"name":"4plebs Archive","domain":"archive.4plebs.org","http":true,"https":true,"software":"foolfuuka","boards":["adv","f","hr","o","pol","s4s","tg","trv","tv","x"],"files":["adv","f","hr","o","pol","s4s","tg","trv","tv","x"]},{"uid":4,"name":"Nyafuu Archive","domain":"archive.nyafuu.org","http":true,"https":true,"software":"foolfuuka","boards":["c","e","w","wg"],"files":["c","e","w","wg"]},{"uid":5,"name":"Love is Over","domain":"archive.loveisover.me","http":true,"https":true,"software":"foolfuuka","boards":["c","d","e","i","lgbt","t","u"],"files":["c","d","e","i","lgbt","t","u"]},{"uid":8,"name":"Rebecca Black Tech","domain":"archive.rebeccablacktech.com","http":false,"https":true,"software":"fuuka","boards":["cgl","g","mu","qa","w"],"files":["cgl","g","mu","qa","w"]},{"uid":10,"name":"warosu","domain":"warosu.org","http":false,"https":true,"software":"fuuka","boards":["3","biz","cgl","ck","diy","fa","g","ic","jp","lit","sci","tg","vr"],"files":["3","biz","cgl","ck","diy","fa","g","ic","jp","lit","sci","tg","vr"]},{"uid":15,"name":"fgts","domain":"fgts.jp","http":true,"https":true,"software":"foolfuuka","boards":["asp","b","cm","h","hc","hm","n","p","qa","r","s","soc","toy","y"],"files":["asp","cm","h","hc","hm","n","p","qa","r","s","soc","toy","y"]},{"uid":22,"name":"not4plebs","domain":"totally.not4plebs.org","http":true,"https":true,"software":"foolfuuka","boards":["sp"],"files":["sp"]},{"uid":23,"name":"archive.horse","domain":"4ch.archive.horse","http":false,"https":true,"software":"foolfuuka","boards":["mlp","qa"],"files":["mlp","qa"]},{"uid":24,"name":"fireden.net","domain":"boards.fireden.net","http":false,"https":true,"software":"foolfuuka","boards":["cm","ic","vg","y"],"files":["cm","ic","vg","y"]}],
     to: function(dest, data) {
       var archive;
       archive = (dest === 'search' || dest === 'board' ? Redirect.data.thread : Redirect.data[dest])[data.boardID];
