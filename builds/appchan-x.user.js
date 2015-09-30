@@ -363,7 +363,7 @@
         'Textarea Resize': ['vertical', 'Options to resize the post form\'s comment box.', ['both', 'horizontal', 'vertical', 'none']],
         'Tripcode Hider': [true, 'Intelligent name field hiding.'],
         'Images Overlap Post Form': [true, 'Images expand over the post form and sidebar content, usually used with "Expand images" set to "full".'],
-        'Captcha Filter': [true, 'Apply an SVG filter to the captcha to make it match your theme. WARNING: May cause invisible captchas.']
+        'Captcha Filter': [false, 'Apply an SVG filter to the captcha to make it match your theme. WARNING: May cause invisible captchas.']
       }
     },
     threadWatcher: {
