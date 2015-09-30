@@ -830,10 +830,12 @@ QR =
       window.location.origin + Build.path g.BOARD.ID, threadID, postID
 
     if URL
-      if Conf['Open Post in New Tab'] or postsCount
-        $.open URL
-      else
-        window.location = URL
+      setTimeout ->
+        if Conf['Open Post in New Tab'] or postsCount
+          $.open URL
+        else
+          window.location = URL
+      , 500
 
     QR.status()
 

@@ -10304,11 +10304,13 @@
       QR.cooldown.add(req.uploadEndTime, threadID, postID);
       URL = threadID === postID ? window.location.origin + Build.path(g.BOARD.ID, threadID) : g.VIEW === 'index' && !QR.cooldown.auto && Conf['Open Post in New Tab'] ? window.location.origin + Build.path(g.BOARD.ID, threadID, postID) : void 0;
       if (URL) {
-        if (Conf['Open Post in New Tab'] || postsCount) {
-          $.open(URL);
-        } else {
-          window.location = URL;
-        }
+        setTimeout(function() {
+          if (Conf['Open Post in New Tab'] || postsCount) {
+            return $.open(URL);
+          } else {
+            return window.location = URL;
+          }
+        }, 500);
       }
       return QR.status();
     },
