@@ -69,6 +69,9 @@ Style =
       item.disabled = true if item = $ item, d.head
 
     if g.VIEW is 'home'
+
+      $.asap (-> d.readyState is 'complete'), -> $('#disclaimer-dialog .container-close').click()
+
       for item in $$ '[rel="stylesheet"], style[type="text/css"]', d.head
         item.disabled = true
 
@@ -95,7 +98,7 @@ Style =
   silhouette: ([fg]) ->
     "0 0 0 0 #{fg.r} 0 0 0 0 #{fg.g} 0 0 0 0 #{fg.b}"
 
-  layout: 
+  layout:
     <%= importCSS('layout') %> + ' ' + <%= importCSS('font-awesome') %>
 
   dynamic: ->

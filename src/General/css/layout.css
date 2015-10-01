@@ -2877,8 +2877,22 @@ div[data-checked="false"] > .suboption-list {
 #preview-tooltip-nws,
 #preview-tooltip-ws,
 #ft .fill,
-.clear-bug {
+.clear-bug,
+#disclaimer-dialog_c {
   display: none;
+}
+.masked #disclaimer-dialog_c {
+  display: block;
+}
+#disclaimer-dialog {
+  position: fixed;
+  left: 50% !important;
+  top: 50% !important;
+  <%= transform %>: translate(-50%, -50%);
+  z-index: 999;
+}
+#disclaimer-dialog > div {
+  padding: 2px;
 }
 /* ExLinks */
 #exlinks-options-content {

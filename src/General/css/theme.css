@@ -140,6 +140,7 @@ textarea.field:focus {
 .has-file #qr-filename-container:focus #qr-extras-container {
   background: #{theme["Focused Input Background"]};
 }
+#disclaimer-dialog,
 #ft,
 #mouseover,
 #post-preview,
