@@ -67,6 +67,7 @@ class DataBoard
 
   forceSync: ->
     $.forceSync @key
+
   clean: ->
     $.forceSync @key
     for boardID, val of @data.boards
@@ -93,6 +94,7 @@ class DataBoard
     @sync?()
 
   disconnect: ->
+    Conf[@key] = @data
     $.desync @key
     delete @sync
     delete @data

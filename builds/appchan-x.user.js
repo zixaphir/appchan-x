@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.8 - 2015-10-02
+* appchan x - Version 2.10.8 - 2015-10-03
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -4044,6 +4044,7 @@
     };
 
     DataBoard.prototype.disconnect = function() {
+      Conf[this.key] = this.data;
       $.desync(this.key);
       delete this.sync;
       return delete this.data;
