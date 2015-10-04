@@ -2635,14 +2635,6 @@
     return fd;
   };
 
-  $.extend = function(object, properties) {
-    var key, val;
-    for (key in properties) {
-      val = properties[key];
-      object[key] = val;
-    }
-  };
-
   $.ajax = (function() {
     var lastModified;
     lastModified = {};
@@ -4062,14 +4054,15 @@
     };
 
     DataBoard.prototype.onSync = function(data) {
-      this.data = data || {
-        boards: {}
-      };
+      if (data) {
+        $.extend(this.data, data);
+      } else {
+        this.data.boards = {};
+      }
       return typeof this.sync === "function" ? this.sync() : void 0;
     };
 
     DataBoard.prototype.disconnect = function() {
-      Conf[this.key] = this.data;
       $.desync(this.key);
       delete this.sync;
       return delete this.data;

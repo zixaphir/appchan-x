@@ -36,11 +36,6 @@ $.formData = (form) ->
       fd.append key, val
   fd
 
-$.extend = (object, properties) ->
-  for key, val of properties
-    object[key] = val
-  return
-
 $.ajax = do ->
   # Status Code 304: Not modified
   # With the `If-Modified-Since` header we only receive the HTTP headers and no body for 304 responses.
