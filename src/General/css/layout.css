@@ -2142,13 +2142,16 @@ a:only-of-type > .remove {
 }
 #appchanx-settings {
   width: auto;
-  left: 15%;
-  right: 15%;
+  left: 0;
+  right: 0;
   top: 15%;
   bottom: 15%;
   position: fixed;
   z-index: 31;
   padding: .3em;
+  max-width: 70%;
+  min-width: 800px;
+  margin: auto;
 }
 .rounded-edges #appchanx-settings,
 .rounded-edges #appchanx-settings fieldset,
@@ -2226,6 +2229,8 @@ a:only-of-type > .remove {
 }
 .credits {
   float: right;
+  position: relative;
+  z-index: 1;
 }
 #appchanx-settings h3 {
   margin: 0;
