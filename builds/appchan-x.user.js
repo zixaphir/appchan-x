@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.8 - 2015-10-03
+* appchan x - Version 2.10.8 - 2015-10-06
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -13718,7 +13718,7 @@
       return d.title = Get.threadExcerpt(this);
     },
     disconnect: function() {
-      if (g.VIEW !== 'thread' || !Conf['Thread Excerpt']) {
+      if (g.VIEW !== 'thread') {
         return;
       }
       return Thread.callbacks.disconnect('Thread Excerpt');

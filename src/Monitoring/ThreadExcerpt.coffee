@@ -7,5 +7,5 @@ ThreadExcerpt =
       cb:   @node
   node: -> d.title = Get.threadExcerpt @
   disconnect: ->
-    return if g.VIEW isnt 'thread' or !Conf['Thread Excerpt']
+    return if g.VIEW isnt 'thread'
     Thread.callbacks.disconnect 'Thread Excerpt'
