@@ -90,10 +90,8 @@ class DataBoard
       type: 'head'
 
   onSync: (data) =>
-    if data
-      $.extend @data, data
-    else
-      @data.boards = {}
+    data or= boards: {}
+    $.extend @data, data
     @sync?()
 
   disconnect: ->
