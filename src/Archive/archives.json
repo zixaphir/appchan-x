@@ -51,16 +51,16 @@
   "https": true,
   "software": "foolfuuka",
   "boards": ["asp", "b", "cm", "h", "hc", "hm", "n", "p", "qa", "r", "s", "soc", "toy", "vp", "y"],
-  "files": ["asp", "cm", "h", "hc", "hm", "n", "p", "qa", "r", "s", "soc", "toy", "vp", "y"]
+  "files": ["asp", "b", "cm", "h", "hc", "hm", "n", "p", "qa", "r", "s", "soc", "toy", "vp", "y"]
 }, {
   "uid": 23,
   "name": "Desustorage",
   "domain": "desustorage.org",
-  "http": false,
+  "http": true,
   "https": true,
   "software": "foolfuuka",
-  "boards": ["a", "aco", "an", "c", "co", "d", "fit", "int", "k", "m", "mlp", "qa", "r9k", "tg", "wsg"],
-  "files": ["a", "aco", "an", "c", "co", "d", "fit", "int", "k", "m", "mlp", "qa", "r9k", "tg", "wsg"]
+  "boards": ["a", "aco", "an", "c", "co", "d", "fit", "int", "k", "m", "mlp", "qa", "r9k", "tg", "vr", "wsg"],
+  "files": ["a", "aco", "an", "c", "co", "d", "fit", "int", "k", "m", "mlp", "qa", "r9k", "tg", "vr", "wsg"]
 }, {
   "uid": 24,
   "name": "fireden.net",
@@ -73,12 +73,22 @@
   "search": []
 }, {
   "uid": 25,
-  "name": "b4k.co",
-  "domain": "ff.b4k.co",
+  "name": "arch.b4k.co",
+  "domain": "arch.b4k.co",
   "http": true,
   "https": true,
   "software": "foolfuuka",
-  "boards": ["g", "mlp", "qa", "v"],
+  "boards": ["g", "mlp", "v"],
   "files": [],
+  "search": []
+}, {
+  "uid": 26,
+  "name": "poweredby.moe",
+  "domain": "archive.poweredby.moe",
+  "http": true,
+  "https": true,
+  "software": "foolfuuka",
+  "boards": ["a", "c", "g", "jp"],
+  "files": ["a", "c", "jp"],
   "search": []
 }]
