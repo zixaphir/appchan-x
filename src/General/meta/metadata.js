@@ -23,7 +23,7 @@
 // @grant        GM_openInTab
 // @grant        GM_xmlhttpRequest
 // @run-at       document-start
-// @updateURL 	 <%= meta.repo %>raw/stable/builds/<%= meta.files.metajs %>
+// @updateURL    <%= meta.repo %>raw/stable/builds/<%= meta.files.metajs %>
 // @downloadURL  <%= meta.repo %>raw/stable/builds/<%= meta.files.userjs %>
 // @icon         data:image/png;base64,<%= grunt.file.read('src/General/img/icon48.png', {encoding: 'base64'}) %>
 // ==/UserScript==

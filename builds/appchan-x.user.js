@@ -22,13 +22,13 @@
 // @grant        GM_openInTab
 // @grant        GM_xmlhttpRequest
 // @run-at       document-start
-// @updateURL 	 https://github.com/zixaphir/appchan-x/raw/stable/builds/appchan-x.meta.js
+// @updateURL    https://github.com/zixaphir/appchan-x/raw/stable/builds/appchan-x.meta.js
 // @downloadURL  https://github.com/zixaphir/appchan-x/raw/stable/builds/appchan-x.user.js
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAElBMVEX///8EZgR8ulSk0oT///8EAgQ1A88mAAAAAXRSTlMAQObYZgAAAIpJREFUeF6t0sENwjAMhWF84N4H6gAYMUBkdQMYwfuvwmstEeD4kl892P0OaaWcpga2/K0SGII1HNBXARgu7veoY3ANd+esgMHZIz85u0EABrbms3pl/bkC1Tn5ihGOfQwqHeZ/FdYdirEMgCG2ZAQWDTL0m9FvjAhcvoGNAK2gZhGYYX9+ZgFm9gaiNmNkMENY4QAAAABJRU5ErkJggg==
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.11 - 2015-10-10
+* appchan x - Version 2.10.11 - 2015-10-11
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -15104,6 +15104,9 @@
       Unread.read();
       Unread.update();
       if (Conf['Scroll to Last Read Post']) {
+        if (d.hidden) {
+          $.one(d, 'visibilitychange', Unread.scroll);
+        }
         Unread.scroll();
       }
       $.on(d, 'scroll visibilitychange', Unread.read);

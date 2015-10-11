@@ -88,7 +88,10 @@ Unread =
     Unread.setLine true
     Unread.read()
     Unread.update()
-    Unread.scroll() if Conf['Scroll to Last Read Post']
+    if Conf['Scroll to Last Read Post']
+      if d.hidden # Unread.scroll doesn't seem to work in a background tab and I don't want to debug why.
+        $.one d, 'visibilitychange', Unread.scroll
+      Unread.scroll()
     $.on  d, 'scroll visibilitychange', Unread.read
     $.on  d, 'visibilitychange',        Unread.setLine if Conf['Unread Line']
 
