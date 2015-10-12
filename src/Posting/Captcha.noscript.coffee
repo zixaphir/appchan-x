@@ -1,10 +1,9 @@
 Captcha.noscript =
-  lifetime:  2 * $.MINUTE
-  iframeURL: '//www.google.com/recaptcha/api/fallback?k=<%= meta.recaptchaKey %>'
+  lifetime: 30 * $.MINUTE
 
   init: ->
     return if d.cookie.indexOf('pass_enabled=1') >= 0
-    return unless @isEnabled = !!$.id 'g-recaptcha'
+    return unless @isEnabled = !!$ '#g-recaptcha, #captchaContainerAlt'
 
     container = $.el 'div',
       className: 'captcha-img'
@@ -27,7 +26,7 @@ Captcha.noscript =
       token:     @save.bind @
       error:     @error.bind @
 
-    $.addClass QR.nodes.el, 'has-captcha'
+    $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1', 'noscript-captcha'
     $.after QR.nodes.com.parentNode, [container, input]
 
     @captchas = []
@@ -40,14 +39,17 @@ Captcha.noscript =
     @setup()
 
   initFrame: ->
-    conn = new Connection window.top, "#{location.protocol}//boards.4chan.org",
+    conn = new Connection window.parent, "#{location.protocol}//boards.4chan.org",
       response: (response) ->
-        $.id('response').value = response
-        $('.fbc-challenge > form').submit()
-    conn.send
-      token: $('.fbc-verification-token > textarea')?.value
-      error: $('.fbc-error')?.textContent
-    return unless img = $ '.fbc-payload > img'
+        $.id('recaptcha_response_field').value = response
+        # The form has a field named 'submit'
+        HTMLFormElement.prototype.submit.call $('form')
+    if location.hash is '#response'
+      conn.send
+        token: $('textarea')?.value
+        error: $('.recaptcha_input_area')?.textContent.replace(/:$/, '')
+    return unless img = $ 'img'
+    $('form').action = '#response'
     cb = ->
       canvas = $.el 'canvas'
       canvas.width  = img.width
@@ -60,6 +62,12 @@ Captcha.noscript =
       $.on img, 'load', cb
 
   timers: {}
+
+  iframeURL: ->
+    url = '//www.google.com/recaptcha/api/noscript?k=<%= meta.recaptchaKey %>'
+    if lang = Conf['captchaLanguage'].trim()
+      url += "&hl=#{encodeURIComponent lang}"
+    url
 
   cb:
     focus: -> QR.captcha.setup false, true
@@ -88,11 +96,11 @@ Captcha.noscript =
     if !@nodes.iframe
       @nodes.iframe = $.el 'iframe',
         id: 'qr-captcha-iframe'
-        src: @iframeURL
-      $.add d.body, @nodes.iframe
-      @conn.target = @nodes.iframe.contentWindow
-    else if !@occupied
-      @nodes.iframe.src = @iframeURL
+        src: @iframeURL()
+      $.add QR.nodes.el, @nodes.iframe
+      @conn.target = @nodes.iframe
+    else if !@occupied or force
+      @nodes.iframe.src = @iframeURL()
     @occupied = true
     @nodes.input.focus() if focus
 
@@ -109,12 +117,11 @@ Captcha.noscript =
 
   destroy: ->
     return unless @isEnabled
-    $.rm @nodes.img if @nodes.img
+    $.rm @nodes.img
     delete @nodes.img
-    $.rm @nodes.iframe if @nodes.iframe
+    $.rm @nodes.iframe
     delete @nodes.iframe
     delete @occupied
-    @unflag()
     @beforeSetup()
 
   sync: (captchas=[]) ->
@@ -126,7 +133,7 @@ Captcha.noscript =
     if captcha = @captchas.shift()
       @count()
       $.set 'captchas', @captchas
-      captcha.response
+      captcha
     else if /\S/.test @nodes.input.value
       (cb) =>
         @submitCB = cb
@@ -142,15 +149,17 @@ Captcha.noscript =
   save: (token) ->
     delete @occupied
     @nodes.input.value = ''
+    captcha =
+      challenge: token
+      response:  'manual_challenge'
+      timeout:   @timeout
     if @submitCB
-      @submitCB token
+      @submitCB captcha
       delete @submitCB
       if @needed() then @reload() else @destroy()
     else
       $.forceSync 'captchas'
-      @captchas.push
-        response: token
-        timeout:  @timeout
+      @captchas.push captcha
       @count()
       $.set 'captchas', @captchas
       @reload()
@@ -162,16 +171,6 @@ Captcha.noscript =
       @submitCB()
       delete @submitCB
     QR.error "Captcha Error: #{message}"
-
-  notify: (el) ->
-    if Conf['Captcha Warning Notifications'] and !d.hidden
-      QR.notify el
-    else
-      $.addClass @nodes.input, 'error'
-      $.one @nodes.input, 'keydown', @unflag.bind @
-
-  unflag: ->
-    $.rmClass @nodes.input, 'error'
 
   clear: ->
     return unless @captchas.length
@@ -189,7 +188,7 @@ Captcha.noscript =
     @occupied = true
     @timeout = Date.now() + @lifetime
     unless img
-      img = @nodes.img = new Image
+      img = @nodes.img = new Image()
       $.one img, 'load', @afterSetup.bind @
       $.on img, 'load', -> @hidden = false
       $.add container, img
@@ -217,13 +216,13 @@ Captcha.noscript =
 
   expire: ->
     return unless @nodes.iframe
-    if @needed() or d.activeElement is @nodes.input
+    if not d.hidden and (@needed() or d.activeElement is @nodes.input)
       @reload()
     else
       @destroy()
 
   reload: ->
-    @nodes.iframe.src = @iframeURL
+    @nodes.iframe.src = @iframeURL()
     @occupied = true
     @nodes.img?.hidden = true
 

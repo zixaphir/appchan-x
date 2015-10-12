@@ -3,7 +3,12 @@ Captcha.v2 =
 
   init: ->
     return if d.cookie.indexOf('pass_enabled=1') >= 0
-    return unless @isEnabled = !!$.id 'g-recaptcha'
+    return unless @isEnabled = !!$ '#g-recaptcha, #captchaContainerAlt'
+
+    if @noscript = Conf['Force Noscript Captcha'] or not $.hasClass doc, 'js-enabled'
+      @conn = new Connection null, "#{location.protocol}//www.google.com",
+        token: (token) => @save true, token
+      $.addClass QR.nodes.el, 'noscript-captcha'
 
     @captchas = []
     $.get 'captchas', [], ({captchas}) ->
@@ -17,17 +22,29 @@ Captcha.v2 =
     counter   = $ '.captcha-counter > a', root
     @nodes = {root, counter}
     @count()
-    $.addClass QR.nodes.el, 'has-captcha'
+    $.addClass QR.nodes.el, 'has-captcha', 'captcha-v2'
     $.after QR.nodes.com.parentNode, root
 
     $.on counter, 'click', @toggle.bind @
+    $.on counter, 'keydown', (e) =>
+      return unless Keybinds.keyCode(e) is 'Space'
+      @toggle()
+      e.preventDefault()
+      e.stopPropagation()
     $.on window, 'captcha:success', =>
       # XXX Greasemonkey 1.x workaround to gain access to GM_* functions.
       $.queueTask => @save false
 
+  initFrame: ->
+    if token = $('.fbc-verification-token > textarea')?.value
+      conn = new Connection window.parent, "#{location.protocol}//boards.4chan.org"
+      conn.send {token}
+
   shouldFocus: false
   timeouts: {}
   postsCount: 0
+
+  noscriptURL: -> '//www.google.com/recaptcha/api/fallback?k=<%= meta.recaptchaKey %>'
 
   needed: ->
     captchaCount = @captchas.length
@@ -51,8 +68,7 @@ Captcha.v2 =
 
   setup: (focus, force) ->
     return unless @isEnabled and (@needed() or force)
-    $.addClass QR.nodes.el, 'captcha-open'
-    @shouldFocus = true if focus
+    @shouldFocus = true if focus and not QR.inBubble()
     if @timeouts.destroy
       clearTimeout @timeouts.destroy
       delete @timeouts.destroy
@@ -61,6 +77,7 @@ Captcha.v2 =
     if @nodes.container
       if @shouldFocus and iframe = $ 'iframe', @nodes.container
         iframe.focus()
+        QR.focus() # Event handler not fired in Firefox
         delete @shouldFocus
       return
 
@@ -70,13 +87,26 @@ Captcha.v2 =
       childList: true
       subtree: true
 
-    $.globalEval '''
+    if @noscript
+      @setupNoscript()
+    else
+      @setupJS()
+
+  setupNoscript: ->
+    iframe = $.el 'iframe',
+      id: 'qr-captcha-iframe'
+      src: @noscriptURL()
+    $.add @nodes.container, iframe
+    @conn.target = iframe
+
+  setupJS: ->
+    $.globalEval """
       (function() {
         function render() {
           var container = document.querySelector("#qr .captcha-container");
           container.dataset.widgetID = window.grecaptcha.render(container, {
             sitekey: '<%= meta.recaptchaKey %>',
-            theme: 'light',
+            theme: #{if Style.lightTheme then "'light'" else "'dark'"},
             callback: function(response) {
               window.dispatchEvent(new CustomEvent("captcha:success", {detail: response}));
             }
@@ -92,7 +122,7 @@ Captcha.v2 =
           }
         }
       })();
-    '''
+    """
 
   afterSetup: (mutations) ->
     for mutation in mutations
@@ -102,7 +132,8 @@ Captcha.v2 =
     return
 
   setupIFrame: (iframe) ->
-    @setupTime = Date.now()
+    Captcha.replace.iframe iframe
+    $.addClass QR.nodes.el, 'captcha-open'
     if QR.nodes.el.getBoundingClientRect().bottom > doc.clientHeight
       QR.nodes.el.style.top    = null
       QR.nodes.el.style.bottom = '0px'
@@ -118,6 +149,11 @@ Captcha.v2 =
     $.rmClass QR.nodes.el, 'captcha-open'
     $.rm @nodes.container if @nodes.container
     delete @nodes.container
+    # Clean up abandoned iframes.
+    for garbage in $$ 'div > .gc-bubbleDefault'
+      $.rm ins if (ins = garbage.parentNode.nextSibling) and ins.nodeName is 'INS'
+      $.rm garbage.parentNode
+    return
 
   sync: (captchas=[]) ->
     @captchas = captchas
@@ -129,35 +165,34 @@ Captcha.v2 =
     if captcha = @captchas.shift()
       $.set 'captchas', @captchas
       @count()
-      captcha.response
+      captcha
     else
       null
 
-  save: (pasted) ->
+  save: (pasted, token) ->
     $.forceSync 'captchas'
     @captchas.push
-      response: $('textarea', @nodes.container).value
-      timeout:  (if pasted then @setupTime else Date.now()) + @lifetime
+      response: token or $('textarea', @nodes.container).value
+      timeout:  Date.now() + @lifetime
     $.set 'captchas', @captchas
     @count()
 
+    focus = d.activeElement?.nodeName is 'IFRAME' and /https?:\/\/www\.google\.com\/recaptcha\//.test(d.activeElement.src)
     if @needed()
-      if QR.cooldown.auto or Conf['Post on Captcha Completion']
-        @shouldFocus = true
-      else
-        QR.nodes.status.focus()
+      if focus
+        if QR.cooldown.auto or Conf['Post on Captcha Completion']
+          @shouldFocus = true
+        else
+          QR.nodes.status.focus()
       @reload()
     else
       if pasted
         @destroy()
       else
         @timeouts.destroy ?= setTimeout @destroy.bind(@), 3 * $.SECOND
-      QR.nodes.status.focus()
+      QR.nodes.status.focus() if focus
 
     QR.submit() if Conf['Post on Captcha Completion'] and !QR.cooldown.auto
-
-  notify: (el) ->
-    QR.notify el
 
   clear: ->
     return unless @captchas.length
@@ -169,7 +204,7 @@ Captcha.v2 =
     @captchas = @captchas[i..]
     @count()
     $.set 'captchas', @captchas
-    @setup true
+    @setup(d.activeElement is QR.nodes.status)
 
   count: ->
     @nodes.counter.textContent = "Captchas: #{@captchas.length}"
@@ -178,9 +213,12 @@ Captcha.v2 =
       @timeouts.clear = setTimeout @clear.bind(@), @captchas[0].timeout - Date.now()
 
   reload: ->
-    $.globalEval '''
-      (function() {
-        var container = document.querySelector("#qr .captcha-container");
-        window.grecaptcha.reset(container.dataset.widgetID);
-      })();
-    '''
+    if @noscript
+      $('iframe', @nodes.container).src = @noscriptURL()
+    else
+      $.globalEval '''
+        (function() {
+          var container = document.querySelector("#qr .captcha-container");
+          window.grecaptcha.reset(container.dataset.widgetID);
+        })();
+      '''

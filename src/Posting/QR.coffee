@@ -7,9 +7,13 @@ QR =
 
     return if g.VIEW is 'archive'
 
-    $.globalEval 'document.documentElement.dataset.jsEnabled = true;'
-    noscript = Conf['Force Noscript Captcha'] or !doc.dataset.jsEnabled
-    @captcha = Captcha[if noscript then 'noscript' else 'v2']
+    $.globalEval 'document.documentElement.classList.add("js-enabled");'
+    version = if Conf['Use Recaptcha v1']
+      noscript = Conf['Force Noscript Captcha'] or not $.hasClass doc, 'js-enabled'
+      if noscript then 'noscript' else 'v1'
+    else
+      'v2'
+    @captcha = Captcha[version]
 
     $.on d, '4chanXInitFinished', @initReady
 
@@ -120,17 +124,20 @@ QR =
 
   focus: ->
     $.queueTask ->
-      return unless QR.nodes
-      unless $$('.goog-bubble-content > iframe').some((el) -> el.getBoundingClientRect().top >= 0)
-        focus = d.activeElement and QR.nodes.el.contains(d.activeElement)
-        $[if focus then 'addClass' else 'rmClass'] QR.nodes.el, 'focus'
-      if chrome?
-        # XXX Stop anomalous scrolling on space/tab in captcha iframe.
-        if d.activeElement and QR.nodes.el.contains(d.activeElement) and d.activeElement.nodeName is 'IFRAME'
+      unless QR.inBubble()
+        QR.hasFocus = d.activeElement and QR.nodes.el.contains(d.activeElement)
+        QR.nodes.el.classList.toggle 'focus', QR.hasFocus
+      # XXX Stop unwanted scrolling due to captcha.
+      if QR.captcha.isEnabled and QR.captcha is Captcha.v2 and !QR.captcha.noscript
+        if QR.inCaptcha()
           QR.scrollY = window.scrollY
           $.on d, 'scroll', QR.scrollLock
         else
           $.off d, 'scroll', QR.scrollLock
+
+  inBubble: ->
+    bubbles = $$ '.goog-bubble-content > iframe'
+    d.activeElement in bubbles or bubbles.some((el) -> el.getBoundingClientRect().bottom > 0)
 
   scrollLock: (e) ->
     if d.activeElement and QR.nodes.el.contains(d.activeElement) and d.activeElement.nodeName is 'IFRAME'

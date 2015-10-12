@@ -381,6 +381,18 @@ Config =
         false
         'Submit the post immediately when the captcha is completed.'
       ]
+      'Captcha Fixes': [
+        true
+        'Make captcha easier to use, especially with the keyboard.'
+      ]
+      'Use Recaptcha v1': [
+        false
+        'Use the old text version of Recaptcha.'
+      ]
+      'Use Recaptcha v2 in Reports': [
+        false
+        'Use the image selection captcha in the report window.'
+      ]
 
     'Quote Links':
       'Quote Backlinks': [
