@@ -1,10 +1,14 @@
-Captcha.noscript =
+Captcha.noscript = class extends Captcha
+  constructor: ->
+    @cb =
+      focus: Captcha.cb.focus
+      load:  (-> if @nodes.iframe then @reload() else @setup()).bind @
+      cache: (-> @sendResponse()).bind @
+
   lifetime: 30 * $.MINUTE
+  timers: {}
 
-  init: ->
-    return if d.cookie.indexOf('pass_enabled=1') >= 0
-    return unless @isEnabled = !!$ '#g-recaptcha, #captchaContainerAlt'
-
+  impInit: ->
     container = $.el 'div',
       className: 'captcha-img'
       title: 'Reload reCAPTCHA'
@@ -35,7 +39,7 @@ Captcha.noscript =
       QR.captcha.clear()
     $.sync 'captchas', @sync
 
-    @beforeSetup()
+    @preSetup()
     @setup()
 
   initFrame: ->
@@ -61,18 +65,9 @@ Captcha.noscript =
     else
       $.on img, 'load', cb
 
-  timers: {}
+  iframeURL: -> '//www.google.com/recaptcha/api/noscript?k=<%= meta.recaptchaKey %>'
 
-  iframeURL: ->
-    url = '//www.google.com/recaptcha/api/noscript?k=<%= meta.recaptchaKey %>'
-    if lang = Conf['captchaLanguage'].trim()
-      url += "&hl=#{encodeURIComponent lang}"
-    url
-
-  cb:
-    focus: -> QR.captcha.setup false, true
-
-  beforeSetup: ->
+  preSetup: ->
     {container, input} = @nodes
     container.hidden = true
     input.value = ''
@@ -80,19 +75,7 @@ Captcha.noscript =
     @count()
     $.on input, 'focus click', @cb.focus
 
-  needed: ->
-    captchaCount = @captchas.length
-    captchaCount++ if QR.req
-    postsCount = QR.posts.length
-    postsCount = 0 if postsCount is 1 and !Conf['Auto-load captcha'] and !QR.posts[0].com and !QR.posts[0].file
-    captchaCount < postsCount
-
-  onNewPost: ->
-
-  onPostChange: ->
-
-  setup: (focus, force) ->
-    return unless @isEnabled and (@needed() or force)
+  impSetup: (focus, force) ->
     if !@nodes.iframe
       @nodes.iframe = $.el 'iframe',
         id: 'qr-captcha-iframe'
@@ -104,7 +87,7 @@ Captcha.noscript =
     @occupied = true
     @nodes.input.focus() if focus
 
-  afterSetup: ->
+  postSetup: ->
     {container, input} = @nodes
     container.hidden = false
     input.placeholder = 'Verification'
@@ -122,19 +105,12 @@ Captcha.noscript =
     $.rm @nodes.iframe
     delete @nodes.iframe
     delete @occupied
-    @beforeSetup()
+    @preSetup()
 
-  sync: (captchas=[]) ->
-    QR.captcha.captchas = captchas
-    QR.captcha.count()
+  # handleCaptcha: -> super()
 
-  getOne: ->
-    @clear()
-    if captcha = @captchas.shift()
-      @count()
-      $.set 'captchas', @captchas
-      captcha
-    else if /\S/.test @nodes.input.value
+  handleNoCaptcha: ->
+    if /\S/.test @nodes.input.value
       (cb) =>
         @submitCB = cb
         @sendResponse()
@@ -164,32 +140,13 @@ Captcha.noscript =
       $.set 'captchas', @captchas
       @reload()
 
-  error: (message) ->
-    @occupied = true
-    @nodes.input.value = ''
-    if @submitCB
-      @submitCB()
-      delete @submitCB
-    QR.error "Captcha Error: #{message}"
-
-  clear: ->
-    return unless @captchas.length
-    $.forceSync 'captchas'
-    now = Date.now()
-    for captcha, i in @captchas
-      break if captcha.timeout > now
-    return unless i
-    @captchas = @captchas[i..]
-    @count()
-    $.set 'captchas', @captchas
-
   load: (src) ->
     {container, input, img} = @nodes
     @occupied = true
     @timeout = Date.now() + @lifetime
     unless img
       img = @nodes.img = new Image()
-      $.one img, 'load', @afterSetup.bind @
+      $.one img, 'load', @postSetup.bind @
       $.on img, 'load', -> @hidden = false
       $.add container, img
     img.src = src
@@ -198,21 +155,24 @@ Captcha.noscript =
     clearTimeout @timers.expire
     @timers.expire = setTimeout @expire.bind(@), @lifetime
 
+  reload: ->
+    @nodes.iframe.src = @iframeURL()
+    @occupied = true
+    @nodes.img?.hidden = true
+
   count: ->
-    count = if @captchas then @captchas.length else 0
-    placeholder = @nodes.input.placeholder.replace /\ \(.*\)$/, ''
-    placeholder += switch count
-      when 0
-        if placeholder is 'Verification' then ' (Shift + Enter to cache)' else ''
-      when 1
-        ' (1 cached captcha)'
-      else
-        " (#{count} cached captchas)"
-    @nodes.input.placeholder = placeholder
-    @nodes.input.alt = count # For XTRM RICE.
+    super()
     clearTimeout @timers.clear
     if @captchas.length
       @timers.clear = setTimeout @clear.bind(@), @captchas[0].timeout - Date.now()
+
+  error: (message) ->
+    @occupied = true
+    @nodes.input.value = ''
+    if @submitCB
+      @submitCB()
+      delete @submitCB
+    QR.error "Captcha Error: #{message}"
 
   expire: ->
     return unless @nodes.iframe
@@ -220,17 +180,3 @@ Captcha.noscript =
       @reload()
     else
       @destroy()
-
-  reload: ->
-    @nodes.iframe.src = @iframeURL()
-    @occupied = true
-    @nodes.img?.hidden = true
-
-  keydown: (e) ->
-    if e.keyCode is 8 and not @nodes.input.value
-      if @nodes.iframe then @reload() else @setup()
-    else if e.keyCode is 13 and e.shiftKey
-      @sendResponse()
-    else
-      return
-    e.preventDefault()

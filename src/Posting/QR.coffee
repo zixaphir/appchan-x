@@ -13,7 +13,7 @@ QR =
       if noscript then 'noscript' else 'v1'
     else
       'v2'
-    @captcha = Captcha[version]
+    @captcha = new Captcha[version]()
 
     $.on d, '4chanXInitFinished', @initReady
 

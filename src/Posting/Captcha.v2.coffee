@@ -1,10 +1,11 @@
-Captcha.v2 =
-  lifetime: 2 * $.MINUTE
+Captcha.v2 = class extends Captcha
+  constructor: ->
+  shouldFocus: false
+  timeouts: {}
+  postsCount: 0
+  noscriptURL: -> '//www.google.com/recaptcha/api/fallback?k=<%= meta.recaptchaKey %>'
 
-  init: ->
-    return if d.cookie.indexOf('pass_enabled=1') >= 0
-    return unless @isEnabled = !!$ '#g-recaptcha, #captchaContainerAlt'
-
+  impInit: ->
     if @noscript = Conf['Force Noscript Captcha'] or not $.hasClass doc, 'js-enabled'
       @conn = new Connection null, "#{location.protocol}//www.google.com",
         token: (token) => @save true, token
@@ -40,34 +41,9 @@ Captcha.v2 =
       conn = new Connection window.parent, "#{location.protocol}//boards.4chan.org"
       conn.send {token}
 
-  shouldFocus: false
-  timeouts: {}
-  postsCount: 0
+  # perSetup: unused
 
-  noscriptURL: -> '//www.google.com/recaptcha/api/fallback?k=<%= meta.recaptchaKey %>'
-
-  needed: ->
-    captchaCount = @captchas.length
-    captchaCount++ if QR.req
-    @postsCount = QR.posts.length
-    @postsCount = 0 if @postsCount is 1 and !Conf['Auto-load captcha'] and !QR.posts[0].com and !QR.posts[0].file
-    captchaCount < @postsCount
-
-  onNewPost: ->
-    @setup()
-
-  onPostChange: ->
-    @setup() if @postsCount is 0
-    @postsCount = 0 if QR.posts.length is 1 and !Conf['Auto-load captcha'] and !QR.posts[0].com and !QR.posts[0].file
-
-  toggle: ->
-    if @nodes.container and !@timeouts.destroy
-      @destroy()
-    else
-      @setup true, true
-
-  setup: (focus, force) ->
-    return unless @isEnabled and (@needed() or force)
+  impSetup: (focus, force) ->
     @shouldFocus = true if focus and not QR.inBubble()
     if @timeouts.destroy
       clearTimeout @timeouts.destroy
@@ -83,7 +59,7 @@ Captcha.v2 =
 
     @nodes.container = $.el 'div', className: 'captcha-container'
     $.prepend @nodes.root, @nodes.container
-    new MutationObserver(@afterSetup.bind @).observe @nodes.container,
+    new MutationObserver(@postSetup.bind @).observe @nodes.container,
       childList: true
       subtree: true
 
@@ -124,7 +100,7 @@ Captcha.v2 =
       })();
     """
 
-  afterSetup: (mutations) ->
+  postSetup: (mutations) ->
     for mutation in mutations
       for node in mutation.addedNodes
         @setupIFrame   iframe   if iframe   = $.x './descendant-or-self::iframe',   node
@@ -143,6 +119,19 @@ Captcha.v2 =
   setupTextArea: (textarea) ->
     $.one textarea, 'input', => @save true
 
+  onNewPost: ->
+    @setup()
+
+  onPostChange: ->
+    @setup() if @postsCount is 0
+    @postsCount = 0 if QR.posts.length is 1 and !Conf['Auto-load captcha'] and !QR.posts[0].com and !QR.posts[0].file
+
+  toggle: ->
+    if @nodes.container and !@timeouts.destroy
+      @destroy()
+    else
+      @setup true, true
+
   destroy: ->
     return unless @isEnabled
     delete @timeouts.destroy
@@ -156,18 +145,11 @@ Captcha.v2 =
     return
 
   sync: (captchas=[]) ->
-    @captchas = captchas
+    super captchas
     @clear()
-    @count()
 
-  getOne: ->
-    @clear()
-    if captcha = @captchas.shift()
-      $.set 'captchas', @captchas
-      @count()
-      captcha
-    else
-      null
+  # handleCaptcha: (captcha) -> super captcha
+  # handleNoCaptcha: -> super()
 
   save: (pasted, token) ->
     $.forceSync 'captchas'
@@ -195,16 +177,7 @@ Captcha.v2 =
     QR.submit() if Conf['Post on Captcha Completion'] and !QR.cooldown.auto
 
   clear: ->
-    return unless @captchas.length
-    $.forceSync 'captchas'
-    now = Date.now()
-    for captcha, i in @captchas
-      break if captcha.timeout > now
-    return unless i
-    @captchas = @captchas[i..]
-    @count()
-    $.set 'captchas', @captchas
-    @setup(d.activeElement is QR.nodes.status)
+    @setup(d.activeElement is QR.nodes.status) if super()
 
   count: ->
     @nodes.counter.textContent = "Captchas: #{@captchas.length}"
@@ -222,3 +195,5 @@ Captcha.v2 =
           window.grecaptcha.reset(container.dataset.widgetID);
         })();
       '''
+
+  # keydown: unimplemented

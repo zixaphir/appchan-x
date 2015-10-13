@@ -1,10 +1,11 @@
-Captcha.v1 =
-  blank: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='57'/>"
+Captcha.v1 = class extends Captcha
+  constructor: ->
+    @cb =
+      focus: Captcha.cb
+      load:  @reload.bind @
+      cache: @save.bind @
 
-  init: ->
-    return if d.cookie.indexOf('pass_enabled=1') >= 0
-    return unless @isEnabled = !!$ '#g-recaptcha, #captchaContainerAlt'
-
+  impInit: ->
     imgContainer = $.el 'div',
       className: 'captcha-img'
       title: 'Reload reCAPTCHA'
@@ -33,72 +34,23 @@ Captcha.v1 =
     $.sync 'captchas', @sync
 
     @replace()
-    @beforeSetup()
+    @preSetup()
     @setup() if Conf['Auto-load captcha']
-    new MutationObserver(@afterSetup).observe $('#g-recaptcha, #captchaContainerAlt'), childList: true
-    @afterSetup() # reCAPTCHA might have loaded before the QR.
+    new MutationObserver(@postSetup).observe $('#g-recaptcha, #captchaContainerAlt'), childList: true
+    @postSetup() # reCAPTCHA might have loaded before the QR.
 
-  replace: ->
-    return if @script
-    unless @script = $ 'script[src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"]', d.head
-      @script = $.el 'script',
-        src: '//www.google.com/recaptcha/api/js/recaptcha_ajax.js'
-      $.add d.head, @script
-    if old = $.id 'g-recaptcha'
-      container = $.el 'div',
-        id: 'captchaContainerAlt'
-      $.replace old, container
-
-  create: ->
-    $.globalEval '''
-      (function() {
-        var container = document.getElementById("captchaContainerAlt");
-        if (container.firstChild) return;
-        var options = {
-          theme: "clean",
-          tabindex: {"boards.4chan.org": 5, "sys.4chan.org": 3}[location.hostname]
-        };
-        if (window.Recaptcha) {
-          window.Recaptcha.create("<%= meta.recaptchaKey %>", container, options);
-        } else {
-          var script = document.head.querySelector('script[src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"]');
-          script.addEventListener('load', function() {
-            window.Recaptcha.create("<%= meta.recaptchaKey %>", container, options);
-          }, false);
-        }
-      })();
-    '''
-
-  cb:
-    focus: -> QR.captcha.setup false, true
-
-  beforeSetup: ->
-    {img, input} = @nodes
+  preSetup: ->
+    {img} = @nodes
     img.parentNode.hidden = true
     img.src = @blank
-    input.value = ''
-    input.placeholder = 'Focus to load reCAPTCHA'
-    @count()
-    $.on input, 'focus click', @cb.focus
+    super()
 
-  needed: ->
-    captchaCount = @captchas.length
-    captchaCount++ if QR.req
-    postsCount = QR.posts.length
-    postsCount = 0 if postsCount is 1 and !Conf['Auto-load captcha'] and !QR.posts[0].com and !QR.posts[0].file
-    captchaCount < postsCount
-
-  onNewPost: ->
-
-  onPostChange: ->
-
-  setup: (focus, force) ->
-    return unless @isEnabled and (force or @needed())
+  impSetup: (focus, force) ->
     @create()
     @nodes.input.focus() if focus
     @reload()
 
-  afterSetup: ->
+  postSetup: ->
     return unless challenge = $.id 'recaptcha_challenge_field_holder'
     return if challenge is QR.captcha.nodes.challenge
 
@@ -124,29 +76,47 @@ Captcha.v1 =
       QR.nodes.el.style.top    = null
       QR.nodes.el.style.bottom = '0px'
 
-  destroy: ->
-    return unless @script
-    $.globalEval 'window.Recaptcha.destroy();'
-    @beforeSetup() if @nodes
+  replace: ->
+    return if @script
+    unless @script = $ 'script[src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"]', d.head
+      @script = $.el 'script',
+        src: '//www.google.com/recaptcha/api/js/recaptcha_ajax.js'
+      $.add d.head, @script
+    if old = $.id 'g-recaptcha'
+      container = $.el 'div',
+        id: 'captchaContainerAlt'
+      $.replace old, container
 
-  sync: (captchas=[]) ->
-    QR.captcha.captchas = captchas
-    QR.captcha.count()
+  # handleCaptcha: (captcha) -> super captcha
 
-  getOne: ->
-    @clear()
-    if captcha = @captchas.shift()
-      @count()
-      $.set 'captchas', @captchas
-      captcha
+  handleNoCaptcha: ->
+    challenge = @nodes.img.alt
+    timeout   = @timeout
+    if /\S/.test(response = @nodes.input.value)
+      @destroy()
+      {challenge, response, timeout}
     else
-      challenge = @nodes.img.alt
-      timeout   = @timeout
-      if /\S/.test(response = @nodes.input.value)
-        @destroy()
-        {challenge, response, timeout}
-      else
-        null
+      null
+
+  create: ->
+    $.globalEval '''
+      (function() {
+        var container = document.getElementById("captchaContainerAlt");
+        if (container.firstChild) return;
+        var options = {
+          theme: "clean",
+          tabindex: {"boards.4chan.org": 5, "sys.4chan.org": 3}[location.hostname]
+        };
+        if (window.Recaptcha) {
+          window.Recaptcha.create("<%= meta.recaptchaKey %>", container, options);
+        } else {
+          var script = document.head.querySelector('script[src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"]');
+          script.addEventListener('load', function() {
+            window.Recaptcha.create("<%= meta.recaptchaKey %>", container, options);
+          }, false);
+        }
+      })();
+    '''
 
   save: ->
     return unless /\S/.test(response = @nodes.input.value)
@@ -158,17 +128,6 @@ Captcha.v1 =
     @count()
     @destroy()
     @setup false, true
-    $.set 'captchas', @captchas
-
-  clear: ->
-    return unless @captchas.length
-    $.forceSync 'captchas'
-    now = Date.now()
-    for captcha, i in @captchas
-      break if captcha.timeout > now
-    return unless i
-    @captchas = @captchas[i..]
-    @count()
     $.set 'captchas', @captchas
 
   load: ->
@@ -185,19 +144,6 @@ Captcha.v1 =
     @nodes.input.value = ''
     @clear()
 
-  count: ->
-    count = if @captchas then @captchas.length else 0
-    placeholder = @nodes.input.placeholder.replace /\ \(.*\)$/, ''
-    placeholder += switch count
-      when 0
-        if placeholder is 'Verification' then ' (Shift + Enter to cache)' else ''
-      when 1
-        ' (1 cached captcha)'
-      else
-        " (#{count} cached captchas)"
-    @nodes.input.placeholder = placeholder
-    @nodes.input.alt = count # For XTRM RICE.
-
   reload: (focus) ->
     # Recaptcha.should_focus = false: Hack to prevent the input from being focused
     $.globalEval '''
@@ -210,11 +156,9 @@ Captcha.v1 =
     '''
     @nodes.input.focus() if focus
 
-  keydown: (e) ->
-    if e.keyCode is 8 and not @nodes.input.value
-      @reload()
-    else if e.keyCode is 13 and e.shiftKey
-      @save()
-    else
-      return
-    e.preventDefault()
+  # clear: -> super()
+
+  destroy: ->
+    return unless @script
+    $.globalEval 'window.Recaptcha.destroy();'
+    @beforeSetup() if @nodes

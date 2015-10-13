@@ -1,1 +1,1 @@
-Captcha = {}
+# Captcha = {}
