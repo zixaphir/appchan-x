@@ -18,12 +18,11 @@ Captcha.noscript = class extends Captcha
       title: 'Verification'
       autocomplete: 'off'
       spellcheck: false
+
     @nodes = {container, input}
 
     $.on input, 'keydown', @keydown.bind @
-    $.on @nodes.container, 'click', =>
-      @reload()
-      @nodes.input.focus()
+    $.on container, 'click', @reload.bind @
 
     @conn = new Connection null, "#{location.protocol}//www.google.com",
       challenge: @load.bind @

@@ -9143,12 +9143,7 @@
         input: input
       };
       $.on(input, 'keydown', this.keydown.bind(this));
-      $.on(this.nodes.container, 'click', (function(_this) {
-        return function() {
-          _this.reload();
-          return _this.nodes.input.focus();
-        };
-      })(this));
+      $.on(container, 'click', this.reload.bind(this));
       this.conn = new Connection(null, "" + location.protocol + "//www.google.com", {
         challenge: this.load.bind(this),
         token: this.save.bind(this),
@@ -9376,12 +9371,12 @@
     blank = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='57'/>";
 
     _Class.prototype.impInit = function() {
-      var imgContainer, input;
-      imgContainer = $.el('div', {
+      var container, img, input;
+      container = $.el('div', {
         className: 'captcha-img',
         title: 'Reload reCAPTCHA'
       });
-      $.extend(imgContainer, {
+      $.extend(container, {
         innerHTML: "<img>"
       });
       input = $.el('input', {
@@ -9390,16 +9385,17 @@
         autocomplete: 'off',
         spellcheck: false
       });
+      img = container.firstChild;
       this.nodes = {
-        img: imgContainer.firstChild,
+        img: img,
         input: input
       };
+      $.on(input, 'keydown', this.keydown.bind(this));
+      $.on(container, 'click', this.reload.bind(this));
       $.on(input, 'blur', QR.focusout);
       $.on(input, 'focus', QR.focusin);
-      $.on(input, 'keydown', QR.captcha.keydown.bind(QR.captcha));
-      $.on(this.nodes.img.parentNode, 'click', QR.captcha.reload.bind(QR.captcha));
       $.addClass(QR.nodes.el, 'has-captcha', 'captcha-v1');
-      $.after(QR.nodes.com.parentNode, [imgContainer, input]);
+      $.after(QR.nodes.com.parentNode, [container, input]);
       this.replace();
       this.preSetup();
       if (Conf['Auto-load captcha']) {

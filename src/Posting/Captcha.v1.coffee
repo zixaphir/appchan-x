@@ -8,30 +8,34 @@ Captcha.v1 = class extends Captcha
   blank = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='57'/>"
 
   impInit: ->
-    imgContainer = $.el 'div',
+    container = $.el 'div',
       className: 'captcha-img'
       title: 'Reload reCAPTCHA'
-    $.extend imgContainer, <%= html('<img>') %>
+    $.extend container, <%= html('<img>') %>
+    
     input = $.el 'input',
       className: 'captcha-input field'
       title: 'Verification'
       autocomplete: 'off'
       spellcheck: false
-    @nodes =
-      img:       imgContainer.firstChild
-      input:     input
+    
+    img = container.firstChild
+    
+    @nodes = {img, input}
+
+    $.on input, 'keydown', @keydown.bind @
+    $.on container, 'click', @reload.bind @
 
     $.on input, 'blur',  QR.focusout
     $.on input, 'focus', QR.focusin
-    $.on input, 'keydown', QR.captcha.keydown.bind QR.captcha
-    $.on @nodes.img.parentNode, 'click', QR.captcha.reload.bind QR.captcha
 
     $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1'
-    $.after QR.nodes.com.parentNode, [imgContainer, input]
+    $.after QR.nodes.com.parentNode, [container, input]
 
     @replace()
     @preSetup()
     @setup() if Conf['Auto-load captcha']
+
     new MutationObserver(@postSetup).observe $('#g-recaptcha, #captchaContainerAlt'), childList: true
     @postSetup() # reCAPTCHA might have loaded before the QR.
 
