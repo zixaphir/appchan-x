@@ -10,7 +10,6 @@ class Captcha
     @captchas = []
     $.get 'captchas', [], ({captchas}) ->
       QR.captcha.sync captchas
-      QR.captcha.clear()
     $.sync 'captchas', @sync
 
     @impInit()
@@ -70,6 +69,7 @@ class Captcha
   sync: (captchas=[]) ->
     @captchas = captchas
     @count()
+    @clear()
 
   clear: ->
     return false unless @captchas.length

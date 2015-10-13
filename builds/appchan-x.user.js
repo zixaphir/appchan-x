@@ -4352,8 +4352,7 @@
       $.get('captchas', [], function(_arg) {
         var captchas;
         captchas = _arg.captchas;
-        QR.captcha.sync(captchas);
-        return QR.captcha.clear();
+        return QR.captcha.sync(captchas);
       });
       $.sync('captchas', this.sync);
       return this.impInit();
@@ -4440,7 +4439,8 @@
         captchas = [];
       }
       this.captchas = captchas;
-      return this.count();
+      this.count();
+      return this.clear();
     };
 
     Captcha.prototype.clear = function() {
@@ -9768,14 +9768,6 @@
         }
         $.rm(garbage.parentNode);
       }
-    };
-
-    _Class.prototype.sync = function(captchas) {
-      if (captchas == null) {
-        captchas = [];
-      }
-      _Class.__super__.sync.call(this, captchas);
-      return this.clear();
     };
 
     _Class.prototype.save = function(pasted, token) {

@@ -139,10 +139,6 @@ Captcha.v2 = class extends Captcha
       $.rm garbage.parentNode
     return
 
-  sync: (captchas=[]) ->
-    super captchas
-    @clear()
-
   # handleCaptcha: (captcha) -> super captcha
   # handleNoCaptcha: -> super()
 
