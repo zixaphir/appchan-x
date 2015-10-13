@@ -4337,11 +4337,7 @@
   })();
 
   Captcha = (function() {
-    var blank;
-
     function Captcha() {}
-
-    blank = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='57'/>";
 
     Captcha.prototype.lifetime = 2 * $.MINUTE;
 
@@ -4352,6 +4348,14 @@
       if (!(this.isEnabled = !!$('#g-recaptcha, #captchaContainerAlt'))) {
         return;
       }
+      this.captchas = [];
+      $.get('captchas', [], function(_arg) {
+        var captchas;
+        captchas = _arg.captchas;
+        QR.captcha.sync(captchas);
+        return QR.captcha.clear();
+      });
+      $.sync('captchas', this.sync);
       return this.impInit();
     };
 
@@ -9168,14 +9172,6 @@
       });
       $.addClass(QR.nodes.el, 'has-captcha', 'captcha-v1', 'noscript-captcha');
       $.after(QR.nodes.com.parentNode, [container, input]);
-      this.captchas = [];
-      $.get('captchas', [], function(_arg) {
-        var captchas;
-        captchas = _arg.captchas;
-        QR.captcha.sync(captchas);
-        return QR.captcha.clear();
-      });
-      $.sync('captchas', this.sync);
       this.preSetup();
       return this.setup();
     };
@@ -9381,6 +9377,8 @@
   })(Captcha);
 
   Captcha.v1 = (function(_super) {
+    var blank;
+
     __extends(_Class, _super);
 
     function _Class() {
@@ -9390,6 +9388,8 @@
         cache: this.save.bind(this)
       };
     }
+
+    blank = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='57'/>";
 
     _Class.prototype.impInit = function() {
       var imgContainer, input;
@@ -9416,14 +9416,6 @@
       $.on(this.nodes.img.parentNode, 'click', QR.captcha.reload.bind(QR.captcha));
       $.addClass(QR.nodes.el, 'has-captcha', 'captcha-v1');
       $.after(QR.nodes.com.parentNode, [imgContainer, input]);
-      this.captchas = [];
-      $.get('captchas', [], function(_arg) {
-        var captchas;
-        captchas = _arg.captchas;
-        QR.captcha.sync(captchas);
-        return QR.captcha.clear();
-      });
-      $.sync('captchas', this.sync);
       this.replace();
       this.preSetup();
       if (Conf['Auto-load captcha']) {
@@ -9607,13 +9599,6 @@
         });
         $.addClass(QR.nodes.el, 'noscript-captcha');
       }
-      this.captchas = [];
-      $.get('captchas', [], function(_arg) {
-        var captchas;
-        captchas = _arg.captchas;
-        return QR.captcha.sync(captchas);
-      });
-      $.sync('captchas', this.sync.bind(this));
       root = $.el('div', {
         className: 'captcha-root'
       });

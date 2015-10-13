@@ -33,12 +33,6 @@ Captcha.noscript = class extends Captcha
     $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1', 'noscript-captcha'
     $.after QR.nodes.com.parentNode, [container, input]
 
-    @captchas = []
-    $.get 'captchas', [], ({captchas}) ->
-      QR.captcha.sync captchas
-      QR.captcha.clear()
-    $.sync 'captchas', @sync
-
     @preSetup()
     @setup()
 

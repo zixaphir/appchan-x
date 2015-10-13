@@ -11,11 +11,6 @@ Captcha.v2 = class extends Captcha
         token: (token) => @save true, token
       $.addClass QR.nodes.el, 'noscript-captcha'
 
-    @captchas = []
-    $.get 'captchas', [], ({captchas}) ->
-      QR.captcha.sync captchas
-    $.sync 'captchas', @sync.bind @
-
     root = $.el 'div', className: 'captcha-root'
     $.extend root, <%= html(
       '<div class="captcha-counter"><a href="javascript:;"></a></div>'

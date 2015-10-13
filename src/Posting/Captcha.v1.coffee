@@ -5,6 +5,8 @@ Captcha.v1 = class extends Captcha
       load:  @reload.bind @
       cache: @save.bind @
 
+  blank = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='57'/>"
+
   impInit: ->
     imgContainer = $.el 'div',
       className: 'captcha-img'
@@ -26,12 +28,6 @@ Captcha.v1 = class extends Captcha
 
     $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1'
     $.after QR.nodes.com.parentNode, [imgContainer, input]
-
-    @captchas = []
-    $.get 'captchas', [], ({captchas}) ->
-      QR.captcha.sync captchas
-      QR.captcha.clear()
-    $.sync 'captchas', @sync
 
     @replace()
     @preSetup()
