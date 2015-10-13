@@ -1,7 +1,7 @@
 Captcha.v1 = class extends Captcha
   constructor: ->
     @cb =
-      focus: Captcha.cb
+      focus: Captcha.cb.focus
       load:  @reload.bind @
       cache: @save.bind @
 

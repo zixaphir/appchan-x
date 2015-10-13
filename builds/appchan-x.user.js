@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.11 - 2015-10-12
+* appchan x - Version 2.10.11 - 2015-10-13
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -4358,8 +4358,6 @@
       return this.impInit();
     };
 
-    Captcha.prototype.impInit = function() {};
-
     Captcha.prototype.cb = {
       focus: function() {
         return QR.captcha.setup(false, true);
@@ -4404,12 +4402,6 @@
       return this.impSetup(focus, force);
     };
 
-    Captcha.prototype.impSetup = function() {};
-
-    Captcha.prototype.postSetup = function() {};
-
-    Captcha.prototype.destroy = function() {};
-
     Captcha.prototype.getOne = function() {
       var captcha;
       this.clear();
@@ -4426,13 +4418,7 @@
       return captcha;
     };
 
-    Captcha.prototype.handleNoCaptcha = function() {
-      return null;
-    };
-
-    Captcha.prototype.save = function() {};
-
-    Captcha.prototype.load = function() {};
+    Captcha.prototype.handleNoCaptcha = function() {};
 
     Captcha.prototype.sync = function(captchas) {
       if (captchas == null) {
@@ -4488,8 +4474,6 @@
       this.nodes.input.placeholder = placeholder;
       return this.nodes.input.alt = count;
     };
-
-    Captcha.prototype.reload = function() {};
 
     Captcha.prototype.keydown = function(e) {
       if (e.keyCode === 8 && !this.nodes.input.value) {
@@ -9383,7 +9367,7 @@
 
     function _Class() {
       this.cb = {
-        focus: Captcha.cb,
+        focus: Captcha.cb.focus,
         load: this.reload.bind(this),
         cache: this.save.bind(this)
       };

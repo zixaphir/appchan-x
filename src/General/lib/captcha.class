@@ -1,5 +1,5 @@
 class Captcha
-  constructor: ->
+  # constructor: ->
 
   lifetime: 2 * $.MINUTE
   
@@ -14,7 +14,7 @@ class Captcha
 
     @impInit()
 
-  impInit: -> # Implement in instance.
+  # impInit: -> # Implement in instance.
 
   cb:
     focus: -> QR.captcha.setup false, true
@@ -46,9 +46,9 @@ class Captcha
     return unless @isEnabled and (@needed() or force)
     @impSetup focus, force
 
-  impSetup: -> # Implement in instance.
-  postSetup: -> # Implement in instance.
-  destroy: -> # Implement in instance.
+  # impSetup: -> # Implement in instance.
+  # postSetup: -> # Implement in instance.
+  # destroy: -> # Implement in instance.
   getOne: ->
     @clear()
     if captcha = @captchas.shift()
@@ -62,9 +62,9 @@ class Captcha
     $.set 'captchas', @captchas
     captcha
 
-  handleNoCaptcha: -> return null # Some implementations will change this.
-  save: -> # Implement in instance.
-  load: -> # not used in v2, implement in instace.
+  handleNoCaptcha: -> # Some implementations will change this.
+  # save: -> # Implement in instance.
+  # load: -> # not used in v2, implement in instace.
 
   sync: (captchas=[]) ->
     @captchas = captchas
@@ -82,7 +82,6 @@ class Captcha
     @count()
     $.set 'captchas', @captchas
     return true
-    # implement in v2: @setup(d.activeElement is QR.nodes.status) if super()
 
   count: -> # Implement as super() or override.
     count = if @captchas then @captchas.length else 0
@@ -97,7 +96,7 @@ class Captcha
     @nodes.input.placeholder = placeholder
     @nodes.input.alt = count # For XTRM RICE.
 
-  reload: -> # Implement in instance
+  # reload: -> # Implement in instance
 
   keydown: (e) ->
     if e.keyCode is 8 and not @nodes.input.value
