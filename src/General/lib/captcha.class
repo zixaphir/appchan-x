@@ -101,10 +101,28 @@ class Captcha
   keydown: (e) ->
     if e.keyCode is 8 and not @nodes.input.value
       @cb.load()
-      # if @nodes.iframe then @reload() else @setup()
     else if e.keyCode is 13 and e.shiftKey
       @cb.cache()
-      # @sendResponse()
     else
       return
     e.preventDefault()
+
+  buildV1Nodes: ->
+    container = $.el 'div',
+      className: 'captcha-img'
+      title: 'Reload reCAPTCHA'
+
+    input = $.el 'input',
+      className: 'captcha-input field'
+      title: 'Verification'
+      autocomplete: 'off'
+      spellcheck: false
+    
+    @nodes = {container, input}
+
+    $.on input, 'keydown', @keydown.bind @
+    $.on container, 'click', @reload.bind @
+
+    $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1'
+    $.after QR.nodes.com.parentNode, [container, input]
+

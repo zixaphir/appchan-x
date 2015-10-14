@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.11 - 2015-10-13
+* appchan x - Version 2.10.11 - 2015-10-14
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -4484,6 +4484,28 @@
         return;
       }
       return e.preventDefault();
+    };
+
+    Captcha.prototype.buildV1Nodes = function() {
+      var container, input;
+      container = $.el('div', {
+        className: 'captcha-img',
+        title: 'Reload reCAPTCHA'
+      });
+      input = $.el('input', {
+        className: 'captcha-input field',
+        title: 'Verification',
+        autocomplete: 'off',
+        spellcheck: false
+      });
+      this.nodes = {
+        container: container,
+        input: input
+      };
+      $.on(input, 'keydown', this.keydown.bind(this));
+      $.on(container, 'click', this.reload.bind(this));
+      $.addClass(QR.nodes.el, 'has-captcha', 'captcha-v1');
+      return $.after(QR.nodes.com.parentNode, [container, input]);
     };
 
     return Captcha;
@@ -9108,7 +9130,7 @@
 
     function _Class() {
       this.cb = {
-        focus: Captcha.cb.focus,
+        focus: Captcha.prototype.cb.focus,
         load: (function() {
           if (this.nodes.iframe) {
             return this.reload();
@@ -9122,35 +9144,20 @@
       };
     }
 
+    _Class.prototype.iframeURL = '//www.google.com/recaptcha/api/noscript?k=6Ldp2bsSAAAAAAJ5uyx_lx34lJeEpTLVkP5k04qc';
+
     _Class.prototype.lifetime = 30 * $.MINUTE;
 
     _Class.prototype.timers = {};
 
     _Class.prototype.impInit = function() {
-      var container, input;
-      container = $.el('div', {
-        className: 'captcha-img',
-        title: 'Reload reCAPTCHA'
-      });
-      input = $.el('input', {
-        className: 'captcha-input field',
-        title: 'Verification',
-        autocomplete: 'off',
-        spellcheck: false
-      });
-      this.nodes = {
-        container: container,
-        input: input
-      };
-      $.on(input, 'keydown', this.keydown.bind(this));
-      $.on(container, 'click', this.reload.bind(this));
+      this.buildV1Nodes();
+      $.addClass(QR.nodes.el, 'noscript-captcha');
       this.conn = new Connection(null, "" + location.protocol + "//www.google.com", {
         challenge: this.load.bind(this),
         token: this.save.bind(this),
         error: this.error.bind(this)
       });
-      $.addClass(QR.nodes.el, 'has-captcha', 'captcha-v1', 'noscript-captcha');
-      $.after(QR.nodes.com.parentNode, [container, input]);
       this.preSetup();
       return this.setup();
     };
@@ -9190,10 +9197,6 @@
       }
     };
 
-    _Class.prototype.iframeURL = function() {
-      return '//www.google.com/recaptcha/api/noscript?k=6Ldp2bsSAAAAAAJ5uyx_lx34lJeEpTLVkP5k04qc';
-    };
-
     _Class.prototype.preSetup = function() {
       var container, input, _ref;
       _ref = this.nodes, container = _ref.container, input = _ref.input;
@@ -9205,20 +9208,24 @@
     };
 
     _Class.prototype.impSetup = function(focus, force) {
+      this.create();
+      if (focus) {
+        return this.nodes.input.focus();
+      }
+    };
+
+    _Class.prototype.create = function() {
       if (!this.nodes.iframe) {
         this.nodes.iframe = $.el('iframe', {
           id: 'qr-captcha-iframe',
-          src: this.iframeURL()
+          src: this.iframeURL
         });
         $.add(QR.nodes.el, this.nodes.iframe);
         this.conn.target = this.nodes.iframe;
       } else if (!this.occupied || force) {
-        this.nodes.iframe.src = this.iframeURL();
+        this.nodes.iframe.src = this.iframeURL;
       }
-      this.occupied = true;
-      if (focus) {
-        return this.nodes.input.focus();
-      }
+      return this.occupied = true;
     };
 
     _Class.prototype.postSetup = function() {
@@ -9317,7 +9324,7 @@
 
     _Class.prototype.reload = function() {
       var _ref;
-      this.nodes.iframe.src = this.iframeURL();
+      this.nodes.iframe.src = this.iframeURL;
       this.occupied = true;
       return (_ref = this.nodes.img) != null ? _ref.hidden = true : void 0;
     };
@@ -9362,7 +9369,7 @@
 
     function _Class() {
       this.cb = {
-        focus: Captcha.cb.focus,
+        focus: Captcha.prototype.cb.focus,
         load: this.reload.bind(this),
         cache: this.save.bind(this)
       };
@@ -9371,31 +9378,10 @@
     blank = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='57'/>";
 
     _Class.prototype.impInit = function() {
-      var container, img, input;
-      container = $.el('div', {
-        className: 'captcha-img',
-        title: 'Reload reCAPTCHA'
-      });
-      $.extend(container, {
-        innerHTML: "<img>"
-      });
-      input = $.el('input', {
-        className: 'captcha-input field',
-        title: 'Verification',
-        autocomplete: 'off',
-        spellcheck: false
-      });
-      img = container.firstChild;
-      this.nodes = {
-        img: img,
-        input: input
-      };
-      $.on(input, 'keydown', this.keydown.bind(this));
-      $.on(container, 'click', this.reload.bind(this));
-      $.on(input, 'blur', QR.focusout);
-      $.on(input, 'focus', QR.focusin);
-      $.addClass(QR.nodes.el, 'has-captcha', 'captcha-v1');
-      $.after(QR.nodes.com.parentNode, [container, input]);
+      var img;
+      this.buildV1Nodes();
+      this.nodes.img = img = $.el('img');
+      $.add(this.nodes.container, img);
       this.replace();
       this.preSetup();
       if (Conf['Auto-load captcha']) {
@@ -9408,23 +9394,20 @@
     };
 
     _Class.prototype.preSetup = function() {
-      var img;
-      img = this.nodes.img;
-      img.parentNode.hidden = true;
-      img.src = this.blank;
+      var container, img, _ref;
+      _ref = this.nodes, container = _ref.container, img = _ref.img;
+      container.hidden = true;
+      container.src = this.blank;
       return _Class.__super__.preSetup.call(this);
     };
 
     _Class.prototype.impSetup = function(focus, force) {
       this.create();
-      if (focus) {
-        this.nodes.input.focus();
-      }
-      return this.reload();
+      return this.reload(focus);
     };
 
     _Class.prototype.postSetup = function() {
-      var challenge, img, input, setLifetime, _ref;
+      var challenge, container, input, setLifetime, _ref;
       if (!(challenge = $.id('recaptcha_challenge_field_holder'))) {
         return;
       }
@@ -9437,8 +9420,8 @@
       $.on(window, 'captcha:timeout', setLifetime);
       $.globalEval('window.dispatchEvent(new CustomEvent("captcha:timeout", {detail: RecaptchaState.timeout}))');
       $.off(window, 'captcha:timeout', setLifetime);
-      _ref = QR.captcha.nodes, img = _ref.img, input = _ref.input;
-      img.parentNode.hidden = false;
+      _ref = QR.captcha.nodes, container = _ref.container, input = _ref.input;
+      container.hidden = false;
       input.placeholder = 'Verification';
       QR.captcha.count();
       $.off(input, 'focus click', QR.captcha.cb.focus);

@@ -1,36 +1,17 @@
 Captcha.v1 = class extends Captcha
   constructor: ->
     @cb =
-      focus: Captcha.cb.focus
+      focus: Captcha::cb.focus
       load:  @reload.bind @
       cache: @save.bind @
 
   blank = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='57'/>"
 
   impInit: ->
-    container = $.el 'div',
-      className: 'captcha-img'
-      title: 'Reload reCAPTCHA'
-    $.extend container, <%= html('<img>') %>
-    
-    input = $.el 'input',
-      className: 'captcha-input field'
-      title: 'Verification'
-      autocomplete: 'off'
-      spellcheck: false
-    
-    img = container.firstChild
-    
-    @nodes = {img, input}
+    @buildV1Nodes()
 
-    $.on input, 'keydown', @keydown.bind @
-    $.on container, 'click', @reload.bind @
-
-    $.on input, 'blur',  QR.focusout
-    $.on input, 'focus', QR.focusin
-
-    $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1'
-    $.after QR.nodes.com.parentNode, [container, input]
+    @nodes.img = img = $.el 'img'
+    $.add @nodes.container, img
 
     @replace()
     @preSetup()
@@ -40,15 +21,14 @@ Captcha.v1 = class extends Captcha
     @postSetup() # reCAPTCHA might have loaded before the QR.
 
   preSetup: ->
-    {img} = @nodes
-    img.parentNode.hidden = true
-    img.src = @blank
+    {container, img} = @nodes
+    container.hidden = true
+    container.src = @blank
     super()
 
   impSetup: (focus, force) ->
     @create()
-    @nodes.input.focus() if focus
-    @reload()
+    @reload focus
 
   postSetup: ->
     return unless challenge = $.id 'recaptcha_challenge_field_holder'
@@ -59,8 +39,8 @@ Captcha.v1 = class extends Captcha
     $.globalEval 'window.dispatchEvent(new CustomEvent("captcha:timeout", {detail: RecaptchaState.timeout}))'
     $.off window, 'captcha:timeout', setLifetime
 
-    {img, input} = QR.captcha.nodes
-    img.parentNode.hidden = false
+    {container, input} = QR.captcha.nodes
+    container.hidden = false
     input.placeholder = 'Verification'
     QR.captcha.count()
     $.off input, 'focus click', QR.captcha.cb.focus

@@ -1,36 +1,23 @@
 Captcha.noscript = class extends Captcha
   constructor: ->
     @cb =
-      focus: Captcha.cb.focus
+      focus: Captcha::cb.focus
       load:  (-> if @nodes.iframe then @reload() else @setup()).bind @
       cache: (-> @sendResponse()).bind @
 
+  iframeURL: '//www.google.com/recaptcha/api/noscript?k=<%= meta.recaptchaKey %>'
   lifetime: 30 * $.MINUTE
   timers: {}
 
   impInit: ->
-    container = $.el 'div',
-      className: 'captcha-img'
-      title: 'Reload reCAPTCHA'
+    @buildV1Nodes()
 
-    input = $.el 'input',
-      className: 'captcha-input field'
-      title: 'Verification'
-      autocomplete: 'off'
-      spellcheck: false
-
-    @nodes = {container, input}
-
-    $.on input, 'keydown', @keydown.bind @
-    $.on container, 'click', @reload.bind @
+    $.addClass QR.nodes.el, 'noscript-captcha'
 
     @conn = new Connection null, "#{location.protocol}//www.google.com",
       challenge: @load.bind @
       token:     @save.bind @
       error:     @error.bind @
-
-    $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1', 'noscript-captcha'
-    $.after QR.nodes.com.parentNode, [container, input]
 
     @preSetup()
     @setup()
@@ -58,8 +45,6 @@ Captcha.noscript = class extends Captcha
     else
       $.on img, 'load', cb
 
-  iframeURL: -> '//www.google.com/recaptcha/api/noscript?k=<%= meta.recaptchaKey %>'
-
   preSetup: ->
     {container, input} = @nodes
     container.hidden = true
@@ -69,16 +54,19 @@ Captcha.noscript = class extends Captcha
     $.on input, 'focus click', @cb.focus
 
   impSetup: (focus, force) ->
+    @create()
+    @nodes.input.focus() if focus
+
+  create: ->
     if !@nodes.iframe
       @nodes.iframe = $.el 'iframe',
         id: 'qr-captcha-iframe'
-        src: @iframeURL()
+        src: @iframeURL
       $.add QR.nodes.el, @nodes.iframe
       @conn.target = @nodes.iframe
     else if !@occupied or force
-      @nodes.iframe.src = @iframeURL()
+      @nodes.iframe.src = @iframeURL
     @occupied = true
-    @nodes.input.focus() if focus
 
   postSetup: ->
     {container, input} = @nodes
@@ -149,7 +137,7 @@ Captcha.noscript = class extends Captcha
     @timers.expire = setTimeout @expire.bind(@), @lifetime
 
   reload: ->
-    @nodes.iframe.src = @iframeURL()
+    @nodes.iframe.src = @iframeURL
     @occupied = true
     @nodes.img?.hidden = true
 
