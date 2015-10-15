@@ -389,10 +389,10 @@ Config =
         false
         'Use the old text version of Recaptcha.'
       ]
-      'Use Recaptcha v2 in Reports': [
-        false
-        'Use the image selection captcha in the report window.'
-      ]
+      #'Use Recaptcha v2 in Reports': [
+      #  false
+      #  'Use the image selection captcha in the report window.'
+      #]
 
     'Quote Links':
       'Quote Backlinks': [

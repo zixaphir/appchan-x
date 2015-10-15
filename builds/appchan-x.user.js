@@ -241,8 +241,7 @@
         'Auto-load captcha': [false, 'Automatically load the captcha in the QR even if your post is empty.'],
         'Post on Captcha Completion': [false, 'Submit the post immediately when the captcha is completed.'],
         'Captcha Fixes': [true, 'Make captcha easier to use, especially with the keyboard.'],
-        'Use Recaptcha v1': [false, 'Use the old text version of Recaptcha.'],
-        'Use Recaptcha v2 in Reports': [false, 'Use the image selection captcha in the report window.']
+        'Use Recaptcha v1': [false, 'Use the old text version of Recaptcha.']
       },
       'Quote Links': {
         'Quote Backlinks': [true, 'Add quote backlinks.'],
@@ -9332,7 +9331,9 @@
 
     _Class.prototype.impSetup = function(focus, force) {
       this.create();
-      return this.reload(focus);
+      if (focus) {
+        return this.nodes.input.focus();
+      }
     };
 
     _Class.prototype.postSetup = function() {

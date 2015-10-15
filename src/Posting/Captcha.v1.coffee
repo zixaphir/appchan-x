@@ -28,7 +28,7 @@ Captcha.v1 = class extends Captcha
 
   impSetup: (focus, force) ->
     @create()
-    @reload focus
+    @nodes.input.focus() if focus
 
   postSetup: ->
     return unless challenge = $.id 'recaptcha_challenge_field_holder'
