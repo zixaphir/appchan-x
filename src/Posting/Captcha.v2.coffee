@@ -3,14 +3,8 @@ Captcha.v2 = class extends Captcha
   shouldFocus: false
   timeouts: {}
   postsCount: 0
-  noscriptURL: -> '//www.google.com/recaptcha/api/fallback?k=<%= meta.recaptchaKey %>'
 
   impInit: ->
-    if @noscript = Conf['Force Noscript Captcha'] or not $.hasClass doc, 'js-enabled'
-      @conn = new Connection null, "#{location.protocol}//www.google.com",
-        token: (token) => @save true, token
-      $.addClass QR.nodes.el, 'noscript-captcha'
-
     root = $.el 'div', className: 'captcha-root'
     $.extend root, <%= html(
       '<div class="captcha-counter"><a href="javascript:;"></a></div>'
@@ -36,8 +30,6 @@ Captcha.v2 = class extends Captcha
       conn = new Connection window.parent, "#{location.protocol}//boards.4chan.org"
       conn.send {token}
 
-  # perSetup: unused
-
   impSetup: (focus, force) ->
     @shouldFocus = true if focus and not QR.inBubble()
     if @timeouts.destroy
@@ -58,17 +50,7 @@ Captcha.v2 = class extends Captcha
       childList: true
       subtree: true
 
-    if @noscript
-      @setupNoscript()
-    else
-      @setupJS()
-
-  setupNoscript: ->
-    iframe = $.el 'iframe',
-      id: 'qr-captcha-iframe'
-      src: @noscriptURL()
-    $.add @nodes.container, iframe
-    @conn.target = iframe
+    @setupJS()
 
   setupJS: ->
     $.globalEval """
@@ -139,9 +121,6 @@ Captcha.v2 = class extends Captcha
       $.rm garbage.parentNode
     return
 
-  # handleCaptcha: (captcha) -> super captcha
-  # handleNoCaptcha: -> super()
-
   save: (pasted, token) ->
     $.forceSync 'captchas'
     @captchas.push
@@ -177,14 +156,9 @@ Captcha.v2 = class extends Captcha
       @timeouts.clear = setTimeout @clear.bind(@), @captchas[0].timeout - Date.now()
 
   reload: ->
-    if @noscript
-      $('iframe', @nodes.container).src = @noscriptURL()
-    else
-      $.globalEval '''
-        (function() {
-          var container = document.querySelector("#qr .captcha-container");
-          window.grecaptcha.reset(container.dataset.widgetID);
-        })();
-      '''
-
-  # keydown: unimplemented
+    $.globalEval '''
+      (function() {
+        var container = document.querySelector("#qr .captcha-container");
+        window.grecaptcha.reset(container.dataset.widgetID);
+      })();
+    '''

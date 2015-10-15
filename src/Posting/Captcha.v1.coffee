@@ -23,7 +23,7 @@ Captcha.v1 = class extends Captcha
   preSetup: ->
     {container, img} = @nodes
     container.hidden = true
-    container.src = @blank
+    img.src = @blank
     super()
 
   impSetup: (focus, force) ->
@@ -141,4 +141,4 @@ Captcha.v1 = class extends Captcha
   destroy: ->
     return unless @script
     $.globalEval 'window.Recaptcha.destroy();'
-    @beforeSetup() if @nodes
+    @preSetup() if @nodes

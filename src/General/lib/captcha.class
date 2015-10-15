@@ -2,7 +2,7 @@ class Captcha
   # constructor: ->
 
   lifetime: 2 * $.MINUTE
-  
+
   init: ->
     return if d.cookie.indexOf('pass_enabled=1') >= 0
     return unless @isEnabled = !!$ '#g-recaptcha, #captchaContainerAlt'
@@ -117,7 +117,7 @@ class Captcha
       title: 'Verification'
       autocomplete: 'off'
       spellcheck: false
-    
+
     @nodes = {container, input}
 
     $.on input, 'keydown', @keydown.bind @
@@ -125,4 +125,3 @@ class Captcha
 
     $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1'
     $.after QR.nodes.com.parentNode, [container, input]
-

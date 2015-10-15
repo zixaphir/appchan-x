@@ -1,3 +1,4 @@
+###
 Captcha.noscript = class extends Captcha
   constructor: ->
     @cb =
@@ -161,3 +162,4 @@ Captcha.noscript = class extends Captcha
       @reload()
     else
       @destroy()
+###

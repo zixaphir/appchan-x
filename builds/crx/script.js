@@ -208,7 +208,6 @@
         'Show Name and Subject': [false, 'Show the classic name, email, and subject fields in the QR, even when 4chan doesn\'t use them all.'],
         'Cooldown': [true, 'Indicate the remaining time before posting again.'],
         'Posting Success Notifications': [true, 'Show notifications on successful post creation or file uploading.'],
-        'Force Noscript Captcha': [false, 'Use the non-Javascript fallback captcha in the QR even if Javascript is enabled.'],
         'Captcha Warning Notifications': [true, 'When disabled, shows a red border on the CAPTCHA input until a key is pressed instead of a notification.'],
         'Dump List Before Comment': [false, 'Position of the QR\'s Dump List.'],
         'Auto-load captcha': [false, 'Automatically load the captcha in the QR even if your post is empty.'],
@@ -9166,242 +9165,172 @@
     }
   };
 
-  Captcha.noscript = (function(_super) {
-    __extends(_Class, _super);
 
-    function _Class() {
-      this.cb = {
-        focus: Captcha.prototype.cb.focus,
-        load: (function() {
-          if (this.nodes.iframe) {
-            return this.reload();
-          } else {
-            return this.setup();
-          }
-        }).bind(this),
-        cache: (function() {
-          return this.sendResponse();
-        }).bind(this)
-      };
-    }
-
-    _Class.prototype.iframeURL = '//www.google.com/recaptcha/api/noscript?k=6Ldp2bsSAAAAAAJ5uyx_lx34lJeEpTLVkP5k04qc';
-
-    _Class.prototype.lifetime = 30 * $.MINUTE;
-
-    _Class.prototype.timers = {};
-
-    _Class.prototype.impInit = function() {
-      this.buildV1Nodes();
-      $.addClass(QR.nodes.el, 'noscript-captcha');
-      this.conn = new Connection(null, "" + location.protocol + "//www.google.com", {
-        challenge: this.load.bind(this),
-        token: this.save.bind(this),
-        error: this.error.bind(this)
-      });
-      this.preSetup();
-      return this.setup();
-    };
-
-    _Class.prototype.initFrame = function() {
-      var cb, conn, img, _ref, _ref1;
-      conn = new Connection(window.parent, "" + location.protocol + "//boards.4chan.org", {
-        response: function(response) {
-          $.id('recaptcha_response_field').value = response;
-          return HTMLFormElement.prototype.submit.call($('form'));
-        }
-      });
-      if (location.hash === '#response') {
-        conn.send({
-          token: (_ref = $('textarea')) != null ? _ref.value : void 0,
-          error: (_ref1 = $('.recaptcha_input_area')) != null ? _ref1.textContent.replace(/:$/, '') : void 0
-        });
-      }
-      if (!(img = $('img'))) {
-        return;
-      }
-      $('form').action = '#response';
-      cb = function() {
-        var canvas;
-        canvas = $.el('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        canvas.getContext('2d').drawImage(img, 0, 0);
-        return conn.send({
-          challenge: canvas.toDataURL()
-        });
-      };
-      if (img.complete) {
-        return cb();
-      } else {
-        return $.on(img, 'load', cb);
-      }
-    };
-
-    _Class.prototype.preSetup = function() {
-      var container, input, _ref;
-      _ref = this.nodes, container = _ref.container, input = _ref.input;
-      container.hidden = true;
-      input.value = '';
-      input.placeholder = 'Focus to load reCAPTCHA';
-      this.count();
-      return $.on(input, 'focus click', this.cb.focus);
-    };
-
-    _Class.prototype.impSetup = function(focus, force) {
-      this.create();
-      if (focus) {
-        return this.nodes.input.focus();
-      }
-    };
-
-    _Class.prototype.create = function() {
-      if (!this.nodes.iframe) {
-        this.nodes.iframe = $.el('iframe', {
-          id: 'qr-captcha-iframe',
-          src: this.iframeURL
-        });
-        $.add(QR.nodes.el, this.nodes.iframe);
-        this.conn.target = this.nodes.iframe;
-      } else if (!this.occupied || force) {
-        this.nodes.iframe.src = this.iframeURL;
-      }
-      return this.occupied = true;
-    };
-
-    _Class.prototype.postSetup = function() {
-      var container, input, _ref;
-      _ref = this.nodes, container = _ref.container, input = _ref.input;
-      container.hidden = false;
-      input.placeholder = 'Verification';
-      this.count();
-      $.off(input, 'focus click', this.cb.focus);
-      if (QR.nodes.el.getBoundingClientRect().bottom > doc.clientHeight) {
-        QR.nodes.el.style.top = '';
-        return QR.nodes.el.style.bottom = '0px';
-      }
-    };
-
-    _Class.prototype.destroy = function() {
-      if (!this.isEnabled) {
-        return;
-      }
-      $.rm(this.nodes.img);
-      delete this.nodes.img;
-      $.rm(this.nodes.iframe);
-      delete this.nodes.iframe;
-      delete this.occupied;
-      return this.preSetup();
-    };
-
-    _Class.prototype.handleNoCaptcha = function() {
-      if (/\S/.test(this.nodes.input.value)) {
-        return (function(_this) {
-          return function(cb) {
-            _this.submitCB = cb;
-            return _this.sendResponse();
-          };
-        })(this);
-      } else {
-        return null;
-      }
-    };
-
-    _Class.prototype.sendResponse = function() {
-      var response;
-      response = this.nodes.input.value;
-      if (/\S/.test(response)) {
-        return this.conn.send({
-          response: response
-        });
-      }
-    };
-
-    _Class.prototype.save = function(token) {
-      var captcha;
-      delete this.occupied;
-      this.nodes.input.value = '';
-      captcha = {
-        challenge: token,
-        response: 'manual_challenge',
-        timeout: this.timeout
-      };
-      if (this.submitCB) {
-        this.submitCB(captcha);
-        delete this.submitCB;
-        if (this.needed()) {
-          return this.reload();
-        } else {
-          return this.destroy();
-        }
-      } else {
-        $.forceSync('captchas');
-        this.captchas.push(captcha);
-        this.count();
-        $.set('captchas', this.captchas);
-        return this.reload();
-      }
-    };
-
-    _Class.prototype.load = function(src) {
-      var container, img, input, _ref;
-      _ref = this.nodes, container = _ref.container, input = _ref.input, img = _ref.img;
-      this.occupied = true;
-      this.timeout = Date.now() + this.lifetime;
-      if (!img) {
-        img = this.nodes.img = new Image();
-        $.one(img, 'load', this.postSetup.bind(this));
-        $.on(img, 'load', function() {
-          return this.hidden = false;
-        });
-        $.add(container, img);
-      }
-      img.src = src;
-      input.value = '';
-      this.clear();
-      clearTimeout(this.timers.expire);
-      return this.timers.expire = setTimeout(this.expire.bind(this), this.lifetime);
-    };
-
-    _Class.prototype.reload = function() {
-      var _ref;
-      this.nodes.iframe.src = this.iframeURL;
-      this.occupied = true;
-      return (_ref = this.nodes.img) != null ? _ref.hidden = true : void 0;
-    };
-
-    _Class.prototype.count = function() {
-      _Class.__super__.count.call(this);
-      clearTimeout(this.timers.clear);
-      if (this.captchas.length) {
-        return this.timers.clear = setTimeout(this.clear.bind(this), this.captchas[0].timeout - Date.now());
-      }
-    };
-
-    _Class.prototype.error = function(message) {
-      this.occupied = true;
-      this.nodes.input.value = '';
-      if (this.submitCB) {
-        this.submitCB();
-        delete this.submitCB;
-      }
-      return QR.error("Captcha Error: " + message);
-    };
-
-    _Class.prototype.expire = function() {
-      if (!this.nodes.iframe) {
-        return;
-      }
-      if (!d.hidden && (this.needed() || d.activeElement === this.nodes.input)) {
-        return this.reload();
-      } else {
-        return this.destroy();
-      }
-    };
-
-    return _Class;
-
-  })(Captcha);
+  /*
+  Captcha.noscript = class extends Captcha
+    constructor: ->
+      @cb =
+        focus: Captcha::cb.focus
+        load:  (-> if @nodes.iframe then @reload() else @setup()).bind @
+        cache: (-> @sendResponse()).bind @
+  
+    iframeURL: '//www.google.com/recaptcha/api/noscript?k=6Ldp2bsSAAAAAAJ5uyx_lx34lJeEpTLVkP5k04qc'
+    lifetime: 30 * $.MINUTE
+    timers: {}
+  
+    impInit: ->
+      @buildV1Nodes()
+  
+      $.addClass QR.nodes.el, 'noscript-captcha'
+  
+      @conn = new Connection null, "#{location.protocol}//www.google.com",
+        challenge: @load.bind @
+        token:     @save.bind @
+        error:     @error.bind @
+  
+      @preSetup()
+      @setup()
+  
+    initFrame: ->
+      conn = new Connection window.parent, "#{location.protocol}//boards.4chan.org",
+        response: (response) ->
+          $.id('recaptcha_response_field').value = response
+           * The form has a field named 'submit'
+          HTMLFormElement.prototype.submit.call $('form')
+      if location.hash is '#response'
+        conn.send
+          token: $('textarea')?.value
+          error: $('.recaptcha_input_area')?.textContent.replace(/:$/, '')
+      return unless img = $ 'img'
+      $('form').action = '#response'
+      cb = ->
+        canvas = $.el 'canvas'
+        canvas.width  = img.width
+        canvas.height = img.height
+        canvas.getContext('2d').drawImage(img, 0, 0)
+        conn.send {challenge: canvas.toDataURL()}
+      if img.complete
+        cb()
+      else
+        $.on img, 'load', cb
+  
+    preSetup: ->
+      {container, input} = @nodes
+      container.hidden = true
+      input.value = ''
+      input.placeholder = 'Focus to load reCAPTCHA'
+      @count()
+      $.on input, 'focus click', @cb.focus
+  
+    impSetup: (focus, force) ->
+      @create()
+      @nodes.input.focus() if focus
+  
+    create: ->
+      if !@nodes.iframe
+        @nodes.iframe = $.el 'iframe',
+          id: 'qr-captcha-iframe'
+          src: @iframeURL
+        $.add QR.nodes.el, @nodes.iframe
+        @conn.target = @nodes.iframe
+      else if !@occupied or force
+        @nodes.iframe.src = @iframeURL
+      @occupied = true
+  
+    postSetup: ->
+      {container, input} = @nodes
+      container.hidden = false
+      input.placeholder = 'Verification'
+      @count()
+      $.off input, 'focus click', @cb.focus
+  
+      if QR.nodes.el.getBoundingClientRect().bottom > doc.clientHeight
+        QR.nodes.el.style.top    = ''
+        QR.nodes.el.style.bottom = '0px'
+  
+    destroy: ->
+      return unless @isEnabled
+      $.rm @nodes.img
+      delete @nodes.img
+      $.rm @nodes.iframe
+      delete @nodes.iframe
+      delete @occupied
+      @preSetup()
+  
+     * handleCaptcha: -> super()
+  
+    handleNoCaptcha: ->
+      if /\S/.test @nodes.input.value
+        (cb) =>
+          @submitCB = cb
+          @sendResponse()
+      else
+        null
+  
+    sendResponse: ->
+      response = @nodes.input.value
+      if /\S/.test response
+        @conn.send {response}
+  
+    save: (token) ->
+      delete @occupied
+      @nodes.input.value = ''
+      captcha =
+        challenge: token
+        response:  'manual_challenge'
+        timeout:   @timeout
+      if @submitCB
+        @submitCB captcha
+        delete @submitCB
+        if @needed() then @reload() else @destroy()
+      else
+        $.forceSync 'captchas'
+        @captchas.push captcha
+        @count()
+        $.set 'captchas', @captchas
+        @reload()
+  
+    load: (src) ->
+      {container, input, img} = @nodes
+      @occupied = true
+      @timeout = Date.now() + @lifetime
+      unless img
+        img = @nodes.img = new Image()
+        $.one img, 'load', @postSetup.bind @
+        $.on img, 'load', -> @hidden = false
+        $.add container, img
+      img.src = src
+      input.value = ''
+      @clear()
+      clearTimeout @timers.expire
+      @timers.expire = setTimeout @expire.bind(@), @lifetime
+  
+    reload: ->
+      @nodes.iframe.src = @iframeURL
+      @occupied = true
+      @nodes.img?.hidden = true
+  
+    count: ->
+      super()
+      clearTimeout @timers.clear
+      if @captchas.length
+        @timers.clear = setTimeout @clear.bind(@), @captchas[0].timeout - Date.now()
+  
+    error: (message) ->
+      @occupied = true
+      @nodes.input.value = ''
+      if @submitCB
+        @submitCB()
+        delete @submitCB
+      QR.error "Captcha Error: #{message}"
+  
+    expire: ->
+      return unless @nodes.iframe
+      if not d.hidden and (@needed() or d.activeElement is @nodes.input)
+        @reload()
+      else
+        @destroy()
+   */
 
   Captcha.v1 = (function(_super) {
     var blank;
@@ -9438,7 +9367,7 @@
       var container, img, _ref;
       _ref = this.nodes, container = _ref.container, img = _ref.img;
       container.hidden = true;
-      container.src = this.blank;
+      img.src = this.blank;
       return _Class.__super__.preSetup.call(this);
     };
 
@@ -9568,7 +9497,7 @@
       }
       $.globalEval('window.Recaptcha.destroy();');
       if (this.nodes) {
-        return this.beforeSetup();
+        return this.preSetup();
       }
     };
 
@@ -9587,22 +9516,8 @@
 
     _Class.prototype.postsCount = 0;
 
-    _Class.prototype.noscriptURL = function() {
-      return '//www.google.com/recaptcha/api/fallback?k=6Ldp2bsSAAAAAAJ5uyx_lx34lJeEpTLVkP5k04qc';
-    };
-
     _Class.prototype.impInit = function() {
       var counter, root;
-      if (this.noscript = Conf['Force Noscript Captcha'] || !$.hasClass(doc, 'js-enabled')) {
-        this.conn = new Connection(null, "" + location.protocol + "//www.google.com", {
-          token: (function(_this) {
-            return function(token) {
-              return _this.save(true, token);
-            };
-          })(this)
-        });
-        $.addClass(QR.nodes.el, 'noscript-captcha');
-      }
       root = $.el('div', {
         className: 'captcha-root'
       });
@@ -9673,21 +9588,7 @@
         childList: true,
         subtree: true
       });
-      if (this.noscript) {
-        return this.setupNoscript();
-      } else {
-        return this.setupJS();
-      }
-    };
-
-    _Class.prototype.setupNoscript = function() {
-      var iframe;
-      iframe = $.el('iframe', {
-        id: 'qr-captcha-iframe',
-        src: this.noscriptURL()
-      });
-      $.add(this.nodes.container, iframe);
-      return this.conn.target = iframe;
+      return this.setupJS();
     };
 
     _Class.prototype.setupJS = function() {
@@ -9825,11 +9726,7 @@
     };
 
     _Class.prototype.reload = function() {
-      if (this.noscript) {
-        return $('iframe', this.nodes.container).src = this.noscriptURL();
-      } else {
-        return $.globalEval('(function() {\n  var container = document.querySelector("#qr .captcha-container");\n  window.grecaptcha.reset(container.dataset.widgetID);\n})();');
-      }
+      return $.globalEval('(function() {\n  var container = document.querySelector("#qr .captcha-container");\n  window.grecaptcha.reset(container.dataset.widgetID);\n})();');
     };
 
     return _Class;
@@ -10625,7 +10522,12 @@
       };
       cb = function(response) {
         if (response != null) {
-          extra.form.append('g-recaptcha-response', response);
+          if (response.challenge != null) {
+            extra.form.append('recaptcha_challenge_field', response.challenge);
+            extra.form.append('recaptcha_response_field', response.response);
+          } else {
+            extra.form.append('g-recaptcha-response', response.response);
+          }
         }
         QR.req = $.ajax("https://sys.4chan.org/" + g.BOARD + "/post", options, extra);
         return QR.req.progress = '...';

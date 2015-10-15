@@ -361,10 +361,10 @@ Config =
         true
         'Show notifications on successful post creation or file uploading.'
       ]
-      'Force Noscript Captcha': [
-        false
-        'Use the non-Javascript fallback captcha in the QR even if Javascript is enabled.'
-      ]
+      #'Force Noscript Captcha': [
+      #  false
+      #  'Use the non-Javascript fallback captcha in the QR even if Javascript is enabled.'
+      #]
       'Captcha Warning Notifications': [
         true
         'When disabled, shows a red border on the CAPTCHA input until a key is pressed instead of a notification.'
