@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.11 - 2015-10-18
+* appchan x - Version 2.10.11 - 2015-10-19
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -4373,7 +4373,7 @@
         captchas = _arg.captchas;
         return QR.captcha.sync(captchas);
       });
-      $.sync('captchas', this.sync);
+      $.sync('captchas', this.sync.bind(this));
       return this.impInit();
     };
 

@@ -10,7 +10,7 @@ class Captcha
     @captchas = []
     $.get 'captchas', [], ({captchas}) ->
       QR.captcha.sync captchas
-    $.sync 'captchas', @sync
+    $.sync 'captchas', @sync.bind @
 
     @impInit()
 
