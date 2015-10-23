@@ -40,7 +40,7 @@ Captcha.v1 = class extends Captcha
     $.off window, 'captcha:timeout', setLifetime
 
     {container, input} = QR.captcha.nodes
-    container.hidden = false
+    container.removeAttribute hidden
     input.placeholder = 'Verification'
     QR.captcha.count()
     $.off input, 'focus click', QR.captcha.cb.focus

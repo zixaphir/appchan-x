@@ -21,9 +21,11 @@ Captcha.v2 = class extends Captcha
       @toggle()
       e.preventDefault()
       e.stopPropagation()
-    $.on window, 'captcha:success', =>
+
+    save = @save.bind @
+    $.on window, 'captcha:success', ->
       # XXX Greasemonkey 1.x workaround to gain access to GM_* functions.
-      $.queueTask => @save false
+      $.queueTask -> save false
 
   initFrame: ->
     if token = $('.fbc-verification-token > textarea')?.value
