@@ -230,6 +230,10 @@ Config =
         true
         'Loop videos opened in their own tabs.'
       ]
+      'Add Download Attribute to Filename': [
+        true
+        'Adds the Download attribute to the file link above image thumbnails. Useful for download managers like DownThemAll 3.0 that support renaming downloads with the download attribute.'
+      ]
 
     'Menu':
       'Menu': [
