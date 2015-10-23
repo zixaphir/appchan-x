@@ -29,5 +29,4 @@ DownloadLink =
     return unless @file
     # Filename formatting really fucks with this.
     a = $('.file-info a', @file.text) or @file.text.firstElementChild
-    console.log a
     a.download = @file.name

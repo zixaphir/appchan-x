@@ -173,7 +173,7 @@
         'Restart when Opened': [true, 'Restart GIFs and WebMs when you hover over or expand them.'],
         'Show Controls': [true, 'Show controls on videos expanded inline. Turn this off if you want to contract videos by clicking on them.'],
         'Loop in New Tab': [true, 'Loop videos opened in their own tabs.'],
-        'Add Download Attribute to Filename': [true, 'Adds the Download attribute to the file link above image thumbnails. Useful for download managers like DownThemAll that support renaming downloads with the download attribute.']
+        'Add Download Attribute to Filename': [true, 'Adds the Download attribute to the file link above image thumbnails. Useful for download managers like DownThemAll 3.0 that support renaming downloads with the download attribute.']
       },
       'Menu': {
         'Menu': [true, 'Add a drop-down menu to posts.'],
@@ -13501,7 +13501,6 @@
         return;
       }
       a = $('.file-info a', this.file.text) || this.file.text.firstElementChild;
-      console.log(a);
       return a.download = this.file.name;
     }
   };
