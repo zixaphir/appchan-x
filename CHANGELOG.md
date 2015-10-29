@@ -1,3 +1,9 @@
+### v2.10.12 
+*2015-10-29*
+
+- Implement V1 captcha again
+- Bugfixes
+
 ### v2.10.11 
 *2015-10-10*
 
