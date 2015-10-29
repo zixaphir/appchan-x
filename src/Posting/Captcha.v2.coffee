@@ -1,15 +1,10 @@
-Captcha.v2 =
-  lifetime: 2 * $.MINUTE
+Captcha.v2 = class extends Captcha
+  constructor: ->
+  shouldFocus: false
+  timeouts: {}
+  postsCount: 0
 
-  init: ->
-    return if d.cookie.indexOf('pass_enabled=1') >= 0
-    return unless @isEnabled = !!$.id 'g-recaptcha'
-
-    @captchas = []
-    $.get 'captchas', [], ({captchas}) ->
-      QR.captcha.sync captchas
-    $.sync 'captchas', @sync.bind @
-
+  impInit: ->
     root = $.el 'div', className: 'captcha-root'
     $.extend root, <%= html(
       '<div class="captcha-counter"><a href="javascript:;"></a></div>'
@@ -17,42 +12,28 @@ Captcha.v2 =
     counter   = $ '.captcha-counter > a', root
     @nodes = {root, counter}
     @count()
-    $.addClass QR.nodes.el, 'has-captcha'
+    $.addClass QR.nodes.el, 'has-captcha', 'captcha-v2'
     $.after QR.nodes.com.parentNode, root
 
     $.on counter, 'click', @toggle.bind @
-    $.on window, 'captcha:success', =>
+    $.on counter, 'keydown', (e) =>
+      return unless Keybinds.keyCode(e) is 'Space'
+      @toggle()
+      e.preventDefault()
+      e.stopPropagation()
+
+    save = @save.bind @
+    $.on window, 'captcha:success', ->
       # XXX Greasemonkey 1.x workaround to gain access to GM_* functions.
-      $.queueTask => @save false
+      $.queueTask -> save false
 
-  shouldFocus: false
-  timeouts: {}
-  postsCount: 0
+  initFrame: ->
+    if token = $('.fbc-verification-token > textarea')?.value
+      conn = new Connection window.parent, "#{location.protocol}//boards.4chan.org"
+      conn.send {token}
 
-  needed: ->
-    captchaCount = @captchas.length
-    captchaCount++ if QR.req
-    @postsCount = QR.posts.length
-    @postsCount = 0 if @postsCount is 1 and !Conf['Auto-load captcha'] and !QR.posts[0].com and !QR.posts[0].file
-    captchaCount < @postsCount
-
-  onNewPost: ->
-    @setup()
-
-  onPostChange: ->
-    @setup() if @postsCount is 0
-    @postsCount = 0 if QR.posts.length is 1 and !Conf['Auto-load captcha'] and !QR.posts[0].com and !QR.posts[0].file
-
-  toggle: ->
-    if @nodes.container and !@timeouts.destroy
-      @destroy()
-    else
-      @setup true, true
-
-  setup: (focus, force) ->
-    return unless @isEnabled and (@needed() or force)
-    $.addClass QR.nodes.el, 'captcha-open'
-    @shouldFocus = true if focus
+  impSetup: (focus, force) ->
+    @shouldFocus = true if focus and not QR.inBubble()
     if @timeouts.destroy
       clearTimeout @timeouts.destroy
       delete @timeouts.destroy
@@ -61,22 +42,26 @@ Captcha.v2 =
     if @nodes.container
       if @shouldFocus and iframe = $ 'iframe', @nodes.container
         iframe.focus()
+        QR.focus() # Event handler not fired in Firefox
         delete @shouldFocus
       return
 
     @nodes.container = $.el 'div', className: 'captcha-container'
     $.prepend @nodes.root, @nodes.container
-    new MutationObserver(@afterSetup.bind @).observe @nodes.container,
+    new MutationObserver(@postSetup.bind @).observe @nodes.container,
       childList: true
       subtree: true
 
-    $.globalEval '''
+    @setupJS()
+
+  setupJS: ->
+    $.globalEval """
       (function() {
         function render() {
           var container = document.querySelector("#qr .captcha-container");
           container.dataset.widgetID = window.grecaptcha.render(container, {
             sitekey: '<%= meta.recaptchaKey %>',
-            theme: 'light',
+            theme: #{if Style.lightTheme then "'light'" else "'dark'"},
             callback: function(response) {
               window.dispatchEvent(new CustomEvent("captcha:success", {detail: response}));
             }
@@ -92,9 +77,9 @@ Captcha.v2 =
           }
         }
       })();
-    '''
+    """
 
-  afterSetup: (mutations) ->
+  postSetup: (mutations) ->
     for mutation in mutations
       for node in mutation.addedNodes
         @setupIFrame   iframe   if iframe   = $.x './descendant-or-self::iframe',   node
@@ -102,7 +87,8 @@ Captcha.v2 =
     return
 
   setupIFrame: (iframe) ->
-    @setupTime = Date.now()
+    Captcha.replace.iframe iframe
+    $.addClass QR.nodes.el, 'captcha-open'
     if QR.nodes.el.getBoundingClientRect().bottom > doc.clientHeight
       QR.nodes.el.style.top    = null
       QR.nodes.el.style.bottom = '0px'
@@ -112,64 +98,58 @@ Captcha.v2 =
   setupTextArea: (textarea) ->
     $.one textarea, 'input', => @save true
 
+  onNewPost: ->
+    @setup()
+
+  onPostChange: ->
+    @setup() if @postsCount is 0
+    @postsCount = 0 if QR.posts.length is 1 and !Conf['Auto-load captcha'] and !QR.posts[0].com and !QR.posts[0].file
+
+  toggle: ->
+    if @nodes.container and !@timeouts.destroy
+      @destroy()
+    else
+      @setup true, true
+
   destroy: ->
     return unless @isEnabled
     delete @timeouts.destroy
     $.rmClass QR.nodes.el, 'captcha-open'
     $.rm @nodes.container if @nodes.container
     delete @nodes.container
+    # Clean up abandoned iframes.
+    for garbage in $$ 'div > .gc-bubbleDefault'
+      $.rm ins if (ins = garbage.parentNode.nextSibling) and ins.nodeName is 'INS'
+      $.rm garbage.parentNode
+    return
 
-  sync: (captchas=[]) ->
-    @captchas = captchas
-    @clear()
-    @count()
-
-  getOne: ->
-    @clear()
-    if captcha = @captchas.shift()
-      $.set 'captchas', @captchas
-      @count()
-      captcha.response
-    else
-      null
-
-  save: (pasted) ->
+  save: (pasted, token) ->
     $.forceSync 'captchas'
     @captchas.push
-      response: $('textarea', @nodes.container).value
-      timeout:  (if pasted then @setupTime else Date.now()) + @lifetime
+      response: token or $('textarea', @nodes.container).value
+      timeout:  Date.now() + @lifetime
     $.set 'captchas', @captchas
     @count()
 
+    focus = d.activeElement?.nodeName is 'IFRAME' and /https?:\/\/www\.google\.com\/recaptcha\//.test(d.activeElement.src)
     if @needed()
-      if QR.cooldown.auto or Conf['Post on Captcha Completion']
-        @shouldFocus = true
-      else
-        QR.nodes.status.focus()
+      if focus
+        if QR.cooldown.auto or Conf['Post on Captcha Completion']
+          @shouldFocus = true
+        else
+          QR.nodes.status.focus()
       @reload()
     else
       if pasted
         @destroy()
       else
         @timeouts.destroy ?= setTimeout @destroy.bind(@), 3 * $.SECOND
-      QR.nodes.status.focus()
+      QR.nodes.status.focus() if focus
 
     QR.submit() if Conf['Post on Captcha Completion'] and !QR.cooldown.auto
 
-  notify: (el) ->
-    QR.notify el
-
   clear: ->
-    return unless @captchas.length
-    $.forceSync 'captchas'
-    now = Date.now()
-    for captcha, i in @captchas
-      break if captcha.timeout > now
-    return unless i
-    @captchas = @captchas[i..]
-    @count()
-    $.set 'captchas', @captchas
-    @setup true
+    @setup(d.activeElement is QR.nodes.status) if super()
 
   count: ->
     @nodes.counter.textContent = "Captchas: #{@captchas.length}"

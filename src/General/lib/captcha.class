@@ -1,0 +1,127 @@
+class Captcha
+  # constructor: ->
+
+  lifetime: 2 * $.MINUTE
+
+  init: ->
+    return if d.cookie.indexOf('pass_enabled=1') >= 0
+    return unless @isEnabled = !!$ '#g-recaptcha, #captchaContainerAlt'
+
+    @captchas = []
+    $.get 'captchas', [], ({captchas}) ->
+      QR.captcha.sync captchas
+    $.sync 'captchas', @sync.bind @
+
+    @impInit()
+
+  # impInit: -> # Implement in instance.
+
+  cb:
+    focus: -> QR.captcha.setup false, true
+    # Only used by v1 and noscript versions
+    load: ->
+    cache: ->
+
+  needed: ->
+    captchaCount = @captchas.length
+    captchaCount++ if QR.req
+    @postsCount = QR.posts.length
+    if @postsCount is 1 and !Conf['Auto-load captcha']
+      {com, file} = QR.posts[0]
+      @postsCount = 0 if !com and !file
+    captchaCount < @postsCount
+
+  # Used only in V2.
+  onNewPost: ->
+  onPostChange: ->
+
+  preSetup: ->
+    {input} = @nodes
+    input.value = ''
+    input.placeholder = 'Focus to load reCAPTCHA'
+    @count()
+    $.on input, 'focus click', @cb.focus
+
+  setup: (focus, force) ->
+    return unless @isEnabled and (@needed() or force)
+    @impSetup focus, force
+
+  # impSetup: -> # Implement in instance.
+  # postSetup: -> # Implement in instance.
+  # destroy: -> # Implement in instance.
+  getOne: ->
+    @clear()
+    if captcha = @captchas.shift()
+      @handleCaptcha captcha
+    else
+      @handleNoCaptcha()
+
+  handleCaptcha: (captcha) ->
+    # Some implementations will change this.
+    @count()
+    $.set 'captchas', @captchas
+    captcha
+
+  handleNoCaptcha: -> # Some implementations will change this.
+  # save: -> # Implement in instance.
+  # load: -> # not used in v2, implement in instace.
+
+  sync: (captchas=[]) ->
+    @captchas = captchas
+    @count()
+    @clear()
+
+  clear: ->
+    return false unless @captchas.length
+    $.forceSync 'captchas'
+    now = Date.now()
+    for captcha, i in @captchas
+      break if captcha.timeout > now
+    return unless i
+    @captchas = @captchas[i..]
+    @count()
+    $.set 'captchas', @captchas
+    return true
+
+  count: -> # Implement as super() or override.
+    count = if @captchas then @captchas.length else 0
+    placeholder = @nodes.input.placeholder.replace /\ \(.*\)$/, ''
+    placeholder += switch count
+      when 0
+        if placeholder is 'Verification' then ' (Shift + Enter to cache)' else ''
+      when 1
+        ' (1 cached captcha)'
+      else
+        " (#{count} cached captchas)"
+    @nodes.input.placeholder = placeholder
+    @nodes.input.alt = count # For XTRM RICE.
+
+  # reload: -> # Implement in instance
+
+  keydown: (e) ->
+    if e.keyCode is 8 and not @nodes.input.value
+      @cb.load()
+    else if e.keyCode is 13 and e.shiftKey
+      @cb.cache()
+    else
+      return
+    e.preventDefault()
+
+  buildV1Nodes: ->
+    container = $.el 'div',
+      className: 'captcha-img'
+      title: 'Reload reCAPTCHA'
+
+    input = $.el 'input',
+      className: 'captcha-input field'
+      title: 'Verification'
+      autocomplete: 'off'
+      spellcheck: false
+
+    @nodes = {container, input}
+
+    $.on input, 'keydown', @keydown.bind @
+    $.on container, 'click', @reload.bind @
+
+    $.addClass QR.nodes.el, 'has-captcha', 'captcha-v1'
+    $.after QR.nodes.com.parentNode, [container, input]

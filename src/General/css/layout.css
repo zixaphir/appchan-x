@@ -1843,9 +1843,6 @@ input:checked + .rice {
 .captcha-input.error:focus {
   border-color: rgb(255,0,0) !important;
 }
-#qr-captcha-iframe {
-  display: none;
-}
 /* Recaptcha v2 */
 #qr .captcha-root {
   position: relative;

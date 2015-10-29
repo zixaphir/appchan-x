@@ -365,10 +365,10 @@ Config =
         true
         'Show notifications on successful post creation or file uploading.'
       ]
-      'Force Noscript Captcha': [
-        false
-        'Use the non-Javascript fallback captcha in the QR even if Javascript is enabled.'
-      ]
+      #'Force Noscript Captcha': [
+      #  false
+      #  'Use the non-Javascript fallback captcha in the QR even if Javascript is enabled.'
+      #]
       'Captcha Warning Notifications': [
         true
         'When disabled, shows a red border on the CAPTCHA input until a key is pressed instead of a notification.'
@@ -385,6 +385,18 @@ Config =
         false
         'Submit the post immediately when the captcha is completed.'
       ]
+      'Captcha Fixes': [
+        true
+        'Make captcha easier to use, especially with the keyboard.'
+      ]
+      'Use Recaptcha v1': [
+        false
+        'Use the old text version of Recaptcha.'
+      ]
+      #'Use Recaptcha v2 in Reports': [
+      #  false
+      #  'Use the image selection captcha in the report window.'
+      #]
 
     'Quote Links':
       'Quote Backlinks': [
