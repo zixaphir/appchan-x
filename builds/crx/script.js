@@ -9407,7 +9407,7 @@
       $.globalEval('window.dispatchEvent(new CustomEvent("captcha:timeout", {detail: RecaptchaState.timeout}))');
       $.off(window, 'captcha:timeout', setLifetime);
       _ref = QR.captcha.nodes, container = _ref.container, input = _ref.input;
-      container.removeAttribute(hidden);
+      container.removeAttribute('hidden');
       input.placeholder = 'Verification';
       QR.captcha.count();
       $.off(input, 'focus click', QR.captcha.cb.focus);
