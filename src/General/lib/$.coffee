@@ -169,29 +169,15 @@ $.el = (tag, properties) ->
   $.extend el, properties if properties
   el
 
-do ->
-  handlers  = []
-  eHandlers = []
+$.on = (el, events, handler) ->
+  for event in events.split ' '
+    el.addEventListener event, handler, false
+  return
 
-  $.on = (el, events, handler) ->
-    fn = (args...) ->
-      try
-        handler.apply this, args
-      catch err
-        Main.handleErrors [err]
-    handlers.push handler
-    eHandlers.push fn
-    for event in events.split ' '
-      el.addEventListener event, fn, false
-    return
-
-  $.off = (el, events, handler) ->
-    i = handlers.indexOf handler
-    return unless i > -1
-    fn = eHandlers[i]
-    for event in events.split ' '
-      el.removeEventListener event, fn, false
-    return
+$.off = (el, events, handler) ->
+  for event in events.split ' '
+    el.removeEventListener event, handler, false
+  return
 
 $.one = (el, events, handler) ->
   cb = (e) ->

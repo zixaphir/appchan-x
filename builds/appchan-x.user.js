@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.13 - 2015-11-04
+* appchan x - Version 2.10.13 - 2015-12-05
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -2873,44 +2873,23 @@
     return el;
   };
 
-  (function() {
-    var eHandlers, handlers;
-    handlers = [];
-    eHandlers = [];
-    $.on = function(el, events, handler) {
-      var event, fn, _i, _len, _ref;
-      fn = function() {
-        var args, err;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        try {
-          return handler.apply(this, args);
-        } catch (_error) {
-          err = _error;
-          return Main.handleErrors([err]);
-        }
-      };
-      handlers.push(handler);
-      eHandlers.push(fn);
-      _ref = events.split(' ');
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        event = _ref[_i];
-        el.addEventListener(event, fn, false);
-      }
-    };
-    return $.off = function(el, events, handler) {
-      var event, fn, i, _i, _len, _ref;
-      i = handlers.indexOf(handler);
-      if (!(i > -1)) {
-        return;
-      }
-      fn = eHandlers[i];
-      _ref = events.split(' ');
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        event = _ref[_i];
-        el.removeEventListener(event, fn, false);
-      }
-    };
-  })();
+  $.on = function(el, events, handler) {
+    var event, _i, _len, _ref;
+    _ref = events.split(' ');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      event = _ref[_i];
+      el.addEventListener(event, handler, false);
+    }
+  };
+
+  $.off = function(el, events, handler) {
+    var event, _i, _len, _ref;
+    _ref = events.split(' ');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      event = _ref[_i];
+      el.removeEventListener(event, handler, false);
+    }
+  };
 
   $.one = function(el, events, handler) {
     var cb;
