@@ -14,6 +14,7 @@ Flash =
     sauceLink = $.el 'a',
       textContent: 'Check Sauce on SWFCHAN'
       href:        "http://eye.swfchan.com/search/?q=#{swfName}"
+      target:      "_blank"
     $.addClass nav, 'swfSauce'
     $.rmClass nav, 'navLinks'
     $.rmAll nav
