@@ -370,13 +370,19 @@ ThreadUpdater =
 
     ThreadUpdater.set 'status', "+#{count}", 'new'
     ThreadUpdater.outdateCount = 0
-    if Conf['Beep'] and d.hidden and Unread.posts and !Unread.posts.length
-      unless ThreadUpdater.audio
-        ThreadUpdater.audio = $.el 'audio', src: ThreadUpdater.beep
-      ThreadUpdater.audio.play()
 
     ThreadUpdater.lastPost = posts[count - 1].ID
     Post.callbacks.execute posts
+
+    if Conf['Beep'] and d.hidden and Unread.posts and !Unread.posts.length
+      unless ThreadUpdater.audio
+        ThreadUpdater.audio = $.el 'audio',
+        src: ThreadUpdater.beep,
+        onended: -> 
+          if QuoteMarkers.beep
+            ThreadUpdater.audio.play()
+            QuoteMarkers.beep = false
+      ThreadUpdater.audio.play()
 
     scroll = Conf['Auto Scroll'] and ThreadUpdater.scrollBG() and Header.getBottomOf(ThreadUpdater.root) > -75
 

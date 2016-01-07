@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.14 - 2016-01-06
+* appchan x - Version 2.10.14 - 2016-01-07
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -256,6 +256,7 @@
         'Mark Quotes of You': [true, 'Add \'(You)\' to quotes linking to your posts.'],
         'Highlight Posts Quoting You': [false, 'Highlights any posts that contain a quote to your post.', 1],
         'Highlight Own Posts': [false, 'Highlights own posts if Quote Markers are enabled.', 1],
+        'Double Beep': [false, 'If Beep is enabled, then beeps twice to notify of a post quoting you.', 1],
         'Mark OP Quotes': [true, 'Add \'(OP)\' to OP quotes.'],
         'Mark Cross-thread Quotes': [true, 'Add \'(Cross-thread)\' to cross-threads quotes.'],
         'Quote Threading': [false, 'Thread conversations']
@@ -8457,6 +8458,9 @@
           markers.push('You');
         }
         $.addClass(post.nodes.root, 'quotesYou');
+        if (Conf['Beep'] && Conf['Double Beep']) {
+          QuoteMarkers.beep = true;
+        }
       }
       if (board.ID === boardID) {
         if (Conf['Mark OP Quotes'] && thread.ID === postID) {
@@ -14664,16 +14668,22 @@
       }
       ThreadUpdater.set('status', "+" + count, 'new');
       ThreadUpdater.outdateCount = 0;
+      ThreadUpdater.lastPost = posts[count - 1].ID;
+      Post.callbacks.execute(posts);
       if (Conf['Beep'] && d.hidden && Unread.posts && !Unread.posts.length) {
         if (!ThreadUpdater.audio) {
           ThreadUpdater.audio = $.el('audio', {
-            src: ThreadUpdater.beep
+            src: ThreadUpdater.beep,
+            onended: function() {
+              if (QuoteMarkers.beep) {
+                ThreadUpdater.audio.play();
+                return QuoteMarkers.beep = false;
+              }
+            }
           });
         }
         ThreadUpdater.audio.play();
       }
-      ThreadUpdater.lastPost = posts[count - 1].ID;
-      Post.callbacks.execute(posts);
       scroll = Conf['Auto Scroll'] && ThreadUpdater.scrollBG() && Header.getBottomOf(ThreadUpdater.root) > -75;
       for (_j = 0, _len1 = posts.length; _j < _len1; _j++) {
         post = posts[_j];

@@ -1,3 +1,6 @@
+- Flash SWFchan link opens in newtab by default
+- Implement Double Beep on posts involving quotes of you
+
 ### v2.10.14 
 *2015-12-05*
 
