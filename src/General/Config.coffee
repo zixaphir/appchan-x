@@ -451,7 +451,7 @@ Config =
       ]
       'Double Beep': [
         false
-        'If Beep is enabled, then beeps twice to notify of a post quoting you.'
+        'Beeps twice to notify you of a post made that is quoting you.'
         1
       ]
       'Mark OP Quotes': [

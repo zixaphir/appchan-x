@@ -24,7 +24,7 @@ QuoteMarkers =
     if QR.db.get {boardID, threadID, postID}
       markers.push 'You' if Conf['Mark Quotes of You']
       $.addClass post.nodes.root, 'quotesYou'
-      if Conf['Beep'] and Conf['Double Beep']
+      if Conf['Double Beep']
         QuoteMarkers.beep = true
 
     if board.ID is boardID
