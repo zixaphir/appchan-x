@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.14 - 2016-01-07
+* appchan x - Version 2.10.14 - 2016-01-21
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -14685,6 +14685,8 @@
         if (QuoteMarkers.beep || Conf['Beep']) {
           ThreadUpdater.audio.play();
         }
+      } else if (QuoteMarkers.beep && !d.hidden) {
+        QuoteMarkers.beep = false;
       }
       scroll = Conf['Auto Scroll'] && ThreadUpdater.scrollBG() && Header.getBottomOf(ThreadUpdater.root) > -75;
       for (_j = 0, _len1 = posts.length; _j < _len1; _j++) {

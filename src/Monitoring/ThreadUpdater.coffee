@@ -384,6 +384,8 @@ ThreadUpdater =
             QuoteMarkers.beep = false
       if QuoteMarkers.beep or Conf['Beep']
         ThreadUpdater.audio.play()
+    else if QuoteMarkers.beep and not d.hidden
+      QuoteMarkers.beep = false
 
     scroll = Conf['Auto Scroll'] and ThreadUpdater.scrollBG() and Header.getBottomOf(ThreadUpdater.root) > -75
 
