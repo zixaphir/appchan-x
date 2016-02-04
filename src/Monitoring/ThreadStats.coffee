@@ -12,7 +12,7 @@ ThreadStats =
     title = "
       Post Count / File Count
       #{if Conf['IP Count in Stats']   then ' / IPs' else ''}
-      #{if Conf['Page Count in Stats'] then ' / Page Count' else ''}
+      #{if g.BOARD.ID is 'f' then ' / Purge Position' else if Conf['Page Count in Stats'] then ' / Page Count' else ''}
     ".trim()
     
     if Conf['Updater and Stats in Header']
@@ -90,7 +90,7 @@ ThreadStats =
     (if thread.fileLimit and !thread.isSticky then $.addClass else $.rmClass) fileCountEl, 'warning'
 
   fetchPage: ->
-    return if !Conf["Page Count in Stats"]
+    return unless Conf["Page Count in Stats"]
     clearTimeout ThreadStats.timeout
     if ThreadStats.thread.isDead
       ThreadStats.pageCountEl.textContent = 'Dead'
@@ -103,9 +103,16 @@ ThreadStats =
   onThreadsLoad: ->
     return unless Conf["Page Count in Stats"] and @status is 200
     for page in @response
-      for thread in page.threads when thread.no is ThreadStats.thread.ID
-        ThreadStats.pageCountEl.textContent = page.page
-        (if page.page is @response.length then $.addClass else $.rmClass) ThreadStats.pageCountEl, 'warning'
-        # Thread data may be stale (modification date given < time of last post). If so, try again on next thread update.
-        ThreadStats.lastPageUpdate = new Date thread.last_modified * $.SECOND
-        return
+      if g.BOARD.ID is 'f'
+        purgePos = 1
+        for thread in page.threads
+          if thread.no < ThreadStats.thread.ID
+            purgePos++
+        ThreadStats.pageCountEl.textContent = purgePos
+      else
+        for thread in page.threads when thread.no is ThreadStats.thread.ID
+          ThreadStats.pageCountEl.textContent = page.page
+          (if page.page is @response.length then $.addClass else $.rmClass) ThreadStats.pageCountEl, 'warning'
+          # Thread data may be stale (modification date given < time of last post). If so, try again on next thread update.
+          ThreadStats.lastPageUpdate = new Date thread.last_modified * $.SECOND
+          return

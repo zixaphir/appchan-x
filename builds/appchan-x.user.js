@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.14 - 2016-01-21
+* appchan x - Version 2.10.14 - 2016-02-04
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -14100,7 +14100,7 @@
         return;
       }
       html = ("[<span id=post-count>0</span> / <span id=file-count>0</span> " + (Conf['IP Count in Stats'] ? '/ <span id=ip-count>?</span>' : '') + " " + (Conf['Page Count in Stats'] ? '/ <span id=page-count>0</span>' : '') + "]").trim();
-      title = ("Post Count / File Count " + (Conf['IP Count in Stats'] ? ' / IPs' : '') + " " + (Conf['Page Count in Stats'] ? ' / Page Count' : '')).trim();
+      title = ("Post Count / File Count " + (Conf['IP Count in Stats'] ? ' / IPs' : '') + " " + (g.BOARD.ID === 'f' ? ' / Purge Position' : Conf['Page Count in Stats'] ? ' / Page Count' : '')).trim();
       if (Conf['Updater and Stats in Header']) {
         this.dialog = sc = $.el('span', {
           innerHTML: html,
@@ -14209,23 +14209,35 @@
       });
     },
     onThreadsLoad: function() {
-      var page, thread, _i, _j, _len, _len1, _ref, _ref1;
+      var page, purgePos, thread, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
       if (!(Conf["Page Count in Stats"] && this.status === 200)) {
         return;
       }
       _ref = this.response;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         page = _ref[_i];
-        _ref1 = page.threads;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          thread = _ref1[_j];
-          if (!(thread.no === ThreadStats.thread.ID)) {
-            continue;
+        if (g.BOARD.ID === 'f') {
+          purgePos = 1;
+          _ref1 = page.threads;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            thread = _ref1[_j];
+            if (thread.no < ThreadStats.thread.ID) {
+              purgePos++;
+            }
           }
-          ThreadStats.pageCountEl.textContent = page.page;
-          (page.page === this.response.length ? $.addClass : $.rmClass)(ThreadStats.pageCountEl, 'warning');
-          ThreadStats.lastPageUpdate = new Date(thread.last_modified * $.SECOND);
-          return;
+          ThreadStats.pageCountEl.textContent = purgePos;
+        } else {
+          _ref2 = page.threads;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            thread = _ref2[_k];
+            if (!(thread.no === ThreadStats.thread.ID)) {
+              continue;
+            }
+            ThreadStats.pageCountEl.textContent = page.page;
+            (page.page === this.response.length ? $.addClass : $.rmClass)(ThreadStats.pageCountEl, 'warning');
+            ThreadStats.lastPageUpdate = new Date(thread.last_modified * $.SECOND);
+            return;
+          }
         }
       }
     }
@@ -14676,8 +14688,7 @@
             src: ThreadUpdater.beep,
             onended: function() {
               if (QuoteMarkers.beep) {
-                ThreadUpdater.audio.play();
-                return QuoteMarkers.beep = false;
+                return ThreadUpdater.audio.play();
               }
             }
           });
@@ -14685,7 +14696,8 @@
         if (QuoteMarkers.beep || Conf['Beep']) {
           ThreadUpdater.audio.play();
         }
-      } else if (QuoteMarkers.beep && !d.hidden) {
+      }
+      if (QuoteMarkers.beep) {
         QuoteMarkers.beep = false;
       }
       scroll = Conf['Auto Scroll'] && ThreadUpdater.scrollBG() && Header.getBottomOf(ThreadUpdater.root) > -75;
