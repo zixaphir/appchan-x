@@ -1,6 +1,7 @@
 - Flash SWFchan link opens in newtab by default
 - Implement Double Beep on posts involving quotes of you
 - Make Double Beep independent from Beep
+- /f/'s Page Count is replaced with Purge Position
 
 ### v2.10.14 
 *2015-12-05*
