@@ -14688,7 +14688,8 @@
             src: ThreadUpdater.beep,
             onended: function() {
               if (QuoteMarkers.beep) {
-                return ThreadUpdater.audio.play();
+                ThreadUpdater.audio.play();
+                return QuoteMarkers.beep = false;
               }
             }
           });
@@ -14697,7 +14698,7 @@
           ThreadUpdater.audio.play();
         }
       }
-      if (QuoteMarkers.beep) {
+      if (QuoteMarkers.beep && !d.hidden) {
         QuoteMarkers.beep = false;
       }
       scroll = Conf['Auto Scroll'] && ThreadUpdater.scrollBG() && Header.getBottomOf(ThreadUpdater.root) > -75;
