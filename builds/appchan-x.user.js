@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.14 - 2016-02-04
+* appchan x - Version 2.10.14 - 2016-02-12
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -13579,7 +13579,6 @@
       });
       $.add(a, range.extractContents());
       range.insertNode(a);
-      range.detach();
       return a;
     }
   };
