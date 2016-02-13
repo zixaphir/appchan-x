@@ -312,7 +312,7 @@ Gallery =
       label = $.el 'label',
         innerHTML: "<input type=checkbox name='#{name}'> #{name}"
       input = label.firstElementChild
-      if name in ['Fit Width', 'Fit Height', 'Hide Thumbnails']
+      if name in ['Fit Width', 'Fit Height', 'Stretch Height', 'Hide Thumbnails']
         $.on input, 'change', Gallery.cb.setFitness
       input.checked = Conf[name]
       $.event 'change', null, input
@@ -320,7 +320,7 @@ Gallery =
       el: label
 
     createSubEntries: ->
-      subEntries = (Gallery.menu.createSubEntry item for item in ['Hide Thumbnails', 'Fit Width', 'Fit Height', 'Scroll to Post'])
+      subEntries = (Gallery.menu.createSubEntry item for item in ['Hide Thumbnails', 'Fit Width', 'Fit Height', 'Stretch Height', 'Scroll to Post'])
 
       delayLabel = $.el 'label', <%= html('Slide Delay: <input type="number" name="Slide Delay" min="0" step="any" class="field">') %>
       delayInput = delayLabel.firstElementChild

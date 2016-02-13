@@ -829,6 +829,9 @@ span.hide-announcement {
 :root.fit-height .full-image:not(#ihover) {
   max-height: 100vh;
 }
+:root.stretch-height .full-image:not(#ihover) {
+  min-height: 90vh;
+}
 :root.fit-width .full-image:not(#ihover) {
   max-width: 100%;
 }
@@ -1478,6 +1481,10 @@ div.boardTitle {
 .gal-fit-height .gal-image video,
 .gal-fit-height .gal-image img {
   max-height: 95vh;
+}
+.gal-stretch-height .gal-image video,
+.gal-stretch-height .gal-image img {
+  max-height: 85vh;
 }
 .gal-image iframe {
   width: 100%;
