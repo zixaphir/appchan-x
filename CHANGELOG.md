@@ -1,3 +1,7 @@
+### v2.10.15
+*2016-02-12*
+
+- Fix an issue on Chrome causing JSON searches to fail, infinite scrolling to break, etc.
 - Flash SWFchan link opens in newtab by default
 - Implement Double Beep on posts involving quotes of you
 - Make Double Beep independent from Beep
