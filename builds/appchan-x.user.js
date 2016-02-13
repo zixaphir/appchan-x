@@ -5966,6 +5966,7 @@
           thread = new Thread(threadData.no, g.BOARD);
           threads.push(thread);
         }
+        thread.threadRoot = threadRoot;
         if (thread.ID in thread.posts) {
           return;
         }
@@ -6019,8 +6020,8 @@
             error: err
           });
         }
-        $.add(thread.OP.nodes.root.parentNode, nodes);
       }
+      $.add(thread.OP.nodes.root.parentElement, nodes);
       if (errors) {
         Main.handleErrors(errors);
       }

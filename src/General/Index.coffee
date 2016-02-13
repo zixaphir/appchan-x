@@ -658,6 +658,9 @@ Index =
         thread = new Thread threadData.no, g.BOARD
         threads.push thread
 
+      # XXX some issue with Chrome 48's garbage collection being too aggressive?
+      thread.threadRoot = threadRoot 
+
       return if thread.ID of thread.posts
 
       try
@@ -682,6 +685,7 @@ Index =
     posts = []
     return unless lastReplies = Index.liveThreadData[thread.ID].last_replies
     nodes = []
+        
     for data in lastReplies
       if post = thread.posts[data.no]
         nodes.push post.nodes.root
@@ -695,7 +699,8 @@ Index =
         errors.push
           message: "Parsing of Post No.#{data.no} failed. Post will be skipped."
           error: err
-      $.add thread.OP.nodes.root.parentNode, nodes
+    
+    $.add thread.OP.nodes.root.parentElement, nodes
 
     Main.handleErrors errors if errors
     Post.callbacks.execute posts
