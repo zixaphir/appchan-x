@@ -476,6 +476,10 @@ Config =
       false
       ''
     ]
+    'Stretch height': [
+      false
+      ''
+    ]
     'Scroll into view': [
       true
       'Scroll down when expanding images to bring the full image into view.'
@@ -505,6 +509,9 @@ Config =
       true
     ]
     'Fit Height': [
+      true
+    ]
+    'Stretch Height': [
       true
     ]
     'Scroll to Post': [

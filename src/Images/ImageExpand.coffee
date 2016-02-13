@@ -300,7 +300,7 @@ ImageExpand =
       label = UI.checkbox name, name
       label.title = desc
       input = label.firstElementChild
-      if name in ['Fit width', 'Fit height']
+      if name in ['Fit width', 'Fit height', 'Stretch height']
         $.on input, 'change', ImageExpand.cb.setFitness
       $.event 'change', null, input
       $.on input, 'change', $.cb.checked
