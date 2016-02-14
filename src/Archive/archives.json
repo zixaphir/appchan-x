@@ -14,17 +14,8 @@
   "http": true,
   "https": true,
   "software": "foolfuuka",
-  "boards": ["c", "e", "w", "wg"],
-  "files": ["c", "e", "w", "wg"]
-}, {
-  "uid": 5,
-  "name": "Love is Over",
-  "domain": "archive.loveisover.me",
-  "http": true,
-  "https": true,
-  "software": "foolfuuka",
-  "boards": ["c", "d", "e", "i", "lgbt", "t", "u"],
-  "files": ["c", "d", "e", "i", "lgbt", "t", "u"]
+  "boards": ["c", "e", "w", "wg", "wsr"],
+  "files": ["c", "e", "w", "wg", "wsr"]
 }, {
   "uid": 8,
   "name": "Rebecca Black Tech",
@@ -32,8 +23,8 @@
   "http": false,
   "https": true,
   "software": "fuuka",
-  "boards": ["cgl", "g", "mu", "qa", "w"],
-  "files": ["cgl", "g", "mu", "qa", "w"]
+  "boards": ["cgl", "g", "mu", "qa"],
+  "files": ["cgl", "g", "mu", "qa"]
 }, {
   "uid": 10,
   "name": "warosu",
@@ -50,8 +41,8 @@
   "http": true,
   "https": true,
   "software": "foolfuuka",
-  "boards": ["asp", "b", "cm", "h", "hc", "hm", "n", "p", "qa", "r", "s", "soc", "toy", "vp", "y"],
-  "files": ["asp", "b", "cm", "h", "hc", "hm", "n", "p", "qa", "r", "s", "soc", "toy", "vp", "y"]
+  "boards": ["asp", "b", "cm", "gd", "h", "hc", "hm", "n", "out", "p", "po", "qa", "r", "s", "soc", "toy", "vp", "y"],
+  "files": ["asp", "b", "cm", "gd", "h", "hc", "hm", "n", "out", "p", "po", "qa", "r", "s", "soc", "toy", "vp", "y"]
 }, {
   "uid": 23,
   "name": "Desustorage",
@@ -59,8 +50,8 @@
   "http": true,
   "https": true,
   "software": "foolfuuka",
-  "boards": ["a", "aco", "an", "c", "co", "d", "fit", "int", "k", "m", "mlp", "qa", "r9k", "tg", "vr", "wsg"],
-  "files": ["a", "aco", "an", "c", "co", "d", "fit", "int", "k", "m", "mlp", "qa", "r9k", "tg", "vr", "wsg"]
+  "boards": ["a", "aco", "an", "c", "co", "d", "fit", "his", "int", "k", "m", "mlp", "qa", "r9k", "tg", "trash", "vr", "wsg"],
+  "files": ["a", "aco", "an", "c", "co", "d", "fit", "his", "int", "k", "m", "mlp", "qa", "r9k", "tg", "trash", "vr", "wsg"]
 }, {
   "uid": 24,
   "name": "fireden.net",
@@ -68,9 +59,8 @@
   "http": false,
   "https": true,
   "software": "foolfuuka",
-  "boards": ["cm", "ic", "vg", "y"],
-  "files": ["cm", "ic", "vg", "y"],
-  "search": []
+  "boards": ["a", "cm", "ic", "sci", "tg", "v", "vg", "y"],
+  "files": ["a", "cm", "ic", "sci", "tg", "v", "vg", "y"]
 }, {
   "uid": 25,
   "name": "arch.b4k.co",
@@ -78,17 +68,6 @@
   "http": true,
   "https": true,
   "software": "foolfuuka",
-  "boards": ["g", "mlp", "v"],
-  "files": [],
-  "search": []
-}, {
-  "uid": 26,
-  "name": "poweredby.moe",
-  "domain": "archive.poweredby.moe",
-  "http": true,
-  "https": true,
-  "software": "foolfuuka",
-  "boards": ["a", "c", "g", "jp"],
-  "files": ["a", "c", "jp"],
-  "search": []
+  "boards": ["g", "jp", "mlp", "v"],
+  "files": []
 }]
