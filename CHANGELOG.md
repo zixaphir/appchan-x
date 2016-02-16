@@ -1,3 +1,5 @@
+- Replaced Double Beep with ccdo's Beep
+
 ### v2.10.15
 *2016-02-12*
 
