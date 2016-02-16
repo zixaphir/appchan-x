@@ -29,6 +29,7 @@ ThreadUpdater =
     for name, conf of Config.updater.checkbox
       checked = if Conf[name] then 'checked' else ''
       el = box name, name
+      el.title = conf[1]
       input = el.firstElementChild
       $.on input, 'change', $.cb.checked
       if input.name is 'Scroll BG'

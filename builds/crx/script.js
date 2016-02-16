@@ -14306,6 +14306,7 @@
         conf = _ref[name];
         checked = Conf[name] ? 'checked' : '';
         el = box(name, name);
+        el.title = conf[1];
         input = el.firstElementChild;
         $.on(input, 'change', $.cb.checked);
         if (input.name === 'Scroll BG') {
