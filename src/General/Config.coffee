@@ -449,11 +449,6 @@ Config =
         'Highlights own posts if Quote Markers are enabled.'
         1
       ]
-      'Double Beep': [
-        false
-        'Beeps twice to notify you of a post made that is quoting you.'
-        1
-      ]
       'Mark OP Quotes': [
         true
         'Add \'(OP)\' to OP quotes.'
@@ -1232,6 +1227,10 @@ Config =
       'Beep': [
         false
         'Beep on new post to completely read thread.'
+      ]
+      'Beep Quoting You': [
+        false
+        'Beep on new post quoting you. Double beeps if Beep is enabled.'
       ]
       'Auto Scroll': [
         false

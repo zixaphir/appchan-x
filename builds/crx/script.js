@@ -228,7 +228,6 @@
         'Mark Quotes of You': [true, 'Add \'(You)\' to quotes linking to your posts.'],
         'Highlight Posts Quoting You': [false, 'Highlights any posts that contain a quote to your post.', 1],
         'Highlight Own Posts': [false, 'Highlights own posts if Quote Markers are enabled.', 1],
-        'Double Beep': [false, 'Beeps twice to notify you of a post made that is quoting you.', 1],
         'Mark OP Quotes': [true, 'Add \'(OP)\' to OP quotes.'],
         'Mark Cross-thread Quotes': [true, 'Add \'(Cross-thread)\' to cross-threads quotes.'],
         'Quote Threading': [false, 'Thread conversations']
@@ -447,6 +446,7 @@
     updater: {
       checkbox: {
         'Beep': [false, 'Beep on new post to completely read thread.'],
+        'Beep Quoting You': [false, 'Beep on new post quoting you. Double beeps if Beep is enabled.'],
         'Auto Scroll': [false, 'Scroll updated posts into view. Only enabled at bottom of page.'],
         'Bottom Scroll': [false, 'Always scroll to the bottom, not the first new post. Useful for event threads.'],
         'Scroll BG': [false, 'Auto-scroll background tabs.'],
@@ -14401,6 +14401,18 @@
     cc-by-nc-3.0
      */
     beep: 'data:audio/wav;base64,UklGRjQDAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAc21wbDwAAABBAAADAAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABkYXRhzAIAAGMms8em0tleMV4zIpLVo8nhfSlcPR102Ki+5JspVEkdVtKzs+K1NEhUIT7DwKrcy0g6WygsrM2k1NpiLl0zIY/WpMrjgCdbPhxw2Kq+5Z4qUkkdU9K1s+K5NkVTITzBwqnczko3WikrqM+l1NxlLF0zIIvXpsnjgydZPhxs2ay95aIrUEkdUdC3suK8N0NUIjq+xKrcz002WioppdGm091pK1w0IIjYp8jkhydXPxxq2K295aUrTkoeTs65suK+OUFUIzi7xqrb0VA0WSoootKm0t5tKlo1H4TYqMfkiydWQBxm16+85actTEseS8y7seHAPD9TIza5yKra01QyWSson9On0d5wKVk2H4DYqcfkjidUQB1j1rG75KsvSkseScu8seDCPz1TJDW2yara1FYxWSwnm9Sn0N9zKVg2H33ZqsXkkihSQR1g1bK65K0wSEsfR8i+seDEQTxUJTOzy6rY1VowWC0mmNWoz993KVc3H3rYq8TklSlRQh1d1LS647AyR0wgRMbAsN/GRDpTJTKwzKrX1l4vVy4lldWpzt97KVY4IXbUr8LZljVPRCxhw7W3z6ZISkw1VK+4sMWvXEhSPk6buay9sm5JVkZNiLWqtrJ+TldNTnquqbCwilZXU1BwpKirrpNgWFhTaZmnpquZbFlbVmWOpaOonHZcXlljhaGhpZ1+YWBdYn2cn6GdhmdhYGN3lp2enIttY2Jjco+bnJuOdGZlZXCImJqakHpoZ2Zug5WYmZJ/bGlobX6RlpeSg3BqaW16jZSVkoZ0bGtteImSk5KIeG5tbnaFkJKRinxxbm91gY2QkIt/c3BwdH6Kj4+LgnZxcXR8iI2OjIR5c3J0e4WLjYuFe3VzdHmCioyLhn52dHR5gIiKioeAeHV1eH+GiYqHgXp2dnh9hIiJh4J8eHd4fIKHiIeDfXl4eHyBhoeHhH96eHmA',
+    playBeep: function() {
+      var audio;
+      ThreadUpdater.audio || (ThreadUpdater.audio = $.el('audio', {
+        src: ThreadUpdater.beep
+      }));
+      audio = ThreadUpdater.audio;
+      if (audio.paused) {
+        return audio.play();
+      } else {
+        return $.one(audio, 'ended', ThreadUpdater.playBeep);
+      }
+    },
     cb: {
       online: function() {
         if (ThreadUpdater.thread.isDead) {
@@ -14627,7 +14639,7 @@
       return new Notice('info', "The thread is " + change + ".", 30);
     },
     parse: function(postObjects) {
-      var OP, count, files, index, node, num, post, postObject, posts, root, scroll, sendEvent, _i, _j, _len, _len1;
+      var OP, count, files, index, node, num, post, postObject, posts, root, scroll, sendEvent, unreadCount, unreadQYCount, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3;
       OP = postObjects[0];
       Build.spoilerRange[ThreadUpdater.thread.board] = OP.custom_spoiler;
       ThreadUpdater.thread.setStatus('Archived', !!+OP.archived);
@@ -14705,26 +14717,17 @@
       }
       ThreadUpdater.set('status', "+" + count, 'new');
       ThreadUpdater.outdateCount = 0;
+      unreadCount = (_ref = Unread.posts) != null ? _ref.size : void 0;
+      unreadQYCount = (_ref1 = Unread.postsQuotingYou) != null ? _ref1.size : void 0;
       ThreadUpdater.lastPost = posts[count - 1].ID;
       Post.callbacks.execute(posts);
-      if ((Conf['Beep'] || Conf['Double Beep']) && d.hidden && Unread.posts && !Unread.posts.length) {
-        if (!ThreadUpdater.audio) {
-          ThreadUpdater.audio = $.el('audio', {
-            src: ThreadUpdater.beep,
-            onended: function() {
-              if (QuoteMarkers.beep) {
-                ThreadUpdater.audio.play();
-                return QuoteMarkers.beep = false;
-              }
-            }
-          });
+      if (d.hidden) {
+        if (Conf['Beep'] && ((_ref2 = Unread.posts) != null ? _ref2.size : void 0) > 0 && unreadCount === 0) {
+          ThreadUpdater.playBeep();
         }
-        if (QuoteMarkers.beep || Conf['Beep']) {
-          ThreadUpdater.audio.play();
+        if (Conf['Beep Quoting You'] && ((_ref3 = Unread.postsQuotingYou) != null ? _ref3.size : void 0) > unreadQYCount) {
+          ThreadUpdater.playBeep();
         }
-      }
-      if (QuoteMarkers.beep && !d.hidden) {
-        QuoteMarkers.beep = false;
       }
       scroll = Conf['Auto Scroll'] && ThreadUpdater.scrollBG() && Header.getBottomOf(ThreadUpdater.root) > -75;
       for (_j = 0, _len1 = posts.length; _j < _len1; _j++) {
