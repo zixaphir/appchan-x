@@ -386,12 +386,12 @@ ThreadUpdater =
     ThreadUpdater.lastPost = posts[count - 1].ID
     Post.callbacks.execute posts
 
-    if d.hidden
-        if Conf['Beep Quoting You'] and Unread.postsQuotingYou?.size > unreadQYCount
-          ThreadUpdater.playBeep()
-          ThreadUpdater.playBeep() if Conf['Beep']
-        else if Conf['Beep'] and Unread.posts?.size > 0 and unreadCount is 0
-          ThreadUpdater.playBeep()
+    if d.hidden or not d.hasFocus()
+      if Conf['Beep Quoting You'] and Unread.postsQuotingYou?.size > unreadQYCount
+        ThreadUpdater.playBeep()
+        ThreadUpdater.playBeep() if Conf['Beep']
+      else if Conf['Beep'] and Unread.posts?.size > 0 and unreadCount is 0
+        ThreadUpdater.playBeep()
 
     scroll = Conf['Auto Scroll'] and ThreadUpdater.scrollBG() and Header.getBottomOf(ThreadUpdater.root) > -75
 
