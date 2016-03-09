@@ -16559,7 +16559,7 @@
                 "data-height": "" + post.h,
                 href: "//i.4cdn.org/" + g.BOARD.ID + "/" + (encodeURIComponent(post.filename)) + post.ext,
                 target: "_blank",
-                textContent: "" + post.filename
+                textContent: "" + post.filename + post.ext
               });
               fileDiv = $.el('div');
               $.addClass(fileDiv, "fileInfo");
