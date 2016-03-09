@@ -188,8 +188,8 @@ Build =
       <%= html(
         '<div class="fileInfo"><span class="fileText" id="fT${postID}">' +
           'File: <a data-width="${file.width}" data-height="${file.height}" href="${file.url}" target="_blank">${file.name}</a>' +
-          '-(${$.bytesToString(file.size)}, ${file.width}x${file.height}, ${file.tag})' +
-        '</span></div>'
+          '-(${$.bytesToString(file.size)}, ${file.width}x${file.height}${isOP?", "+file.tag:""})' +
+        '</span> <a id="sauceSWF" href="//eye.swfchan.com/search/?q=${file.name}" target="_blank">swfchan</a></div>'
       ) %>
     else if file
       if file.isSpoiler
