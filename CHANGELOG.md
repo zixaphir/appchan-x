@@ -1,5 +1,4 @@
 - Replaced Double Beep with ccdo's Beep
-- Added compatibility for flashes inside /f/ threads and redesigned swfchan link
 
 ### v2.10.15
 *2016-02-12*
