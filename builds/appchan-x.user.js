@@ -28,7 +28,7 @@
 // ==/UserScript==
 
 /*
-* appchan x - Version 2.10.15 - 2016-03-10
+* appchan x - Version 2.10.15 - 2016-03-09
 *
 * Licensed under the MIT license.
 * https://github.com/zixaphir/appchan-x/blob/master/LICENSE
@@ -11131,8 +11131,7 @@
       switch (name) {
         case 'thread':
           (this.thread !== 'new' ? $.addClass : $.rmClass)(QR.nodes.el, 'reply-to-thread');
-          QR.status();
-          return this.updateFlashURL();
+          return QR.status();
         case 'com':
           this.nodes.span.textContent = this.com;
           QR.captcha.onPostChange();
@@ -11149,8 +11148,7 @@
           if (!/\.(jpe?g|png|gif|pdf|swf|webm)$/i.test(this.filename)) {
             this.file.newName += '.jpg';
           }
-          this.updateFilename();
-          return this.updateFlashURL();
+          return this.updateFilename();
       }
     };
 
@@ -11169,13 +11167,6 @@
       }
     };
 
-    _Class.prototype.setComment = function(com) {
-      this.com = com || null;
-      if (this === QR.selected) {
-        return QR.nodes.com.value = this.com;
-      }
-    };
-
     _Class.prototype.setFile = function(file) {
       this.file = file;
       this.filename = file.name;
@@ -11190,7 +11181,6 @@
       } else {
         this.updateFilename();
       }
-      this.updateFlashURL();
       if (!/^(image|video)\//.test(file.type)) {
         this.nodes.el.style.backgroundImage = null;
         return;
@@ -11309,7 +11299,6 @@
         this.nodes.label.hidden = true;
       }
       this.showFileData();
-      this.updateFlashURL();
       return URL.revokeObjectURL(this.URL);
     };
 
@@ -11331,31 +11320,6 @@
         return $.addClass(QR.nodes.fileSubmit, 'has-file');
       } else {
         return $.rmClass(QR.nodes.fileSubmit, 'has-file');
-      }
-    };
-
-    _Class.prototype.updateFlashURL = function() {
-      var com, oldURL, url, _ref;
-      if (g.BOARD.ID !== 'f') {
-        return;
-      }
-      if (this.thread === 'new' || !this.file) {
-        return url = '';
-      } else {
-        url = this.filename;
-        if ((_ref = $.engine) === 'blink' || _ref === 'webkit') {
-          url = url.replace(/"/g, '%22');
-        }
-        url = url.replace(/[\t\n\f\r \xa0\u200B\u2029\u3000]+/g, ' ').replace(/(^ | $)/g, '').replace(/\.[0-9A-Za-z]+$/, '');
-        url = "https://i.4cdn.org/f/" + (encodeURIComponent(E(url))) + ".swf\n";
-        oldURL = this.flashURL || '';
-        if (url !== oldURL) {
-          com = this.com || '';
-          if (com.slice(0, oldURL.length) === oldURL) {
-            this.setComment(url + com.slice(oldURL.length));
-          }
-          return this.flashURL = url;
-        }
       }
     };
 

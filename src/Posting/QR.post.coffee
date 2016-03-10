@@ -131,7 +131,6 @@ QR.post = class
       when 'thread'
         (if @thread isnt 'new' then $.addClass else $.rmClass) QR.nodes.el, 'reply-to-thread'
         QR.status()
-        @updateFlashURL()
       when 'com'
         @nodes.span.textContent = @com
         QR.captcha.onPostChange()
@@ -149,7 +148,6 @@ QR.post = class
           # so we suffix it with '.jpg' when needed.
           @file.newName += '.jpg'
         @updateFilename()
-        @updateFlashURL()
 
   forceSave: ->
     return unless @ is QR.selected
@@ -159,11 +157,6 @@ QR.post = class
       continue unless node = QR.nodes[name]
       @save node
     return
-
-  setComment: (com) ->
-    @com = com or null
-    if @ is QR.selected
-      QR.nodes.com.value = @com
 
   setFile: (@file) ->
     @filename = file.name
@@ -175,7 +168,6 @@ QR.post = class
       @showFileData()
     else
       @updateFilename()
-    @updateFlashURL()
     unless /^(image|video)\//.test file.type
       @nodes.el.style.backgroundImage = null
       return
@@ -276,7 +268,6 @@ QR.post = class
     @nodes.el.style.backgroundImage = null
     @nodes.label.hidden = true if QR.spoiler
     @showFileData()
-    @updateFlashURL()
     URL.revokeObjectURL @URL
 
   updateFilename: ->
@@ -293,25 +284,6 @@ QR.post = class
       $.addClass QR.nodes.fileSubmit, 'has-file'
     else
       $.rmClass QR.nodes.fileSubmit, 'has-file'
-
-  updateFlashURL: ->
-    return unless g.BOARD.ID is 'f'
-    if @thread is 'new' or !@file
-      url = ''
-    else
-      url = @filename
-      url = url.replace(/"/g, '%22') if $.engine in ['blink', 'webkit']
-      url = url
-        .replace(/[\t\n\f\r \xa0\u200B\u2029\u3000]+/g, ' ')
-        .replace(/(^ | $)/g, '')
-        .replace(/\.[0-9A-Za-z]+$/, '')
-      url = "https://i.4cdn.org/f/#{encodeURIComponent E url}.swf\n"
-      oldURL = @flashURL or ''
-      if url isnt oldURL
-        com = @com or ''
-        if com[...oldURL.length] is oldURL
-          @setComment url + com[oldURL.length..]
-        @flashURL = url
 
   pasteText: (file) ->
     reader = new FileReader()
